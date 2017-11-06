@@ -1,4 +1,4 @@
-# JoBe
+# Web Programming II Final Group Project - JoBe
 This is the final group Project for CS 554 Web Programming II @ Stevens Institute of Technology
 
 ## Group Members - Team Nitro
