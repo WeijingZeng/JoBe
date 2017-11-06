@@ -1,4 +1,5 @@
-# Final Project for CS554 -  JoBe
+# JoBe
+This is the final group Project for CS 554 Web Programming II @ Stevens Institute of Technology
 
 ## Group Members:
 
