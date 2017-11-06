@@ -1,4 +1,4 @@
-# Final Project for CS554 -JoBe
+# Final Project for CS554 -  JoBe
 
 ## Group Members:
 
