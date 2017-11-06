@@ -2,17 +2,17 @@
 
 ## Group Members:
 
-George Beckert
+..* George Beckert
 
-Patrick Hill
+..* Patrick Hill
 
-Brandon Rothweiler
+..* Brandon Rothweiler
 
-Puneet Sharma
+..* Puneet Sharma
 
-Yugaank Sharma
+..* Yugaank Sharma
 
-Weijing Zeng
+..* Weijing Zeng
 
 JoBe is a cross between a social networking site and a dating site but for musicians to find each other to work with. The user(user A) will fill out an extensive profile stating what they do, what they are looking for, if they are looking for someone locally or someone they can work with remotely, what style/genre they are looking to do, they will post a profile picture and also be able to upload audio/samples of their work to be displayed on their public profile etc. 
 
