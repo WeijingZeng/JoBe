@@ -4,7 +4,7 @@ const uuid = require('node-uuid');
 const bcrypt = require('bcryptjs');
 var firebase = require('firebase');
 var firebaseui = require('firebaseui');
-var auth =firebase.auth();
+var auth = firebase.auth();
 var config = {
     apiKey: "AIzaSyCbb4SNcbrKwQsSxegT7A9TjsjG7jkYGBs",
     authDomain: "jobe-b84fc.firebaseapp.com",
@@ -12,19 +12,20 @@ var config = {
     storageBucket: "jobe-b84fc.appspot.com",
     projectId: "jobe-b84fc",
     messagingSenderId: "447681007576",
-  };
-  firebase.initializeApp(config);
+};
+firebase.initializeApp(config);
 
 let exportedMethods = {
-   async getAllUsers() {
-       let userCollection = await users();
-        return await userCollection.find({}).toArray();;
+    async getAllUsers() {
+        const userCollection = await users();
+        const allUsers = await userCollection.find({}).toArray();
+        return allUsers;
     },
     async getUserById(id) {
-        let userCollection = await users();
-        let user= await userCollection.findOne({ _id: id })
-        if (!user) return Promise.reject("User not found");
-        return user;    
+        const userCollection = await users();
+        const user = await userCollection.findOne({ _id: id })
+        if (!user) throw "User Not Found";
+        return user;
     },
     async getUserByUsername(username) {
         return users().then((userCollection) => {
@@ -35,7 +36,7 @@ let exportedMethods = {
     },
     async getUserByUsernameOrEmail(username, email) {
         return users().then((userCollection) => {
-            return userCollection.findOne({$or:[{ username: username }, { email: email }]}).then((user) => {
+            return userCollection.findOne({ $or: [{ username: username }, { email: email }] }).then((user) => {
                 return user;
             });
         });
@@ -109,7 +110,7 @@ let exportedMethods = {
             });
 
         });
- 
+
     }
 }
 
