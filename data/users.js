@@ -3,19 +3,15 @@ const users = mongoCollections.users;
 const uuid = require('node-uuid');
 const bcrypt = require('bcryptjs');
 let exportedMethods = {
-    getAllUsers() {
-        return users().then((userCollection) => {
-            return userCollection.find({}).toArray();
-        });
+   async getAllUsers() {
+       let userCollection = await users();
+        return await userCollection.find({}).toArray();;
     },
     getUserById(id) {
-        return users().then((userCollection) => {
-            return userCollection.findOne({ _id: id }).then((user) => {
-                if (!user) return Promise.reject("User not found");
-
-                return user;
-            });
-        });
+        let userCollection = await users();
+        let user= await userCollection.findOne({ _id: id })
+        if (!user) return Promise.reject("User not found");
+        return user;    
     },
     getUserByUsername(username) {
         return users().then((userCollection) => {
@@ -90,58 +86,6 @@ let exportedMethods = {
             });
         });
     },
- 
-    addPollCreatedToUser(userId, pollId) {
-        return users().then((userCollection) => {
-            return this.getUserById(userId).then((currentUser) => {
-                return userCollection.updateOne({ _id: userId }, {
-                    $push: {
-                        pollsCreated: {
-                            pollId: pollId
-                        }
-                    }
-                });
-            });
-        });
-    },
-    addPollVotedInToUser(userId, pollId, ansChoiceUserSelected) {
-        return users().then((userCollection) => {
-            return this.getUserById(userId).then((currentUser) => {
-                return userCollection.updateOne({ _id: userId }, {
-                    $addToSet: {
-                        pollsVotedIn: {
-                            pollId: pollId,
-                            ansChoiceSelected: ansChoiceUserSelected
-                        }
-                    }
-                });
-            });
-        });
-    },
-    removePollFromUser(userId, pollId) {
-        return this.getUserById(userId).then((currentUser) => {
-            return userCollection.updateOne({ _id: id }, {
-                $pull: {
-                    pollsCreated: {
-                        pollId: pollId
-                    }
-                }
-            });
-        });
-    },
-    getPollsUserVotedin(userId) {
-        if (!userId)
-            return Promise.reject("No userId provided");
-
-        return this.getUserById(userId).then((user) => {
-            var pollsVotedIn = user.pollsVotedIn;
-            console.log(pollsVotedIn.length)
-            return pollsVotedIn;
-
-        });
-
-    },
-
     isPasswordValid(user, password) {
         return new Promise((fulfill, reject) => {
             if (!user) reject("User not given");
