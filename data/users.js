@@ -7,27 +7,27 @@ let exportedMethods = {
        let userCollection = await users();
         return await userCollection.find({}).toArray();;
     },
-    getUserById(id) {
+    async getUserById(id) {
         let userCollection = await users();
         let user= await userCollection.findOne({ _id: id })
         if (!user) return Promise.reject("User not found");
         return user;    
     },
-    getUserByUsername(username) {
+    async getUserByUsername(username) {
         return users().then((userCollection) => {
             return userCollection.findOne({ username: username }).then((user) => {
                 return user;
             });
         });
     },
-    getUserByUsernameOrEmail(username, email) {
+    async getUserByUsernameOrEmail(username, email) {
         return users().then((userCollection) => {
             return userCollection.findOne({$or:[{ username: username }, { email: email }]}).then((user) => {
                 return user;
             });
         });
     },
-    addUser(username, firstName, lastName, email, gender, city, state, age, hashedPassword) {
+    async addUser(username, firstName, lastName, email, gender, city, state, age, hashedPassword) {
         //need error checking here
 
         if (username === undefined || username === "") return Promise.reject("No username given");
@@ -77,7 +77,7 @@ let exportedMethods = {
 
     },
 
-    removeUser(id) {
+    async removeUser(id) {
         return users().then((userCollection) => {
             return userCollection.removeOne({ _id: id }).then((deletionInfo) => {
                 if (deletionInfo.deletedCount === 0) {
