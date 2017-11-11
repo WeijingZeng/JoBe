@@ -2,6 +2,19 @@ const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
 const uuid = require('node-uuid');
 const bcrypt = require('bcryptjs');
+var firebase = require('firebase');
+var firebaseui = require('firebaseui');
+var auth =firebase.auth();
+var config = {
+    apiKey: "AIzaSyCbb4SNcbrKwQsSxegT7A9TjsjG7jkYGBs",
+    authDomain: "jobe-b84fc.firebaseapp.com",
+    databaseURL: "https://jobe-b84fc.firebaseio.com",
+    storageBucket: "jobe-b84fc.appspot.com",
+    projectId: "jobe-b84fc",
+    messagingSenderId: "447681007576",
+  };
+  firebase.initializeApp(config);
+
 let exportedMethods = {
    async getAllUsers() {
        let userCollection = await users();
