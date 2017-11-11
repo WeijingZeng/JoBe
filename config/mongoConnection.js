@@ -18,7 +18,7 @@ let connectDb = () => {
             });
     }
 
-    return _connection;
+    return _connection; 
 };
 
 module.exports = connectDb;

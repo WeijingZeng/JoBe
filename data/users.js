@@ -152,7 +152,7 @@ let exportedMethods = {
             });
 
         });
-
+ 
     }
 }
 

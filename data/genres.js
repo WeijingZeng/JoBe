@@ -3,7 +3,6 @@ const genres = mongoCollections.genres;
 
 let exportedMethods = {
     
-
 }
 
 module.exports = exportedMethods;

@@ -1,9 +1,9 @@
 const users = require("./users");
-const polls = require("./polls")
-const votesAndMetrics = require("./votesandmetrics")
+const matches = require("./matches")
+const genres = require("./genres")
 
 module.exports = {
     users: users,
-    polls: polls,
-    votesAndMetrics: votesAndMetrics
+    matches: matches,
+    genres: genres
 };
