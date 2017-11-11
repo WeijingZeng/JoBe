@@ -12,6 +12,10 @@
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/@firebase/auth/-/auth-0.2.1.tgz#6248152b7f3b19d5750f657ba1dde17be64cd657"
 
+"@firebase/auth@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@firebase/auth/-/auth-0.2.2.tgz#27af36f565dec5ca6ed6814e8310d78156c5d02c"
+
 "@firebase/database@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@firebase/database/-/database-0.1.3.tgz#50c67e0b2b29c7c9e2ed176450b9223b7befef92"
@@ -24,6 +28,12 @@
   resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-0.1.3.tgz#36ac0ee01b44aad337dcc682ce6ae80b5741a03d"
   dependencies:
     "@firebase/webchannel-wrapper" "^0.2.3"
+
+"@firebase/firestore@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@firebase/firestore/-/firestore-0.1.4.tgz#e8301ddf329a9643219bc4c9cb6e1ae4e0586c27"
+  dependencies:
+    "@firebase/webchannel-wrapper" "^0.2.4"
 
 "@firebase/messaging@^0.1.3":
   version "0.1.3"
@@ -48,6 +58,10 @@
 "@firebase/webchannel-wrapper@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.2.3.tgz#e94f7e772f40e48a2dc52e57d1df38b28bf98e39"
+
+"@firebase/webchannel-wrapper@^0.2.4":
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.2.4.tgz#ec8438b780baff09254076efe345f30fdb41243e"
 
 "@gulp-sourcemaps/identity-map@1.X":
   version "1.0.1"
@@ -2907,6 +2921,20 @@ fined@^1.0.1:
     object.pick "^1.2.0"
     parse-filepath "^1.0.1"
 
+firebase@^4.3.1:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.6.2.tgz#d4d983d975b98ee27588b25791238a1a1e01a71d"
+  dependencies:
+    "@firebase/app" "^0.1.2"
+    "@firebase/auth" "^0.2.2"
+    "@firebase/database" "^0.1.3"
+    "@firebase/firestore" "^0.1.4"
+    "@firebase/messaging" "^0.1.3"
+    "@firebase/polyfill" "^0.1.2"
+    "@firebase/storage" "^0.1.2"
+    dom-storage "^2.0.2"
+    xmlhttprequest "^1.8.0"
+
 firebase@^4.6.1:
   version "4.6.1"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-4.6.1.tgz#7e2853462ea91297c7a3bd63cd61fe0f0856abbf"
@@ -2920,6 +2948,12 @@ firebase@^4.6.1:
     "@firebase/storage" "^0.1.2"
     dom-storage "^2.0.2"
     xmlhttprequest "^1.8.0"
+
+firebaseui@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/firebaseui/-/firebaseui-2.4.1.tgz#5e4a9a8a70921431eae01a9c8832a57e50c2911b"
+  dependencies:
+    firebase "^4.3.1"
 
 first-chunk-stream@^1.0.0:
   version "1.0.0"
