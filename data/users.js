@@ -28,11 +28,10 @@ let exportedMethods = {
         return user;
     },
     async getUserByUsername(username) {
-        return users().then((userCollection) => {
-            return userCollection.findOne({ username: username }).then((user) => {
-                return user;
-            });
-        });
+        const userCollection = await users();
+        const user = await userCollection.findOne({ username: username })
+        if (!user) throw "User Not Found";
+        return user;
     },
     async getUserByUsernameOrEmail(username, email) {
         return users().then((userCollection) => {
