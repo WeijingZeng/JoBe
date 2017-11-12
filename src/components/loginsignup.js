@@ -14,52 +14,70 @@ firebase.initializeApp(config);
 var auth = firebase.auth();
 
 class LoginSignUp extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.formSubmit=this.formSubmit.bind(this)
-        this.state={
+        this.formSubmit = this.formSubmit.bind(this)
+        this.state = {
             uid: undefined
         };
     }
     formSubmit(e) {
         e.preventDefault();
+        //first signout any signed in user
         firebase.auth().signOut()
+        this.setState(() => {
+            return {
+                loggedin: 0
+            }
+        },function(){
+            console.log(`STATE LOGGEDIN: ${this.state.loggedin}`)
+        })
+        
         const email = e.target.elements.email.value
         const password = e.target.elements.password.value
+        //Try signing in, if user is not found then create the user
         let user
-        user= auth.signInWithEmailAndPassword(email, password).catch(function (e) {
+        user = auth.signInWithEmailAndPassword(email, password).catch(function (e) {
             console.log(e.code)
             switch (e.code) {
                 case "auth/user-not-found":
-                    user=auth.createUserWithEmailAndPassword(email,password)
+                    user = auth.createUserWithEmailAndPassword(email, password)
                     break;
+                //need to add in password error check
                 default:
+                    console.log(`Something else went wrong: ${e.code}`)
                     break;
             }
         })
-        firebase.auth().onAuthStateChanged((firebaseuser)=>{
-            if (firebaseuser){
-                this.setState(()=>{
+        firebase.auth().onAuthStateChanged((firebaseuser) => {
+            if (firebaseuser) {
+                this.setState(() => {
                     return {
-                        uid: firebaseuser.uid
+                        email: firebaseuser.email,
+                        uid: firebaseuser.uid,
+                        lastSignInTime: firebaseuser.metadata.lastSignInTime,
+                        loggedin: 1
                     }
-                },function(){
+                }, function () {
+                    console.log(`STATE LAST LOGIN: ${this.state.lastSignInTime}`)
                     console.log(`STATE UID: ${this.state.uid}`)
+                    console.log(`STATE EMAIL: ${this.state.email}`)
+                    console.log(`STATE LOGGEDIN: ${this.state.loggedin}`)
                 })
-            }else{
-                console.log ("nada")
+            } else {
+                console.log("No user")
             }
         })
     }
-    
+
     render() {
         return (
             <div >
                 <form onSubmit={this.formSubmit}>
                     <input type="email" id="email" placeholder="Email Address" required />
-                    <input type="password" id="password" placeholder="Password" required/>
+                    <input type="password" id="password" placeholder="Password" required />
                     <br /><br />
-                    <button id="loginsignup" onClick={this.signon} className="btn btn-primary">Login/Sign Up </button>
+                    <button id="loginsignup" className="btn btn-primary">Login/Sign Up </button>
 
 
 
