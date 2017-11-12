@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 
-
-  class LoginSignUp extends Component {
+class LoginSignUp extends Component {
     render() {
         return (
             <div >
-            LOGIN/SIGNUP
+                LOGIN/SIGNUP
             </div>
         )
     }
