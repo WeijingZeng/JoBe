@@ -44,7 +44,7 @@ class LoginSignUp extends Component {
                         uid: firebaseuser.uid
                     }
                 },function(){
-                    console.log(`STATE: ${this.state.uid}`)
+                    console.log(`STATE UID: ${this.state.uid}`)
                 })
             }else{
                 console.log ("nada")
