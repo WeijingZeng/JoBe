@@ -21,7 +21,7 @@ class App extends Component {
           email: user.email,
           uid: user.uid,
           lastSignInTime: user.lastSignInTime,
-          loggedin: 1
+          loggedin: user.loggedin
         }
       }
     }, function () {
