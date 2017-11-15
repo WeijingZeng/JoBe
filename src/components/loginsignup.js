@@ -63,7 +63,10 @@ class LoginSignUp extends Component {
                     console.log(`STATE UID: ${this.state.uid}`)
                     console.log(`STATE EMAIL: ${this.state.email}`)
                     console.log(`STATE LOGGEDIN: ${this.state.loggedin}`)
+                    console.log("FIREBASE CURRENT USER:")
+                    console.log(firebase.auth().currentUser)
                 })
+                this.props.setUser(this.state)
             } else {
                 console.log("No user")
             }
