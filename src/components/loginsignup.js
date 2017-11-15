@@ -73,6 +73,10 @@ class LoginSignUp extends Component {
             }
         })
     }
+    onSignIn(googleUser){
+        alert("I'mmmmm here")
+        var id_token = googleUser.getAuthResponse().id_token
+    }
 
     render() {
         return (
@@ -82,11 +86,8 @@ class LoginSignUp extends Component {
                     <input type="password" id="password" placeholder="Password" required />
                     <br /><br />
                     <button id="loginsignup" className="btn btn-primary">Login/Sign Up </button>
-
-
-
-                    <br /><br />
-                    Login with Google Placeholder.
+                    <br/><br/>
+                    <label class="g-signin2" data-onsuccess={this.onSignIn} data-theme="dark"></label>
                 <br /><br />
                     Login with FaceBoook Placeholder.
                 </form>

@@ -4,8 +4,11 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="theme-color" content="#000000">
+    <meta name="google-signin-client_id" content="447681007576-dccjapm00e2adhvt9cd7mhh04garcpaa.apps.googleusercontent.com">
+    <meta name="google-signin-cookiepolicy" content="single_host_origin">
+    <meta name="google-signin-scope" content="profile email">
     <link rel="stylesheet" href="/css/styles.min.css">
-    <!--
+    <!-- 
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
@@ -37,6 +40,29 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+      function onSuccess(googleUser) {
+        console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+      }
+      function onFailure(error) {
+        console.log(error);
+      }
+      function renderButton() {
+        gapi.signin2.render('my-signin2', {
+          'scope': 'profile email',
+          'width': 240,
+          'height': 50,
+          'longtitle': true,
+          'theme': 'dark',
+          'onsuccess': onSuccess,
+          'onfailure': onFailure
+        });
+      }
+    </script>
+  
+    <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+ 
+  
   </body>
   <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
   <script>
