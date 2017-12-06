@@ -19,6 +19,7 @@ class LoginSignUp extends Component {
         console.log(auth.currentUser) 
         this.emailLogin = this.emailLogin.bind(this)
         this.emailSignUp = this.emailSignUp.bind(this)
+        this.googleSignOn = this.googleSignOn.bind(this)
         this.signOut=this.signOut.bind(this)
         this.state = {
             uid: undefined,
@@ -105,44 +106,45 @@ class LoginSignUp extends Component {
             }
         })
     }
-    googleSignOn(googleUser) {
-        console.log('Google Auth Response', googleUser);
-        // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-        //     var unsubscribe = firebase.auth().onAuthStateChanged(function (firebaseUser) {
-        //         unsubscribe();
-        //         // Check if we are already signed-in Firebase with the correct user.
-        //         if (!this.isUserEqual(googleUser, firebaseUser)) {
-        //             // Build Firebase credential with the Google ID token.
-        //             var credential = firebase.auth.GoogleAuthProvider.credential(
-        //                 googleUser.getAuthResponse().id_token);
-        //             // Sign in with credential from the Google user.
-        //             firebase.auth().signInWithCredential(credential).catch(function (error) {
-        //                 // Handle Errors here.
-        //                 var errorCode = error.code;
-        //                 var errorMessage = error.message;
-        //                 // The email of the user's account used.
-        //                 var email = error.email;
-        //                 // The firebase.auth.AuthCredential type that was used.
-        //                 var credential = error.credential;
-        //                 // ...
-        //             });
-        //         } else {
-        //             console.log('User already signed-in Firebase.');
-        //         }
-        //     });
-        // }
-        // isUserEqual(googleUser, firebaseUser) {
-        //     if (firebaseUser) {
-        //         var providerData = firebaseUser.providerData;
-        //         for (var i = 0; i < providerData.length; i++) {
-        //             if (providerData[i].providerId === firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-        //                 providerData[i].uid === googleUser.getBasicProfile().getId()) {
-        //                 // We don't need to reauth the Firebase connection.
-        //                 return true;
-        //             }
-        //         }
-        //     }
-        //     return false;
+    googleSignOn() {
+        let provider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(provider).then(function(result) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            let user = result.user;
+            console.log(user);
+            // ...
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
+          auth.onAuthStateChanged((firebaseuser) => {
+            if (firebaseuser) {
+                this.setState(() => {
+                    return {
+                        email: firebaseuser.email,
+                        uid: firebaseuser.uid,
+                        lastSignInTime: firebaseuser.metadata.lastSignInTime,
+                        loggedin: 1
+                    }
+                }, function () {
+                    console.log(auth.currentUser)
+                    this.props.setUser(this.state)
+                })
+
+            }
+        })
+
+
+
+          
     }
 
     render() {
@@ -167,6 +169,7 @@ class LoginSignUp extends Component {
                     <button onClick={this.emailLogin} id="login" className="btn btn-primary">Login</button>
                     <button onClick={this.emailSignUp} id="signup" className="btn btn-primary">Sign Up</button>
                     <br /><br />
+                    <button onClick={this.googleSignOn} id="google" className="btn btn-primary">Google Sign-In</button>
                     <br /><br />
                     Login with FaceBoook Placeholder.
             </div>
