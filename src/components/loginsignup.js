@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 var firebase = require('firebase');
 
-
 var config = {
     apiKey: "AIzaSyCbb4SNcbrKwQsSxegT7A9TjsjG7jkYGBs",
     authDomain: "jobe-b84fc.firebaseapp.com",
@@ -17,13 +16,14 @@ class LoginSignUp extends Component {
     constructor(props) {
         super(props);
         console.log(auth.currentUser)
-        this.emailLogin = this.emailLogin.bind(this)
+        this.emailLogin = this.emailLogin.bind(this);
         this.socialSignOn = this.socialSignOn.bind(this)
         this.signOut = this.signOut.bind(this)
         this.state = {
             uid: undefined,
             email: undefined,
-            lastSignInTime: undefined
+            lastSignInTime: undefined,
+            loginError: undefined
         };
     }
     signOut() {
@@ -34,6 +34,7 @@ class LoginSignUp extends Component {
                 email: undefined,
                 uid: undefined,
                 lastSignInTime: undefined,
+                loginError: undefined
             }
         }, function () {
             this.props.setUser(this.state)
@@ -43,32 +44,37 @@ class LoginSignUp extends Component {
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
         if (loginOrSignUp === "login") {
-            auth.signInWithEmailAndPassword(email, password).catch(function (e) {
+
+            auth.signInWithEmailAndPassword(email, password)
+                .catch((e) => {
+                    console.log(e.code)
+                    switch (e.code) {
+                        case "auth/user-not-found":
+                            this.setState({ loginError: "No Account With That Email Address Found!" })
+                            break;
+                        case "auth/wrong-password":
+                            console.log("HIT WRONG PASS")
+                            this.setState({ loginError: "Password Incorrect!" })
+                            break;
+                        default:
+                            console.log(`Something else went wrong: ${e.code}`)
+                            this.setState({ loginError: "Unkown  Error!" })
+                            break;
+                    }
+                });
+        } else if (loginOrSignUp === "signup") {
+            auth.createUserWithEmailAndPassword(email, password).catch((e) => {
                 console.log(e.code)
                 switch (e.code) {
-                    case "auth/user-not-found":
-                        //user = auth.createUserWithEmailAndPassword(email, password)
+                    case "auth/invalid-email":
+                        this.setState({ loginError: "Invalid Email Address!" })
                         break;
-                    //need to add in password error check
                     default:
                         console.log(`Something else went wrong: ${e.code}`)
+                        this.setState({ loginError: "Unkown  Error!" })
                         break;
                 }
-            })
-        } else if (loginOrSignUp === "signup") {
-            auth.createUserWithEmailAndPassword(email, password).catch(function (e) {
-                console.log(e.code)
-                //error code checks will go here
-                // switch (e.code) {
-                //     case "":
-                //         user = auth.createUserWithEmailAndPassword(email, password)
-                //         break;
-                //     //need to add in password error check
-                //     default:
-                //         console.log(`Something else went wrong: ${e.code}`)
-                //         break;
-                //}
-            })
+            });
         }
         auth.onAuthStateChanged((firebaseuser) => {
             if (firebaseuser) {
@@ -139,6 +145,7 @@ class LoginSignUp extends Component {
         } else {
             return (
                 <div >
+                    {this.state.loginError && <div className="loginerror">{this.state.loginError}</div>}
                     <input type="email" id="email" placeholder="Email Address" required />
                     <input type="password" id="password" placeholder="Password" required />
                     <br /><br />
