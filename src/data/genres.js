@@ -444,16 +444,6 @@ const genreData=[{
 	"id": 148,
 	"genre": "Synthpop"
 }]
-function getAllGenres(){
-    return genreData
-}
-
-function getGenreByID(id){
-    console.log(id)
-    //return genreData.find(id)
-    let genre= genreData.find(genre => genre.id === id)
-    return genre
-}
 let exportedMethods = {
     getAllGenres(){
         return genreData
