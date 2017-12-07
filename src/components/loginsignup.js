@@ -16,26 +16,27 @@ var auth = firebase.auth();
 class LoginSignUp extends Component {
     constructor(props) {
         super(props);
-        console.log(auth.currentUser) 
+        console.log(auth.currentUser)
         this.emailLogin = this.emailLogin.bind(this)
         this.emailSignUp = this.emailSignUp.bind(this)
         this.googleSignOn = this.googleSignOn.bind(this)
-        this.signOut=this.signOut.bind(this)
+        this.facebookSignOn = this.facebookSignOn.bind(this)
+        this.signOut = this.signOut.bind(this)
         this.state = {
             uid: undefined,
             email: undefined,
-            lastSignInTime:undefined
+            lastSignInTime: undefined
         };
     }
-    signOut(){
+    signOut() {
         auth.signOut();
-        this.setState(()=>{
-            return{
+        this.setState(() => {
+            return {
                 loggedin: 0,
                 email: undefined,
                 uid: undefined,
                 lastSignInTime: undefined,
-                }
+            }
         }, function () {
             this.props.setUser(this.state)
         })
@@ -43,7 +44,7 @@ class LoginSignUp extends Component {
     emailLogin() {
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
-       auth.signInWithEmailAndPassword(email, password).catch(function (e) {
+        auth.signInWithEmailAndPassword(email, password).catch(function (e) {
             console.log(e.code)
             switch (e.code) {
                 case "auth/user-not-found":
@@ -108,18 +109,18 @@ class LoginSignUp extends Component {
     }
     async googleSignOn() {
         let provider = new firebase.auth.GoogleAuthProvider();
-        try{
-            let result= await firebase.auth().signInWithPopup(provider)
-        }catch(error){
-              // Handle Errors here.
-              var errorCode = error.code;
-              var errorMessage = error.message;
-              // The email of the user's account used.
-              var email = error.email;
-              // The firebase.auth.AuthCredential type that was used.
-              var credential = error.credential;
+        try {
+            let result = await firebase.auth().signInWithPopup(provider)
+        } catch (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
         }
-          auth.onAuthStateChanged((firebaseuser) => {
+        auth.onAuthStateChanged((firebaseuser) => {
             if (firebaseuser) {
                 this.setState(() => {
                     return {
@@ -135,10 +136,37 @@ class LoginSignUp extends Component {
 
             }
         })
+    }
 
+    async facebookSignOn() {
+        let provider = new firebase.auth.FacebookAuthProvider();
+        try {
+            let result = await firebase.auth().signInWithPopup(provider)
+        } catch (error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+        }
+        auth.onAuthStateChanged((firebaseuser) => {
+            if (firebaseuser) {
+                this.setState(() => {
+                    return {
+                        email: firebaseuser.email,
+                        uid: firebaseuser.uid,
+                        lastSignInTime: firebaseuser.metadata.lastSignInTime,
+                        loggedin: 1
+                    }
+                }, function () {
+                    console.log(auth.currentUser)
+                    this.props.setUser(this.state)
+                })
 
-
-          
+            }
+        })
     }
 
     render() {
@@ -150,7 +178,7 @@ class LoginSignUp extends Component {
                     You are logged with Email: {this.state.email}
                     <br />
                     Your Last Login Was: {this.state.lastSignInTime}
-                    <br/>
+                    <br />
                     <button onClick={this.signOut} id="login" className="btn btn-primary">Log Out</button>
                 </div>
             )
@@ -164,11 +192,10 @@ class LoginSignUp extends Component {
                     <button onClick={this.emailSignUp} id="signup" className="btn btn-primary">Sign Up</button>
                     <br /><br />
                     <button onClick={this.googleSignOn} id="google" className="btn"><img src="./imgs/btn_google_signin.png" />
-                    
                     </button>
-                    <br /><br />
-                    Login with FaceBoook Placeholder.
-            </div>
+                    <br /> 
+                    <button onClick={this.facebookSignOn} id="facebook" className="btn"><img src="./imgs/facebook_signin.png" /></button>
+                </div>
             )
         }
     }
