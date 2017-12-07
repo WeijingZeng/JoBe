@@ -53,8 +53,10 @@ class LoginSignUp extends Component {
                             this.setState({ loginError: "No Account With That Email Address Found!" })
                             break;
                         case "auth/wrong-password":
-                            console.log("HIT WRONG PASS")
                             this.setState({ loginError: "Password Incorrect!" })
+                            break;
+                        case "auth/invalid-email":
+                            this.setState({ loginError: "Invalid Email Address!" })
                             break;
                         default:
                             console.log(`Something else went wrong: ${e.code}`)
@@ -68,6 +70,9 @@ class LoginSignUp extends Component {
                 switch (e.code) {
                     case "auth/invalid-email":
                         this.setState({ loginError: "Invalid Email Address!" })
+                        break;
+                    case "auth/weak-password":
+                        this.setState({ loginError: "Password Blank or Password Less Than 6 Characters!" })
                         break;
                     default:
                         console.log(`Something else went wrong: ${e.code}`)
@@ -153,7 +158,7 @@ class LoginSignUp extends Component {
                     <button onClick={() => this.emailLogin("signup")} id="signup" className="btn btn-primary">Sign Up</button>
                     <br /><br />
                     <img onClick={() => this.socialSignOn("google")} alt="google signin" src="./imgs/btn_google_signin.png" />
-                    
+
                     <br />
                     <img onClick={() => this.socialSignOn("facebook")} alt="facebook signin" src="./imgs/facebook_signin.png" />
                 </div>
