@@ -19,8 +19,7 @@ class LoginSignUp extends Component {
         console.log(auth.currentUser)
         this.emailLogin = this.emailLogin.bind(this)
         this.emailSignUp = this.emailSignUp.bind(this)
-        this.googleSignOn = this.googleSignOn.bind(this)
-        this.facebookSignOn = this.facebookSignOn.bind(this)
+        this.socialSignOn = this.socialSignOn.bind(this)
         this.signOut = this.signOut.bind(this)
         this.state = {
             uid: undefined,
@@ -107,8 +106,14 @@ class LoginSignUp extends Component {
             }
         })
     }
-    async googleSignOn() {
-        let provider = new firebase.auth.GoogleAuthProvider();
+
+    async socialSignOn(socialProvider) {
+        let provider = null
+        if (socialProvider === 'google') {
+            provider = new firebase.auth.GoogleAuthProvider();
+        } else if (socialProvider === "facebook") {
+            provider = new firebase.auth.FacebookAuthProvider();
+        }
         try {
             let result = await firebase.auth().signInWithPopup(provider)
         } catch (error) {
@@ -137,38 +142,6 @@ class LoginSignUp extends Component {
             }
         })
     }
-
-    async facebookSignOn() {
-        let provider = new firebase.auth.FacebookAuthProvider();
-        try {
-            let result = await firebase.auth().signInWithPopup(provider)
-        } catch (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-        }
-        auth.onAuthStateChanged((firebaseuser) => {
-            if (firebaseuser) {
-                this.setState(() => {
-                    return {
-                        email: firebaseuser.email,
-                        uid: firebaseuser.uid,
-                        lastSignInTime: firebaseuser.metadata.lastSignInTime,
-                        loggedin: 1
-                    }
-                }, function () {
-                    console.log(auth.currentUser)
-                    this.props.setUser(this.state)
-                })
-
-            }
-        })
-    }
-
     render() {
         if (this.state.loggedin === 1) {
             return (
@@ -191,10 +164,10 @@ class LoginSignUp extends Component {
                     <button onClick={this.emailLogin} id="login" className="btn btn-primary">Login</button>
                     <button onClick={this.emailSignUp} id="signup" className="btn btn-primary">Sign Up</button>
                     <br /><br />
-                    <button onClick={this.googleSignOn} id="google" className="btn"><img src="./imgs/btn_google_signin.png" />
+                    <button onClick={() => this.socialSignOn("google")} id="google" className="btn"><img src="./imgs/btn_google_signin.png" />
                     </button>
-                    <br /> 
-                    <button onClick={this.facebookSignOn} id="facebook" className="btn"><img src="./imgs/facebook_signin.png" /></button>
+                    <br />
+                    <button onClick={() => this.socialSignOn("facebook")} id="facebook" className="btn"><img src="./imgs/facebook_signin.png" /></button>
                 </div>
             )
         }
