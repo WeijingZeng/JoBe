@@ -152,10 +152,10 @@ class LoginSignUp extends Component {
                     <button onClick={() => this.emailLogin("login")} id="login" className="btn btn-primary">Login</button>
                     <button onClick={() => this.emailLogin("signup")} id="signup" className="btn btn-primary">Sign Up</button>
                     <br /><br />
-                    <button onClick={() => this.socialSignOn("google")} id="google" className="btn"><img alt="google signin" src="./imgs/btn_google_signin.png" />
-                    </button>
+                    <img onClick={() => this.socialSignOn("google")} alt="google signin" src="./imgs/btn_google_signin.png" />
+                    
                     <br />
-                    <button onClick={() => this.socialSignOn("facebook")} id="facebook" className="btn"><img alt="facebook signin" src="./imgs/facebook_signin.png" /></button>
+                    <img onClick={() => this.socialSignOn("facebook")} alt="facebook signin" src="./imgs/facebook_signin.png" />
                 </div>
             )
         }
