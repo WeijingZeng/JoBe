@@ -163,7 +163,9 @@ class LoginSignUp extends Component {
                     <button onClick={this.emailLogin} id="login" className="btn btn-primary">Login</button>
                     <button onClick={this.emailSignUp} id="signup" className="btn btn-primary">Sign Up</button>
                     <br /><br />
-                    <button onClick={this.googleSignOn} id="google" className="btn btn-primary">Google Sign-In</button>
+                    <button onClick={this.googleSignOn} id="google" className="btn"><img src="./imgs/btn_google_signin.png" />
+                    
+                    </button>
                     <br /><br />
                     Login with FaceBoook Placeholder.
             </div>
