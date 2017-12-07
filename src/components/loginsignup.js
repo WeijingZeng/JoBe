@@ -18,7 +18,6 @@ class LoginSignUp extends Component {
         super(props);
         console.log(auth.currentUser)
         this.emailLogin = this.emailLogin.bind(this)
-        this.emailSignUp = this.emailSignUp.bind(this)
         this.socialSignOn = this.socialSignOn.bind(this)
         this.signOut = this.signOut.bind(this)
         this.state = {
@@ -40,21 +39,37 @@ class LoginSignUp extends Component {
             this.props.setUser(this.state)
         })
     }
-    emailLogin() {
+    emailLogin(loginOrSignUp) {
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
-        auth.signInWithEmailAndPassword(email, password).catch(function (e) {
-            console.log(e.code)
-            switch (e.code) {
-                case "auth/user-not-found":
-                    //user = auth.createUserWithEmailAndPassword(email, password)
-                    break;
-                //need to add in password error check
-                default:
-                    console.log(`Something else went wrong: ${e.code}`)
-                    break;
-            }
-        })
+        if (loginOrSignUp === "login") {
+            auth.signInWithEmailAndPassword(email, password).catch(function (e) {
+                console.log(e.code)
+                switch (e.code) {
+                    case "auth/user-not-found":
+                        //user = auth.createUserWithEmailAndPassword(email, password)
+                        break;
+                    //need to add in password error check
+                    default:
+                        console.log(`Something else went wrong: ${e.code}`)
+                        break;
+                }
+            })
+        } else if (loginOrSignUp === "signup") {
+            auth.createUserWithEmailAndPassword(email, password).catch(function (e) {
+                console.log(e.code)
+                //error code checks will go here
+                // switch (e.code) {
+                //     case "":
+                //         user = auth.createUserWithEmailAndPassword(email, password)
+                //         break;
+                //     //need to add in password error check
+                //     default:
+                //         console.log(`Something else went wrong: ${e.code}`)
+                //         break;
+                //}
+            })
+        }
         auth.onAuthStateChanged((firebaseuser) => {
             if (firebaseuser) {
                 this.setState(() => {
@@ -66,40 +81,6 @@ class LoginSignUp extends Component {
                     }
                 }, function () {
                     console.log(auth.currentUser)
-                    this.props.setUser(this.state)
-                })
-
-            }
-        })
-    }
-
-    emailSignUp() {
-        const email = document.getElementById("email").value
-        const password = document.getElementById("password").value
-        auth.createUserWithEmailAndPassword(email, password).catch(function (e) {
-            console.log(e.code)
-            //error code checks will go here
-            // switch (e.code) {
-            //     case "":
-            //         user = auth.createUserWithEmailAndPassword(email, password)
-            //         break;
-            //     //need to add in password error check
-            //     default:
-            //         console.log(`Something else went wrong: ${e.code}`)
-            //         break;
-            //}
-        })
-        auth.onAuthStateChanged((firebaseuser) => {
-            if (firebaseuser) {
-                this.setState(() => {
-                    return {
-                        email: firebaseuser.email,
-                        uid: firebaseuser.uid,
-                        lastSignInTime: firebaseuser.metadata.lastSignInTime,
-                        loggedin: 1
-                    }
-                }, function () {
-                    console.log(firebase.auth().currentUser)
                     this.props.setUser(this.state)
                 })
 
@@ -161,13 +142,13 @@ class LoginSignUp extends Component {
                     <input type="email" id="email" placeholder="Email Address" required />
                     <input type="password" id="password" placeholder="Password" required />
                     <br /><br />
-                    <button onClick={this.emailLogin} id="login" className="btn btn-primary">Login</button>
-                    <button onClick={this.emailSignUp} id="signup" className="btn btn-primary">Sign Up</button>
+                    <button onClick={() => this.emailLogin("login")} id="login" className="btn btn-primary">Login</button>
+                    <button onClick={() => this.emailLogin("signup")} id="signup" className="btn btn-primary">Sign Up</button>
                     <br /><br />
-                    <button onClick={() => this.socialSignOn("google")} id="google" className="btn"><img src="./imgs/btn_google_signin.png" />
+                    <button onClick={() => this.socialSignOn("google")} id="google" className="btn"><img alt="google signin" src="./imgs/btn_google_signin.png" />
                     </button>
                     <br />
-                    <button onClick={() => this.socialSignOn("facebook")} id="facebook" className="btn"><img src="./imgs/facebook_signin.png" /></button>
+                    <button onClick={() => this.socialSignOn("facebook")} id="facebook" className="btn"><img alt="facebook signin" src="./imgs/facebook_signin.png" /></button>
                 </div>
             )
         }
