@@ -22,7 +22,8 @@ class LoginSignUp extends Component {
         this.state = {
             uid: undefined,
             email: undefined,
-            lastSignInTime: undefined
+            lastSignInTime: undefined,
+            loginError: undefined
         };
     }
     signOut() {
@@ -33,6 +34,7 @@ class LoginSignUp extends Component {
                 email: undefined,
                 uid: undefined,
                 lastSignInTime: undefined,
+                loginError: undefined
             }
         }, function () {
             this.props.setUser(this.state)
@@ -42,51 +44,37 @@ class LoginSignUp extends Component {
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
         if (loginOrSignUp === "login") {
-            
-            auth.signInWithEmailAndPassword(email, password)
-            .catch((e) => {
-                console.log(e.code)
-                // Now works since the arrow function does not create a new lexical this
-                switch (e.code) {
-                    case "auth/user-not-found":
-                    this.setState({loginError: "No Account With That Email Address Found!"})
-                    
-                        break;
-                    case "auth/wrong-password":
-                    console.log("HIT WRONG PASS")
-                    this.setState({loginError: "Password Incorrect!"})
-                        break;
 
-                    //need to add in password error check
+            auth.signInWithEmailAndPassword(email, password)
+                .catch((e) => {
+                    console.log(e.code)
+                    switch (e.code) {
+                        case "auth/user-not-found":
+                            this.setState({ loginError: "No Account With That Email Address Found!" })
+                            break;
+                        case "auth/wrong-password":
+                            console.log("HIT WRONG PASS")
+                            this.setState({ loginError: "Password Incorrect!" })
+                            break;
+                        default:
+                            console.log(`Something else went wrong: ${e.code}`)
+                            this.setState({ loginError: "Unkown  Error!" })
+                            break;
+                    }
+                });
+        } else if (loginOrSignUp === "signup") {
+            auth.createUserWithEmailAndPassword(email, password).catch((e) => {
+                console.log(e.code)
+                switch (e.code) {
+                    case "auth/invalid-email":
+                        this.setState({ loginError: "Invalid Email Address!" })
+                        break;
                     default:
                         console.log(`Something else went wrong: ${e.code}`)
-                        this.setState({loginError: "Unkown  Error!"})
+                        this.setState({ loginError: "Unkown  Error!" })
                         break;
                 }
-                
-                
-              });
-               
-             
-                
-           
-              
-            
-            
-        } else if (loginOrSignUp === "signup") {
-            auth.createUserWithEmailAndPassword(email, password).catch(function (e) {
-                console.log(e.code)
-                //error code checks will go here
-                // switch (e.code) {
-                //     case "":
-                //         user = auth.createUserWithEmailAndPassword(email, password)
-                //         break;
-                //     //need to add in password error check
-                //     default:
-                //         console.log(`Something else went wrong: ${e.code}`)
-                //         break;
-                //}
-            })
+            });
         }
         auth.onAuthStateChanged((firebaseuser) => {
             if (firebaseuser) {
@@ -157,6 +145,7 @@ class LoginSignUp extends Component {
         } else {
             return (
                 <div >
+                    {this.state.loginError && <div className="loginerror">{this.state.loginError}</div>}
                     <input type="email" id="email" placeholder="Email Address" required />
                     <input type="password" id="password" placeholder="Password" required />
                     <br /><br />
