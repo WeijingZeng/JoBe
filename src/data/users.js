@@ -27,9 +27,15 @@ let exportedMethods = {
             });
         });
     },
+    /*    Add user, firebaseID will come from the app state user object, location will be long and lat, so the profile form
+          should read the users location, lastLogin will also come from the app state user object, the profile form
+          should upload an image and then pass the URL to this method. localRemoteOrAll will be if they are looking to work
+          with people just locally, remotely or are open to any. If the select local only then  distanceIfLocal will store
+          how far around their location do they want
+    */
     async addUser(firebaseID, username, firstName, lastName, email, gender, city, state, age, location, seeking,
         studioSWUsed, mainGenre, secondGenre, thirdGenre, hasSpace, bio, achivements, role, links, influences, lastLogin,
-        profilePhotoUrl) {
+        profilePhotoUrl, localRemoteOrAll, distanceIfLocal) {
         //need error checking here to make sure all fields are supplied and also need to check that their handle is unique 
         let userCollection = await users();
         let newUser = {
@@ -59,6 +65,8 @@ let exportedMethods = {
             profilePhotoUrl: profilePhotoURL,
             profileViewCount: 0,
             adminUser: 0,
+            localRemoteOrAll: localRemoteOrAll,
+            distanceIfLocal: distanceIfLocal
 
         }
         return await userCollection.insertOne(newUser)
