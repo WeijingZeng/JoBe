@@ -26,8 +26,8 @@ class LoginSignUp extends Component {
             loginError: undefined
         };
     }
-    signOut() {
-        auth.signOut();
+    async signOut() {
+        await auth.signOut();
         this.setState(() => {
             return {
                 loggedin: 0,
@@ -40,12 +40,11 @@ class LoginSignUp extends Component {
             this.props.setUser(this.state)
         })
     }
-    emailLogin(loginOrSignUp) {
+    async emailLogin(loginOrSignUp) {
         const email = document.getElementById("email").value
         const password = document.getElementById("password").value
         if (loginOrSignUp === "login") {
-
-            auth.signInWithEmailAndPassword(email, password)
+            await auth.signInWithEmailAndPassword(email, password)
                 .catch((e) => {
                     console.log(e.code)
                     switch (e.code) {
@@ -60,12 +59,12 @@ class LoginSignUp extends Component {
                             break;
                         default:
                             console.log(`Something else went wrong: ${e.code}`)
-                            this.setState({ loginError: "Unkown  Error!" })
+                            this.setState({ loginError: "Unkown Error!" })
                             break;
                     }
                 });
         } else if (loginOrSignUp === "signup") {
-            auth.createUserWithEmailAndPassword(email, password).catch((e) => {
+            await auth.createUserWithEmailAndPassword(email, password).catch((e) => {
                 console.log(e.code)
                 switch (e.code) {
                     case "auth/invalid-email":
@@ -74,14 +73,17 @@ class LoginSignUp extends Component {
                     case "auth/weak-password":
                         this.setState({ loginError: "Password Blank or Password Less Than 6 Characters!" })
                         break;
+                    case "auth/email-already-in-use":
+                        this.setState({ loginError: "Email Address Already in Use!" })
+                        break;
                     default:
                         console.log(`Something else went wrong: ${e.code}`)
-                        this.setState({ loginError: "Unkown  Error!" })
+                        this.setState({ loginError: "Unkown Error!" })
                         break;
                 }
             });
         }
-        auth.onAuthStateChanged((firebaseuser) => {
+        await auth.onAuthStateChanged((firebaseuser) => {
             if (firebaseuser) {
                 this.setState(() => {
                     return {
@@ -91,10 +93,8 @@ class LoginSignUp extends Component {
                         loggedin: 1
                     }
                 }, function () {
-                    console.log(auth.currentUser)
                     this.props.setUser(this.state)
                 })
-
             }
         })
     }
@@ -107,17 +107,17 @@ class LoginSignUp extends Component {
             provider = new firebase.auth.FacebookAuthProvider();
         }
         try {
-            let result = await firebase.auth().signInWithPopup(provider)
+            await firebase.auth().signInWithPopup(provider)
         } catch (error) {
             // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
+            // var errorCode = error.code;
+            // var errorMessage = error.message;
             // The email of the user's account used.
-            var email = error.email;
+            //var email = error.email;
             // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
+            //var credential = error.credential;
         }
-        auth.onAuthStateChanged((firebaseuser) => {
+        await auth.onAuthStateChanged((firebaseuser) => {
             if (firebaseuser) {
                 this.setState(() => {
                     return {
@@ -127,10 +127,8 @@ class LoginSignUp extends Component {
                         loggedin: 1
                     }
                 }, function () {
-                    console.log(auth.currentUser)
                     this.props.setUser(this.state)
                 })
-
             }
         })
     }
