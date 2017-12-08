@@ -31,7 +31,7 @@ let exportedMethods = {
           should read the users location, lastLogin will also come from the app state user object, the profile form
           should upload an image and then pass the URL to this method. localRemoteOrAll will be if they are looking to work
           with people just locally, remotely or are open to any. If the select local only then  distanceIfLocal will store
-          how far around their location do they want
+          how far around their location they are willing to go
     */
     async addUser(firebaseID, username, firstName, lastName, email, gender, city, state, age, location, seeking,
         studioSWUsed, mainGenre, secondGenre, thirdGenre, hasSpace, bio, achivements, role, links, influences, lastLogin,
