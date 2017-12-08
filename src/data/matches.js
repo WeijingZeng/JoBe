@@ -5,6 +5,12 @@ const usersData = require("./users");
 
 let exportedMethods = {
     
+    async getPotentialMatches(uid){
+
+    },
+   async imInterested(interestedUid,interestedInUid ){
+
+    }
    
 }
 
