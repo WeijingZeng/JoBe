@@ -28,7 +28,7 @@ let exportedMethods = {
         });
     },
     /*    Add user, firebaseID will come from the app state user object, location will be long and lat, so the profile form
-          should read the users location, lastLogin will also come from the app state user object, the profile form
+          should read the users location based on IP address, look into the node package , lastLogin will also come from the app state user object, the profile form
           should upload an image and then pass the URL to this method. localRemoteOrAll will be if they are looking to work
           with people just locally, remotely or are open to any. If the select local only then  distanceIfLocal will store
           how far around their location they are willing to go
@@ -62,7 +62,7 @@ let exportedMethods = {
             influences: influences,
             matchingActive: 1,
             lastLogin: lastLogin,
-            profilePhotoUrl: profilePhotoURL,
+            profilePhotoUrl: profilePhotoUrl,
             profileViewCount: 0,
             adminUser: 0,
             localRemoteOrAll: localRemoteOrAll,
