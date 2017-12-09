@@ -33,7 +33,7 @@ let exportedMethods = {
           with people just locally, remotely or are open to any. If the select local only then  distanceIfLocal will store
           how far around their location they are willing to go
     */
-    async addUser(firebaseID, username, firstName, lastName, email, gender, city, state, age, long,lat, seeking,
+    async addUser(firebaseID, username, firstName, lastName, email, gender, city, state, age,location, long,lat, seeking,
         studioSWUsed, mainGenre, secondGenre, thirdGenre, hasSpace, bio, achivements, role, links, influences, lastLogin,
         profilePhotoUrl, localRemoteOrAll, distanceIfLocal) {
         //need error checking here to make sure all fields are supplied and also need to check that their handle is unique 
@@ -48,6 +48,7 @@ let exportedMethods = {
             city: city,
             state: state,
             age: age,
+            location: {long, lat},
             long: long,
             lat: lat,
             seeking: seeking,
