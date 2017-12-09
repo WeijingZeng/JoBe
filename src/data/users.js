@@ -69,7 +69,8 @@ let exportedMethods = {
             distanceIfLocal: distanceIfLocal
 
         }
-        return await userCollection.insertOne(newUser)
+       let addedUser= await userCollection.insertOne(newUser)
+        return this.getUserById(addedUser.insertedId);
     },
 
 
