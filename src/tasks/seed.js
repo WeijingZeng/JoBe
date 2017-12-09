@@ -23,7 +23,9 @@ getIP().then((ip)=> {
                 return users.addUser("8rpjbilwmlUOH3fnlKwBjjbSo9E2", "graffixnyc","Patrick","Hill", "graffixnyc@gmail.com","M",
             "Flushing","NY",21, lng, lat,"band","Pro Tools",1,3,9,"Yes, I have a studio space to use","Test Bio","I was born, isn't that an achivement enough?",
          "bassist","http://www.patrickhill.nyc","Pink Floyd, The Doors, Guns N Roses, Tool","Sat, 09 Dec 2017 17:59:02 GMT","www.myphoto.com/me.jpg","Local",10);
-            }).then(() => {
+            }).then((user) => {
+                console.log("USER:")
+                console.log(user)
                 console.log("Done seeding database");
                 db.close();
             });
