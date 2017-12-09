@@ -8,7 +8,11 @@ import {
   Switch
 } from "react-router-dom";
 
-import LoginSignUp from './components/loginsignup'
+import Bands from './components/Bands';
+import LoginSignUp from './components/LoginSignUp';
+import Image from './styles/band.jpg'
+
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +33,7 @@ class App extends Component {
     })
   }
   render() {
+    
     return (
       <Router>
         <div className="App">
@@ -37,18 +42,43 @@ class App extends Component {
             <h1 className="App-title">Welcome to JoBe - A Place where Musicians Connect</h1>
           </header>
           <p className="App-intro">
-            To get started, either login or sign up below
-
-        </p>
+            
+            <nav className="navbar navbar-toggleable-md navbar-light bg-faded">
+              <button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+              </button>
+              <a className="navbar-brand" href="/">Home</a>
+              <div className="collapse navbar-collapse" id="navbarNav">
+                <ul className="navbar-nav">
+                  <li className="nav-item active">
+                    <a className="nav-link" href="/">Home <span className="sr-only">(current)</span></a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/login">Login</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link" href="/bands">Bands</a>
+                  </li>
+                  <li className="nav-item">
+                    <a className="nav-link disabled" href="#">something else</a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+          </p>
           <br /><br />
-          <LoginSignUp setUser={this.setUser} />
+          
           <Switch>
-
+            
+            <Route path='/bands' component={Bands}/>
+            <Route path='/login' component={LoginSignUp} setUser={this.setUser}/>
           </Switch>
         </div>
       </Router>
     );
   }
 }
+
+
 
 export default App;

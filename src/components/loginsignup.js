@@ -147,7 +147,9 @@ class LoginSignUp extends Component {
             )
         } else {
             return (
+                
                 <div >
+                To get started, either login or sign up below
                     {this.state.loginError && <div className="loginerror">{this.state.loginError}</div>}
                     <input type="email" id="email" placeholder="Email Address" required />
                     <input type="password" id="password" placeholder="Password" required />
