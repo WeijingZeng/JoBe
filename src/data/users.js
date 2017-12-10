@@ -13,20 +13,20 @@ let exportedMethods = {
         try {
             let user = await userCollection.findOne({ _id: id })
             return user;
-        }catch(e) {
+        } catch (e) {
             console.log('there was an error');
-            console.log(e); 
-          }
+            console.log(e);
+        }
     },
     async getUserByUsername(username) {
         const userCollection = await users();
         try {
             let user = await userCollection.findOne({ username: username })
             return user;
-        }catch(e) {
+        } catch (e) {
             console.log('there was an error');
-            console.log(e); 
-          }
+            console.log(e);
+        }
     },
     async getUserByUsernameOrEmail(username, email) {
         return users().then((userCollection) => {
@@ -48,10 +48,10 @@ let exportedMethods = {
         let userCollection = await users();
         //here we check if the username(handle) supplied is unique if it's not, then there
         // will be an error returned and if it is then it goes ahead and adds the user
-        let existingUser=await this.getUserByUsername(username.toLowerCase());
-        if (existingUser){
-            return {error: "Username is not unique"};
-        }else{
+        let existingUser = await this.getUserByUsername(username.toLowerCase());
+        if (existingUser) {
+            return { error: "Username is not unique" };
+        } else {
             let newUser = {
                 _id: firebaseID,
                 username: username.toLowerCase(),
