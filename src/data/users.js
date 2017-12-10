@@ -10,9 +10,13 @@ let exportedMethods = {
     },
     async getUserById(id) {
         const userCollection = await users();
-        const user = await userCollection.findOne({ _id: id })
-        if (!user) throw "User Not Found";
-        return user;
+        try {
+            let user = await userCollection.findOne({ _id: id })
+            return user;
+        }catch(e) {
+            console.log('there was an error');
+            console.log(e); 
+          }
     },
     async getUserByUsername(username) {
         const userCollection = await users();
@@ -42,6 +46,8 @@ let exportedMethods = {
         profilePhotoUrl, localRemoteOrAll, distanceIfLocal) {
         //need error checking here to make sure all fields are supplied and also need to check that their handle is unique 
         let userCollection = await users();
+        //here we check if the username(handle) supplied is unique if it's not, then there
+        // will be an error returned and if it is then it goes ahead and adds the user
         let existingUser=await this.getUserByUsername(username.toLowerCase());
         if (existingUser){
             return {error: "Username is not unique"};
@@ -80,9 +86,6 @@ let exportedMethods = {
             return this.getUserById(addedUser.insertedId);
         }
     },
-
-
-
     async removeUser(id) {
         return users().then((userCollection) => {
             return userCollection.removeOne({ _id: id }).then((deletionInfo) => {
