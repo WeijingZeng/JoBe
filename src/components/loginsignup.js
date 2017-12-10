@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-var firebase = require('firebase');
-
-var config = {
+const firebase = require('firebase');
+const config = {
     apiKey: "AIzaSyCbb4SNcbrKwQsSxegT7A9TjsjG7jkYGBs",
     authDomain: "jobe-b84fc.firebaseapp.com",
     databaseURL: "https://jobe-b84fc.firebaseio.com",
@@ -10,7 +9,7 @@ var config = {
     messagingSenderId: "447681007576",
 };
 firebase.initializeApp(config);
-var auth = firebase.auth();
+const auth = firebase.auth();
 
 class LoginSignUp extends Component {
     constructor(props) {
@@ -98,7 +97,6 @@ class LoginSignUp extends Component {
             }
         })
     }
-
     async socialSignOn(socialProvider) {
         let provider = null
         if (socialProvider === 'google') {
@@ -156,7 +154,6 @@ class LoginSignUp extends Component {
                     <button onClick={() => this.emailLogin("signup")} id="signup" className="btn btn-primary">Sign Up</button>
                     <br /><br />
                     <img onClick={() => this.socialSignOn("google")} alt="google signin" src="./imgs/btn_google_signin.png" />
-
                     <br />
                     <img onClick={() => this.socialSignOn("facebook")} alt="facebook signin" src="./imgs/facebook_signin.png" />
                 </div>
@@ -164,5 +161,4 @@ class LoginSignUp extends Component {
         }
     }
 }
-
 export default LoginSignUp;
