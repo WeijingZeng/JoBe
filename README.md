@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-# Final Project for CS554
-=======
 # Web Programming II Final Group Project - JoBe
 This is the final group Project for CS 554 Web Programming II @ Stevens Institute of Technology
->>>>>>> refs/remotes/origin/master
 
 ## Group Members - Team Nitro
 
