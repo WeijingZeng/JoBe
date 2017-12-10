@@ -16,9 +16,13 @@ let exportedMethods = {
     },
     async getUserByUsername(username) {
         const userCollection = await users();
-        const user = await userCollection.findOne({ username: username })
-        if (!user) throw "User Not Found";
-        return user;
+        try {
+            let user = await userCollection.findOne({ username: username })
+            return user;
+        }catch(e) {
+            console.log('there was an error');
+            console.log(e); 
+          }
     },
     async getUserByUsernameOrEmail(username, email) {
         return users().then((userCollection) => {
@@ -33,44 +37,48 @@ let exportedMethods = {
           with people just locally, remotely or are open to any. If the select local only then  distanceIfLocal will store
           how far around their location they are willing to go
     */
-    async addUser(firebaseID, username, firstName, lastName, email, gender, city, state, age,long,lat, seeking,
+    async addUser(firebaseID, username, firstName, lastName, email, gender, city, state, age, long, lat, seeking,
         studioSWUsed, mainGenre, secondGenre, thirdGenre, hasSpace, bio, achivements, role, links, influences, lastLogin,
         profilePhotoUrl, localRemoteOrAll, distanceIfLocal) {
         //need error checking here to make sure all fields are supplied and also need to check that their handle is unique 
         let userCollection = await users();
-        let newUser = {
-            _id: firebaseID,
-            username: username.toLowerCase(),
-            firstName: firstName,
-            lastName: lastName,
-            email: email,
-            gender: gender,
-            city: city,
-            state: state,
-            age: age,
-            location: {long, lat},
-            seeking: seeking,
-            studioSWUsed: studioSWUsed,
-            mainGenre: mainGenre,
-            secondGenre: secondGenre,
-            thirdGenre: thirdGenre,
-            hasSpace: hasSpace,
-            bio: bio,
-            achivements: achivements,
-            role: role,
-            links: links,
-            influences: influences,
-            matchingActive: 1,
-            lastLogin: lastLogin,
-            profilePhotoUrl: profilePhotoUrl,
-            profileViewCount: 0,
-            adminUser: 0,
-            localRemoteOrAll: localRemoteOrAll,
-            distanceIfLocal: distanceIfLocal
-
+        let existingUser=await this.getUserByUsername(username.toLowerCase());
+        if (existingUser){
+            return {error: "Username is not unique"};
+        }else{
+            let newUser = {
+                _id: firebaseID,
+                username: username.toLowerCase(),
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                gender: gender,
+                city: city,
+                state: state,
+                age: age,
+                location: { long, lat },
+                seeking: seeking,
+                studioSWUsed: studioSWUsed,
+                mainGenre: mainGenre,
+                secondGenre: secondGenre,
+                thirdGenre: thirdGenre,
+                hasSpace: hasSpace,
+                bio: bio,
+                achivements: achivements,
+                role: role,
+                links: links,
+                influences: influences,
+                matchingActive: 1,
+                lastLogin: lastLogin,
+                profilePhotoUrl: profilePhotoUrl,
+                profileViewCount: 0,
+                adminUser: 0,
+                localRemoteOrAll: localRemoteOrAll,
+                distanceIfLocal: distanceIfLocal
+            }
+            let addedUser = await userCollection.insertOne(newUser)
+            return this.getUserById(addedUser.insertedId);
         }
-       let addedUser= await userCollection.insertOne(newUser)
-        return this.getUserById(addedUser.insertedId);
     },
 
 
