@@ -1,13 +1,33 @@
 {
-  "name": "patrickhilllab3",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "nitro-final-project",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@firebase/app": "^0.1.2",
+    "bcryptjs": "^2.4.3",
+    "bluebird": "^3.5.1",
+    "external-ip": "^1.3.1",
+    "firebase": "^4.6.1",
+    "firebaseui": "^2.4.1",
+    "flat": "^4.0.0",
+    "imagemagick": "^0.1.3",
+    "iplocation": "^5.0.0",
+    "mongodb": "^2.2.33",
+    "node-redis": "^0.1.7",
+    "node-uuid": "^1.4.8",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-router-dom": "^4.2.2",
+    "react-scripts": "1.0.17",
+    "redis": "^2.8.0",
+    "socket.io": "^2.0.4"
   },
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
   "devDependencies": {
     "bootstrap": "^4.0.0-beta",
     "gulp": "^3.9.1",
@@ -19,11 +39,5 @@
     "gulp-sourcemaps": "^2.6.1",
     "jquery": "^3.2.1",
     "popper.js": "^1.12.5"
-  },
-  "dependencies": {
-    "body-parser": "^1.18.1",
-    "express": "^4.15.4",
-    "express-handlebars": "^3.0.0",
-    "handlebars": "^4.0.10"
   }
 }
