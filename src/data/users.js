@@ -11,8 +11,6 @@ let exportedMethods = {
     async getUsersNear(long, lat){
         const userCollection = await users();
         let userList= await userCollection.find({location:{ $near :{ $geometry: { type: "Point",  coordinates: [ long, lat ] },$minDistance: 0,$maxDistance: 5000}}}).toArray();
-        console.log("USERNEARLIST")
-        console.log(userList)
         return userList;
     },
     async getUserById(id) {

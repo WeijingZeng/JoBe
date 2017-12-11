@@ -1,6 +1,5 @@
 const mongoCollections = require("../config/mongoCollections");
 const matches = mongoCollections.matches;
-const users = mongoCollections.users;
 const uuid = require('node-uuid');
 const usersData = require("./users");
 
@@ -8,13 +7,14 @@ let exportedMethods = {
 
     async getPotentialMatches(uid) {
         let user = await usersData.getUserById(uid)
-        //console.log(user)
+        console.log(user.location.coordinates[0])
+        console.log(user.location.coordinates[1])
         //here is where we need to search users based on the users's profile
         // like genre, influences, people who are looking for the searcher's role "Guitarist"
         // and people who the searcher is looking for
-        let userList= await usersData.getUsersNear(user.location.coordinates[0],user.location.coordinates[0])
-        console.log(userList)
-        //  return userList
+        let userList= await usersData.getUsersNear(user.location.coordinates[0],user.location.coordinates[1])
+        
+          return userList
     },
     async imInterested(interestedUid, interestedInUid) {
         let user1 = await usersData.getUserById(interestedUid)
