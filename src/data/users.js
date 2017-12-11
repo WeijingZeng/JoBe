@@ -5,7 +5,7 @@ const uuid = require('node-uuid');
 let exportedMethods = {
     async getAllUsers() {
         const userCollection = await users();
-        const allUsers = await userCollection.find({}).toArray();;
+        const allUsers = await userCollection.find({}).toArray();
         return allUsers;
     },
     async getUsersNear(long, lat){
