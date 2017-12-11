@@ -8,13 +8,24 @@ let exportedMethods = {
         const allUsers = await userCollection.find({}).toArray();
         return allUsers;
     },
-    async getPotentialMatches(long, lat, maxDistanceInMiles,role){
+    async getPotentialMatches(long, lat, maxDistanceInMiles, role) {
         //convert the number of miles into meters
-        let maxDistance= maxDistanceInMiles * 1609.34
+        let maxDistance = maxDistanceInMiles * 1609.34
         const userCollection = await users();
         //let userList= await userCollection.find({location:{ $near :{ $geometry: { type: "Point",  coordinates: [ long, lat ] },$minDistance: 0,$maxDistance: maxDistance}}}).toArray();
-        
-        let userList= await userCollection.find({ $and: [{ seeking:  role  }, {location:{ $near :{ $geometry: { type: "Point",  coordinates: [ long, lat ] },$minDistance: 0,$maxDistance: maxDistance}}}] }).toArray()
+
+        let userList = await userCollection.find({
+            $and: [
+                { seeking: role },
+                {
+                    location: {
+                        $near: {
+                            $geometry: { type: "Point", coordinates: [long, lat] }, $minDistance: 0,
+                            $maxDistance: maxDistance
+                        }
+                    }
+                }]
+        }).toArray()
         return userList;
     },
     async getUserById(id) {
@@ -71,7 +82,7 @@ let exportedMethods = {
                 city: city,
                 state: state,
                 age: age,
-                location: { type: "Point", coordinates: [ long, lat ] },
+                location: { type: "Point", coordinates: [long, lat] },
                 seeking: seeking,
                 studioSWUsed: studioSWUsed,
                 mainGenre: mainGenre,
@@ -91,7 +102,7 @@ let exportedMethods = {
                 localRemoteOrAll: localRemoteOrAll,
                 distanceIfLocal: distanceIfLocal
             }
-            await userCollection.createIndex( { location : "2dsphere" } )
+            await userCollection.createIndex({ location: "2dsphere" })
             let addedUser = await userCollection.insertOne(newUser)
             return this.getUserById(addedUser.insertedId);
         }
