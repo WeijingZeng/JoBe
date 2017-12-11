@@ -1,54 +1,62 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const app = express();
-const static = express.static(__dirname + '/public');
+import React, { Component } from 'react';
+import logo from './logo.svg';
+import './App.css';
 
-const configRoutes = require("./routes");
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch
+} from "react-router-dom";
 
-const exphbs = require('express-handlebars');
-
-const Handlebars = require('handlebars');
-
-const handlebarsInstance = exphbs.create({
-    defaultLayout: 'main',
-    // Specify helpers which are only registered on this instance.
-    helpers: {
-        asJSON: (obj, spacing) => {
-            if (typeof spacing === "number")
-                return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
-
-            return new Handlebars.SafeString(JSON.stringify(obj));
+import LoginSignUp from './components/loginsignup'
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.setUser = this.setUser.bind(this)
+  }
+  setUser(user) {
+    this.setState(() => {
+      return {
+        user: {
+          email: user.email,
+          uid: user.uid,
+          lastSignInTime: user.lastSignInTime,
+          loggedin: user.loggedin
         }
-    },
-    partialsDir: [
-        'views/partials/'
-    ]
-});
+      }
+    }, function () {
+      console.log(`APP STATE: ${this.state.user.email}, ${this.state.user.uid} ${this.state.user.lastSignInTime}, ${this.state.user.loggedin}`)
+    })
+  }
+  render() {
+    let body = null;
+    console.log (this.state)
+    
+      //If the user is not logged in, render the login
+      body =
+        <Router>
+          <div className="App">
+            <header className="App-header">
+              <img src={logo} className="App-logo" alt="logo" />
+              <h1 className="App-title">Welcome to JoBe - A Place where Musicians Connect</h1>
+            </header>
+            <p className="App-intro">
+             Here is just our app container.  I have it rendering the LoginSignUp component because there are no other components
+             done yet. We need to 
+             think about what we want displayed on this page as this is the first page the user will be met with.  
+             Maybe check the user state object,If it's populated, then we know the user is logged in and can render the logged 
+             in "homepage" whatever we decide that
+             will be.  If they are not logged in, then render the login component as shown below.
+        </p>
+            <br /><br />
+            <LoginSignUp setUser={this.setUser} />
+            <Switch>
 
-const rewriteUnsupportedBrowserMethods = (req, res, next) => {
-    // If the user posts to the server with a property called _method, rewrite the request's method
-    // To be that method; so if they post _method=PUT you can now allow browsers to POST to a route that gets
-    // rewritten in this middleware to a PUT route
-    if (req.body && req.body._method) {
-        req.method = req.body._method;
-        delete req.body._method;
-    }
+            </Switch>
+          </div>
+        </Router>
+    return body;
+  }
+}
 
-    // let the next middleware run:
-    next();
-};
-
-app.use("/public", static);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(rewriteUnsupportedBrowserMethods);
-
-app.engine('handlebars', handlebarsInstance.engine);
-app.set('view engine', 'handlebars');
-
-configRoutes(app);
-
-app.listen(3000, () => {  
-    console.log("We've now got a server!");
-    console.log("Your routes will be running on http://localhost:3000");
-});
+export default App;
