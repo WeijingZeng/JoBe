@@ -134,6 +134,11 @@ class LoginSignUp extends Component {
         if (this.state.loggedin === 1) {
             return (
                 <div >
+                    After Logging in, either the profile form for them to fill out their profile will
+                    be displayed if they are a new user, or if they are not a new user, then render
+                    their "homepage"
+                    <br/>
+                    <br/>
                     You are logged in as UserID: {this.state.uid}
                     <br />
                     You are logged with Email: {this.state.email}
