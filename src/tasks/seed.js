@@ -28,7 +28,7 @@ getIP().then((ip) => {
                         "bassist", "http://www.patrickhill.nyc", ["Pink Floyd", "The Doors", "Guns N Roses", "Tool"], "Sat, 09 Dec 2017 17:59:02 GMT", "www.myphoto.com/me.jpg", "Local", 10);
                 }).then((user) => {
                     console.log("POTENTIAL MATCHES FUNCTION")
-                    return potentialMatches.getPotentialMatches("8rpjbilwmlUOH3fnlKwBjjbSo9E2")
+                    return users.getPotentialMatches("8rpjbilwmlUOH3fnlKwBjjbSo9E2")
                     
                 }).then(() => {
                     console.log("Done seeding database");
