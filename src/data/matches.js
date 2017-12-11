@@ -12,20 +12,8 @@ let exportedMethods = {
         //here is where we need to search users based on the users's profile
         // like genre, influences, people who are looking for the searcher's role "Guitarist"
         // and people who the searcher is looking for
-        // const userCollection = await users();
-        // let userList= await userCollection.find(
-        //     {
-        //       location:
-        //         { $near :
-        //            {
-        //              $geometry: { type: "Point",  coordinates: [ -73.8205, 40.7506 ] },
-        //              $minDistance: 1000,
-        //              $maxDistance: 5000
-        //            }
-        //         }
-        //     }
-        //  )
-        //  console.log(userList.length)
+        let userList= await usersData.getAllUsers()
+        console.log(userList)
         //  return userList
     },
     async imInterested(interestedUid, interestedInUid) {
