@@ -9,10 +9,11 @@ let exportedMethods = {
         let user = await usersData.getUserById(uid)
         console.log(user.location.coordinates[0])
         console.log(user.location.coordinates[1])
+        console.log(user.role)
         //here is where we need to search users based on the users's profile
         // like genre, influences, people who are looking for the searcher's role "Guitarist"
         // and people who the searcher is looking for
-        let userList= await usersData.getUsersNear(user.location.coordinates[0],user.location.coordinates[1], 10)
+        let userList= await usersData.getUsersNear(user.location.coordinates[0],user.location.coordinates[1], 10,user.role)
         console.log(userList)
           return userList
     },
