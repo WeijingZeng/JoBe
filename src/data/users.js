@@ -8,7 +8,7 @@ let exportedMethods = {
         const allUsers = await userCollection.find({}).toArray();
         return allUsers;
     },
-    async getUsersNear(long, lat, maxDistanceInMiles,role){
+    async getPotentialMatches(long, lat, maxDistanceInMiles,role){
         //convert the number of miles into meters
         let maxDistance= maxDistanceInMiles * 1609.34
         const userCollection = await users();
