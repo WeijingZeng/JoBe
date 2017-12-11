@@ -8,12 +8,15 @@ let exportedMethods = {
         const allUsers = await userCollection.find({}).toArray();
         return allUsers;
     },
-    async getPotentialMatches(long, lat, maxDistanceInMiles, role) {
+    async getPotentialMatches(long, lat, maxDistanceInMiles, role,localRemoteOrAll) {
         //convert the number of miles into meters
+        //location search, this will have to do two things.
+        //1. it will first have to check if the user said they want local matches only
+        //if they do then it will execute the query below, if they do not care about distance then 
+        //we will execute another query without the location filters
+        if (localRemoteOrAll ==="Local"){
         let maxDistance = maxDistanceInMiles * 1609.34
         const userCollection = await users();
-        //let userList= await userCollection.find({location:{ $near :{ $geometry: { type: "Point",  coordinates: [ long, lat ] },$minDistance: 0,$maxDistance: maxDistance}}}).toArray();
-
         let userList = await userCollection.find({
             $and: [
                 { seeking: role },
@@ -27,6 +30,9 @@ let exportedMethods = {
                 }]
         }).toArray()
         return userList;
+    }else{
+        //they do not care about location so run query without location filters
+    }
     },
     async getUserById(id) {
         const userCollection = await users();
