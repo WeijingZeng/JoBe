@@ -29,6 +29,7 @@ getIP().then((ip) => {
                 }).then((user) => {
                     console.log("USER:")
                     console.log(user)
+                    
                 }).then(() => {
                     console.log("POTENTIAL MATCHES FUNCTION")
                     potentialMatches.getPotentialMatches("8rpjbilwmlUOH3fnlKwBjjbSo9E2")

@@ -62,7 +62,7 @@ let exportedMethods = {
                 city: city,
                 state: state,
                 age: age,
-                location: { long, lat },
+                location: { type: "Point", coordinates: [ long, lat ] },
                 seeking: seeking,
                 studioSWUsed: studioSWUsed,
                 mainGenre: mainGenre,
@@ -82,6 +82,7 @@ let exportedMethods = {
                 localRemoteOrAll: localRemoteOrAll,
                 distanceIfLocal: distanceIfLocal
             }
+            await userCollection.createIndex( { location : "2dsphere" } )
             let addedUser = await userCollection.insertOne(newUser)
             return this.getUserById(addedUser.insertedId);
         }
