@@ -5,8 +5,15 @@ const uuid = require('node-uuid');
 let exportedMethods = {
     async getAllUsers() {
         const userCollection = await users();
-        const allUsers = await userCollection.find({}).toArray();
+        const allUsers = await userCollection.find({}).toArray();;
         return allUsers;
+    },
+    async getUsersNear(long, lat){
+        const userCollection = await users();
+        let userList= await userCollection.find({location:{ $near :{ $geometry: { type: "Point",  coordinates: [ long, lat ] },$minDistance: 0,$maxDistance: 5000}}}).toArray();
+        console.log("USERNEARLIST")
+        console.log(userList)
+        return userList;
     },
     async getUserById(id) {
         const userCollection = await users();
