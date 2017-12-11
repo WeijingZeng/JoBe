@@ -27,12 +27,9 @@ getIP().then((ip) => {
                         "Flushing", "NY", 21, lng, lat, "band", "Pro Tools", 1, 3, 9, "Yes, I have a studio space to use", "Test Bio", "I was born, isn't that an achivement enough?",
                         "bassist", "http://www.patrickhill.nyc", ["Pink Floyd", "The Doors", "Guns N Roses", "Tool"], "Sat, 09 Dec 2017 17:59:02 GMT", "www.myphoto.com/me.jpg", "Local", 10);
                 }).then((user) => {
-                    console.log("USER:")
-                    console.log(user)
-                    
-                }).then(() => {
                     console.log("POTENTIAL MATCHES FUNCTION")
-                    potentialMatches.getPotentialMatches("8rpjbilwmlUOH3fnlKwBjjbSo9E2")
+                    return potentialMatches.getPotentialMatches("8rpjbilwmlUOH3fnlKwBjjbSo9E2")
+                    
                 }).then(() => {
                     console.log("Done seeding database");
                     db.close();
@@ -47,6 +44,14 @@ getIP().then((ip) => {
 
 
 
-
+// async function main(){
+    
+ 
+//      let allUsers=await potentialMatches.getPotentialMatches("8rpjbilwmlUOH3fnlKwBjjbSo9E2");
+//  console.log(allUsers)
+ 
+//  }
+ 
+//  main()
 
 

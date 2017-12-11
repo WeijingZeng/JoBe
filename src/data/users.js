@@ -8,11 +8,11 @@ let exportedMethods = {
         const allUsers = await userCollection.find({}).toArray();
         return allUsers;
     },
-    async getUsersNear(long, lat){
+    async getUsersNear(long, lat, maxDistanceInMiles){
+        //convert the number of miles into meters
+        let maxDistance= maxDistanceInMiles * 1609.34
         const userCollection = await users();
-        let userList= await userCollection.find({location:{ $near :{ $geometry: { type: "Point",  coordinates: [ long, lat ] },$minDistance: 0,$maxDistance: 5000}}}).toArray();
-        console.log("USERNEARLIST")
-        console.log(userList)
+        let userList= await userCollection.find({location:{ $near :{ $geometry: { type: "Point",  coordinates: [ long, lat ] },$minDistance: 0,$maxDistance: maxDistance}}}).toArray();
         return userList;
     },
     async getUserById(id) {
