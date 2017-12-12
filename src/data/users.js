@@ -32,6 +32,7 @@ let exportedMethods = {
                 $and: [
                     { seeking: role },
                     { matchingActive: 1 },
+                    {influences: { $in: [influences] }},
                     {
                         location: {
                             $near: {
