@@ -81,7 +81,7 @@ class App extends Component {
         if (this.state && this.state.user && this.state.user.loggedin === 1) {
             body = (
                 <Router>
-                    <div className="container">
+                    <div >
                         <Switch>
                             <Route path="/" component={Matches} />
                         </Switch>
