@@ -14,25 +14,28 @@ let exportedMethods = {
         let lat = user.location.coordinates[1];
         let maxDistanceInMiles = user.distanceIfLocal;
         let role = user.role;
-        let mainGenre=user.mainGenre;
-        let secondGenre=user.secondGenre;
-        let thirdGenre=user.thirdGenre;
-        let influences=user.influences;
+        let mainGenre = user.mainGenre;
+        let secondGenre = user.secondGenre;
+        let thirdGenre = user.thirdGenre;
+        let influences = user.influences;
         let localRemoteOrAll = user.localRemoteOrAll;
-
+        let userList = null;
         //location search, this will have to do two things.
         //1. it will first have to check if the user said they want local matches only
         //if they do then it will execute the query below, if they do not care about distance then 
         //we will execute another query without the location filters
-        if (localRemoteOrAll === "Local" || localRemoteOrAll === "All" ) {
+        if (localRemoteOrAll === "Local" || localRemoteOrAll === "All") {
             const userCollection = await users();
             //convert the number of miles into meters
             let maxDistance = maxDistanceInMiles * 1609.34
-            let userList = await userCollection.find({
+            userList = await userCollection.find({
                 $and: [
                     { seeking: role },
                     { matchingActive: 1 },
-                    {influences: { $in: [influences] }},
+                    { influences: { $in: [influences] } },
+                    { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                    { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                    { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
                     {
                         location: {
                             $near: {
@@ -42,12 +45,23 @@ let exportedMethods = {
                         }
                     }]
             }).toArray()
-            console.log("USERLIST:")
-            console.log(userList)
-            return userList;
+
         } else {
             //they do not care about location so run query without location filters
+            userList = await userCollection.find({
+                $and: [
+                    { seeking: role },
+                    { matchingActive: 1 },
+                    { influences: { $in: [influences] } },
+                    { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                    { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                    { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }
+                ]
+            }).toArray()
         }
+        console.log("USERLIST:")
+        console.log(userList)
+        return userList;
     },
     async getUserById(id) {
         const userCollection = await users();
