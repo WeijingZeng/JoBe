@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import firebase from "firebase";
 
 import { auth } from "../config/firebase-auth";
+import { test } from "../tasks/s3_upload_or_get";
 
 class LoginSignUp extends Component {
     constructor(props) {
@@ -86,7 +87,18 @@ class LoginSignUp extends Component {
             provider = new firebase.auth.FacebookAuthProvider();
         }
         try {
-            await auth.signInWithPopup(provider);
+            var auth1=await auth.signInWithPopup(provider);
+            
+            // profile picture of facebook profile
+            if(auth1.additionalUserInfo.providerId==='facebook.com'){    
+                test('https://graph.facebook.com/'+auth1.user.providerData[0].uid+'/picture?width=800', auth1.user.email+'.jpg')    // test function is in s3_upload_or_get file
+            }
+
+            // profile picture of google profile
+            if(auth1.additionalUserInfo.providerId==='google.com'){
+               test(auth1.user.photoURL, auth1.user.email+'.jpg');
+            }
+
         } catch (error) {
             // Handle Errors here.
             // var errorCode = error.code;
