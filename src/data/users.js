@@ -33,9 +33,12 @@ let exportedMethods = {
                     { seeking: role },
                     { matchingActive: 1 },
                     { influences: { $in: [influences] } },
-                    { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                    { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                    { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                    {
+                        $or: [
+                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                    },
                     {
                         location: {
                             $near: {
@@ -53,9 +56,12 @@ let exportedMethods = {
                     { seeking: role },
                     { matchingActive: 1 },
                     { influences: { $in: [influences] } },
-                    { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                    { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                    { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }
+                    {
+                        $or: [
+                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                    }
                 ]
             }).toArray()
         }
