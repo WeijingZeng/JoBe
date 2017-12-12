@@ -6,6 +6,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { auth } from "./config/firebase-auth";
 
 import LoginSignUp from "./components/loginsignup";
+import Matches from "./components/matches";
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -79,18 +81,10 @@ class App extends Component {
         if (this.state && this.state.user && this.state.user.loggedin === 1) {
             body = (
                 <Router>
-                    <div>
-                        <p className="App-intro">
-                            Put Switch->Route(s) within this Router to render the respective
-                            components. They will be rendered only when logged
-                            in.<br />
-                            The login/logout functionality is encapsulated in{" "}
-                            <em>./config/firebase-auth.js.</em>
-                            <br />
-                            For logout (<b>probably in the nav</b>); use the
-                            method as shown below with the logout button.
-                        </p>
-                        <br />
+                    <div className="container">
+                        <Switch>
+                            <Route path="/" component={Matches} />
+                        </Switch>
                         <br />
                         You are logged in as UserID: {this.state.user.uid}
                         <br />
