@@ -1,62 +1,124 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { auth } from "./config/firebase-auth";
 
-import LoginSignUp from './components/loginsignup'
+import LoginSignUp from "./components/loginsignup";
 class App extends Component {
-  constructor(props) {
-    super(props);
-    this.setUser = this.setUser.bind(this)
-  }
-  setUser(user) {
-    this.setState(() => {
-      return {
-        user: {
-          email: user.email,
-          uid: user.uid,
-          lastSignInTime: user.lastSignInTime,
-          loggedin: user.loggedin
+    constructor(props) {
+        super(props);
+        this.setUser = this.setUser.bind(this);
+    }
+    handleAuthStateChanged(firebaseuser, self) {
+        console.log("Auth state changed");
+        let user = {
+            loggedin: 0,
+            email: undefined,
+            uid: undefined,
+            lastSignInTime: undefined,
+            loginError: undefined
+        };
+        if (firebaseuser) {
+            user = {
+                email: firebaseuser.email,
+                uid: firebaseuser.uid,
+                lastSignInTime: firebaseuser.metadata.lastSignInTime,
+                loggedin: 1
+            };
         }
-      }
-    }, function () {
-      console.log(`APP STATE: ${this.state.user.email}, ${this.state.user.uid} ${this.state.user.lastSignInTime}, ${this.state.user.loggedin}`)
-    })
-  }
-  render() {
-    let body = null;
-    console.log (this.state)
-    
-      //If the user is not logged in, render the login
-      body =
-        <Router>
-          <div className="App">
-            <header className="App-header">
-              <img src={logo} className="App-logo" alt="logo" />
-              <h1 className="App-title">Welcome to JoBe - A Place where Musicians Connect</h1>
-            </header>
-            <p className="App-intro">
-             Here is just our app container.  I have it rendering the LoginSignUp component because there are no other components
-             done yet. We need to 
-             think about what we want displayed on this page as this is the first page the user will be met with.  
-             Maybe check the user state object,If it's populated, then we know the user is logged in and can render the logged 
-             in "homepage" whatever we decide that
-             will be.  If they are not logged in, then render the login component as shown below.
-        </p>
-            <br /><br />
-            <LoginSignUp setUser={this.setUser} />
-            <Switch>
+        self.setUser(user);
+    }
 
-            </Switch>
-          </div>
-        </Router>
-    return body;
-  }
+    componentDidMount() {
+        auth.onAuthStateChanged(user =>
+            this.handleAuthStateChanged(user, this)
+        );
+    }
+    setUser(user) {
+        this.setState(
+            () => {
+                return {
+                    user: {
+                        email: user.email,
+                        uid: user.uid,
+                        lastSignInTime: user.lastSignInTime,
+                        loggedin: user.loggedin
+                    }
+                };
+            },
+            function() {
+                console.log(
+                    `APP STATE: ${this.state.user.email}, ${
+                        this.state.user.uid
+                    } ${this.state.user.lastSignInTime}, ${
+                        this.state.user.loggedin
+                    }`
+                );
+            }
+        );
+    }
+
+    render() {
+        let body = null;
+        console.log(this.state);
+
+        //If the user is not logged in, render the login
+        let header = (
+            <div>
+                <header className="App-header">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <h1 className="App-title">
+                        Welcome to JoBe - A Place where Musicians Connect
+                    </h1>
+                </header>
+            </div>
+        );
+
+        if (this.state && this.state.user && this.state.user.loggedin === 1) {
+            body = (
+                <Router>
+                    <div>
+                        <p className="App-intro">
+                            Put Switch->Route(s) within this Router to render the respective
+                            components. They will be rendered only when logged
+                            in.<br />
+                            The login/logout functionality is encapsulated in{" "}
+                            <em>./config/firebase-auth.js.</em>
+                            <br />
+                            For logout (<b>probably in the nav</b>); use the
+                            method as shown below with the logout button.
+                        </p>
+                        <br />
+                        <br />
+                        You are logged in as UserID: {this.state.user.uid}
+                        <br />
+                        You are logge with Email: {this.state.user.email}
+                        <br />
+                        Your Last Login Was: {this.state.user.lastSignInTime}
+                        <br />
+                        <button
+                            onClick={() => auth.signOut()}
+                            id="login"
+                            className="btn btn-primary"
+                        >
+                            Log Out
+                        </button>
+                    </div>
+                </Router>
+            );
+        } else {
+            body = <LoginSignUp setUser={this.setUser} />;
+        }
+
+        return (
+            <div className="App">
+                {header}
+                {body}
+            </div>
+        );
+    }
 }
 
 export default App;
