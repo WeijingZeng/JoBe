@@ -25,3 +25,7 @@ Based on this profile, the system will match them to other musicians(user B) tha
 npm install  
 must have redis-server running  
 npm start
+
+### Seeding the database:
+
+npm run seed
