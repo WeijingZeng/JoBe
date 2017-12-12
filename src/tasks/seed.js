@@ -23,9 +23,9 @@ getIP().then((ip) => {
                     //firebaseID, username, firstName, lastName, email, gender, city, state, age, long, lat, seeking,
                     //studioSWUsed, mainGenre, secondGenre, thirdGenre, hasSpace, bio, achivements, role, links, influences, lastLogin,
                     //profilePhotoUrl, localRemoteOrAll, distanceIfLocal
-                    return users.addUser("123458929848", "johndoe", "John", "Doe", "graffixnyc@gmail.com", "M",
-                        "Flushing", "NY", 21, lng, lat, "bassist", "Pro Tools", 6, 1, 11, "Yes, I have a studio space to use", "Test Bio", "I was born, isn't that an achivement enough?",
-                        "band", "http://www.patrickhill.nyc", ["Motley Crue", "Staind", "Twisted Sister", "Tool"], "Sat, 09 Dec 2017 17:59:02 GMT", "www.myphoto.com/me.jpg", "Local", 10);
+                    return users.addUser("8rpjbilwmlUOH3fnlKwBjjbSo9E2", "graffixnyc", "Patrick", "Hill", "graffixnyc@gmail.com", "M",
+                        "Flushing", "NY", 21, lng, lat, "band", "Pro Tools", 1, 3, 9, "Yes, I have a studio space to use", "Test Bio", "I was born, isn't that an achivement enough?",
+                        "bassist", "http://www.patrickhill.nyc", ["Pink Floyd", "The Doors", "Guns N Roses", "Tool"], "Sat, 09 Dec 2017 17:59:02 GMT", "www.myphoto.com/me.jpg", "Local", 10);
                 }).then((user) => {
                     console.log("POTENTIAL MATCHES FUNCTION")
                     return users.getPotentialMatches("8rpjbilwmlUOH3fnlKwBjjbSo9E2")

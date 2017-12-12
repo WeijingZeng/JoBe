@@ -50,7 +50,7 @@ let exportedMethods = {
                 $and: [
                     { seeking: role },
                     { matchingActive: 1 },
-                    { influences: { $in: [influences] } },
+                    { influences: { $in: influences } },
                     {
                         $or: [
                             { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
