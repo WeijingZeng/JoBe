@@ -23,6 +23,25 @@ let exportedMethods = {
         const userCollection = await users();
         if (localRemoteOrAll === "Local" || localRemoteOrAll === "All") {
             //convert the number of miles into meters
+<<<<<<< HEAD
+            let maxDistance = maxDistanceInMiles * 1609.34
+            userList = await userCollection.find({
+                $and: [
+                    { seeking: role },
+                    { matchingActive: 1 },
+                    { influences: { $in: influences } },
+                    {
+                        $or: [
+                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                    },
+                    {
+                        location: {
+                            $near: {
+                                $geometry: { type: "Point", coordinates: [long, lat] }, $minDistance: 0,
+                                $maxDistance: maxDistance
+=======
             let maxDistance = maxDistanceInMiles * 1609.34;
             userList = await userCollection
                 .find({
@@ -71,6 +90,7 @@ let exportedMethods = {
                                     $minDistance: 0,
                                     $maxDistance: maxDistance
                                 }
+>>>>>>> 7b2b67a894a9ea49f9aff10e80ca562be23f708a
                             }
                         }
                     ]
@@ -78,6 +98,21 @@ let exportedMethods = {
                 .toArray();
         } else {
             //they do not care about location so run query without location filters
+<<<<<<< HEAD
+            userList = await userCollection.find({
+                $and: [
+                    { seeking: role },
+                    { matchingActive: 1 },
+                    { influences: { $in: influences } },
+                    {
+                        $or: [
+                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                    }
+                ]
+            }).toArray()
+=======
             userList = await userCollection
                 .find({
                     $and: [
@@ -118,6 +153,7 @@ let exportedMethods = {
                     ]
                 })
                 .toArray();
+>>>>>>> 7b2b67a894a9ea49f9aff10e80ca562be23f708a
         }
         console.log("USERLIST:");
         console.log(userList);
