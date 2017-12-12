@@ -8,6 +8,67 @@ let exportedMethods = {
         const allUsers = await userCollection.find({}).toArray();
         return allUsers;
     },
+    async getPotentialMatches(uid) {
+        let user = await this.getUserById(uid);
+        let long = user.location.coordinates[0];
+        let lat = user.location.coordinates[1];
+        let maxDistanceInMiles = user.distanceIfLocal;
+        let role = user.role;
+        let mainGenre = user.mainGenre;
+        let secondGenre = user.secondGenre;
+        let thirdGenre = user.thirdGenre;
+        let influences = user.influences;
+        let localRemoteOrAll = user.localRemoteOrAll;
+        let userList = null;
+        //location search, this will have to do two things.
+        //1. it will first have to check if the user said they want local matches only
+        //if they do then it will execute the query below, if they do not care about distance then 
+        //we will execute another query without the location filters
+        if (localRemoteOrAll === "Local" || localRemoteOrAll === "All") {
+            const userCollection = await users();
+            //convert the number of miles into meters
+            let maxDistance = maxDistanceInMiles * 1609.34
+            userList = await userCollection.find({
+                $and: [
+                    { seeking: role },
+                    { matchingActive: 1 },
+                    { influences: { $in: [influences] } },
+                    {
+                        $or: [
+                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                    },
+                    {
+                        location: {
+                            $near: {
+                                $geometry: { type: "Point", coordinates: [long, lat] }, $minDistance: 0,
+                                $maxDistance: maxDistance
+                            }
+                        }
+                    }]
+            }).toArray()
+
+        } else {
+            //they do not care about location so run query without location filters
+            userList = await userCollection.find({
+                $and: [
+                    { seeking: role },
+                    { matchingActive: 1 },
+                    { influences: { $in: [influences] } },
+                    {
+                        $or: [
+                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                    }
+                ]
+            }).toArray()
+        }
+        console.log("USERLIST:")
+        console.log(userList)
+        return userList;
+    },
     async getUserById(id) {
         const userCollection = await users();
         try {
@@ -62,7 +123,7 @@ let exportedMethods = {
                 city: city,
                 state: state,
                 age: age,
-                location: { long, lat },
+                location: { type: "Point", coordinates: [long, lat] },
                 seeking: seeking,
                 studioSWUsed: studioSWUsed,
                 mainGenre: mainGenre,
@@ -82,6 +143,7 @@ let exportedMethods = {
                 localRemoteOrAll: localRemoteOrAll,
                 distanceIfLocal: distanceIfLocal
             }
+            await userCollection.createIndex({ location: "2dsphere" })
             let addedUser = await userCollection.insertOne(newUser)
             return this.getUserById(addedUser.insertedId);
         }
