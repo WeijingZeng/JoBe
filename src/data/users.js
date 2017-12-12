@@ -42,8 +42,9 @@ let exportedMethods = {
                                 $maxDistance: maxDistance
                             }
                         }
-                    ]
-                })
+                    }
+                ]
+            })
                 .toArray();
         } else {
             //they do not care about location so run query without location filters
