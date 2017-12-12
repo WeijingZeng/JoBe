@@ -20,10 +20,6 @@ let exportedMethods = {
         let influences = user.influences;
         let localRemoteOrAll = user.localRemoteOrAll;
         let userList = null;
-        //location search, this will have to do two things.
-        //1. it will first have to check if the user said they want local matches only
-        //if they do then it will execute the query below, if they do not care about distance then 
-        //we will execute another query without the location filters
         if (localRemoteOrAll === "Local" || localRemoteOrAll === "All") {
             const userCollection = await users();
             //convert the number of miles into meters
@@ -48,7 +44,6 @@ let exportedMethods = {
                         }
                     }]
             }).toArray()
-
         } else {
             //they do not care about location so run query without location filters
             userList = await userCollection.find({
