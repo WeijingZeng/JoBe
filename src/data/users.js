@@ -9,24 +9,29 @@ let exportedMethods = {
         return allUsers;
     },
     async getPotentialMatches(uid) {
-        let user = await this.getUserById(uid)
-        let long = user.location.coordinates[0]
-        let lat = user.location.coordinates[1]
-        let maxDistanceInMiles = user.distanceIfLocal
-        let role = user.role
-        let localRemoteOrAll = user.localRemoteOrAll
+        let user = await this.getUserById(uid);
+        let long = user.location.coordinates[0];
+        let lat = user.location.coordinates[1];
+        let maxDistanceInMiles = user.distanceIfLocal;
+        let role = user.role;
+        let mainGenre=user.mainGenre;
+        let secondGenre=user.secondGenre;
+        let thirdGenre=user.thirdGenre;
+        let influences=user.influences;
+        let localRemoteOrAll = user.localRemoteOrAll;
 
         //location search, this will have to do two things.
         //1. it will first have to check if the user said they want local matches only
         //if they do then it will execute the query below, if they do not care about distance then 
         //we will execute another query without the location filters
-        if (localRemoteOrAll === "Local") {
+        if (localRemoteOrAll === "Local" || localRemoteOrAll === "All" ) {
             const userCollection = await users();
             //convert the number of miles into meters
             let maxDistance = maxDistanceInMiles * 1609.34
             let userList = await userCollection.find({
                 $and: [
                     { seeking: role },
+                    { matchingActive: 1 },
                     {
                         location: {
                             $near: {
