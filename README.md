@@ -22,5 +22,5 @@ Based on this profile, the system will match them to other musicians(user B) tha
 
 
 ### To install and run:
-npm install
+npm install  
 npm start
