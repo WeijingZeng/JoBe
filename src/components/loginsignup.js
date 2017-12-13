@@ -98,7 +98,11 @@ class LoginSignUp extends Component {
             if(auth1.additionalUserInfo.providerId==='google.com'){
                test(auth1.user.photoURL, auth1.user.email+'.jpg');
             }
+<<<<<<< HEAD
 
+=======
+            
+>>>>>>> origin/master
         } catch (error) {
             // Handle Errors here.
             // var errorCode = error.code;
