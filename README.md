@@ -26,6 +26,10 @@ npm install
 must have redis-server running  
 npm start
 
-### Seeding the database:
+### To run the data API server:
+
+npm run api
+
+### To seed the database:
 
 npm run seed
