@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 const express = require('express');
 const router = express.Router();
 const data = require("../src/data");
@@ -93,18 +92,3 @@ router.delete("/:id", (req, res) => {
 
 
 module.exports = router;
-=======
-const express = require("express");
-const router = express.Router();
-const data = require("../data");
-const userData = data.users;
-
-router.get("/getAllUsers", async (req, res, next) => {
-    try {
-        let allUsers = await userData.getAllUsers();
-        res.json(allUsers);
-    } catch (err){
-        res.status(500).json(err);
-    }
-});
->>>>>>> 21ec7d20c16fc5b1e49be5da11c6fad002d7f229
