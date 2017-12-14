@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
 import Submit from "./Submit";
-import Login from "./Login";
 import Log from "./Log";
 import Users from "./Users";
 import io from 'socket.io-client';
 import ApiHelper from "./apiHelper";
-import axios from "axios";
 
 
 
 class Chat extends Component {
   constructor(props){
         super(props);
-        //messages should be loaded from the database, so this state will probably have to be lifted up
         this.state = {
+            //make sure to run the chatserver.js file! (node chatServer.js)
             socket: io.connect('http://localhost:8000'),
             users: [],
             joinedChats: {}
@@ -26,16 +24,23 @@ class Chat extends Component {
         
   }
   async componentDidMount(){
-        console.log(this.props.uid);
+      try{
+
+            let addedUser = await ApiHelper.post("/users",{firebaseId:this.props.uid , email:this.props.email,lastLogin:this.props.lastSignInTime})
+            console.log(`my uid (should be the same as added users) ${this.props.uid}`);
+            console.log(`added a user: ${JSON.stringify(addedUser.data)}\n\n\n\n\n\n\n\n\n\n`);
+        }catch(e){
+            console.log("\n\n\n\n\n\n coudln't add user");
+            console.log(e);
+        }
         try{
-            console.log(ApiHelper);
-            let axiosResponse = await ApiHelper.get("/users/getallusers");
-            console.log("\n\n\n\naxios response:\n" + axiosResponse + "\n\n\n\n\n\n\n");
-       }catch(e){
-            console.log(`\n\n\n\n=========\n${e}\n=======\n\n\n\n`);
-       } 
-        //get all users
-        
+            let allUsers = await ApiHelper.get("/users");
+            let userIds = allUsers.data.map( (user) => {return user._id});
+            console.log("these are all the users:"+userIds);
+            this.setState({users:userIds});
+        }catch(e){
+            console.log(e)
+        }
         this.state.socket.emit("login",this.props.uid);
         this.state.socket.on("chatMessage", (message) => {
             this.updateMessages(message);
@@ -67,6 +72,9 @@ class Chat extends Component {
   }
 
   updateUsers(uid){
+    if(this.state.users.includes(uid)){
+        return;
+    }
     let temp=this.state.users.concat([uid]);
     this.setState({users:temp});
   }

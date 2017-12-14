@@ -85,7 +85,7 @@ class App extends Component {
                             <Route path="/Chat" render={()=>{ 
                                 return (
                                     <div>
-                                    <Chat uid={this.state.user.uid}/>
+                                    <Chat uid={this.state.user.uid} email={this.state.user.email} lastSignInTime={this.state.user.lastSignInTime}/>
                                     <Link to="/">Home</Link>
                                     </div>
                                 )}} />

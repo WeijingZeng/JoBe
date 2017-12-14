@@ -1,14 +1,24 @@
-const axios = require("axios");
-const instance = axios.create("http://localhost:5000/");
+const axios = require('axios');
 
-let ApiHelper = {
-    async get(url) {
-        console.log("trying to get " + url);
+let exportedMethods = { 
+    async get(url){
         try{
-            return await instance.get(url);
-        }catch (e) {
-            console.log(e);
-        }
+              let response =  await axios.get(url);
+            return response;
+        }catch(error) {
+            console.log("========================Error in the api helper=========================");
+            console.log(error);
+        };
+    },
+    async post(url,data){
+        try{
+          let response =  await axios.post(url,data);
+          console.log("Response to add data\n" + JSON.stringify(response.data)+ "\n\n\n\n\n\n");
+          return response;
+        }catch(error) {
+            console.log(error)
+        };
     }
 }
-export default ApiHelper;
+
+export default exportedMethods;
