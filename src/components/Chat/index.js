@@ -3,7 +3,9 @@ import Submit from "./Submit";
 import Login from "./Login";
 import Log from "./Log";
 import Users from "./Users";
-import io from 'socket.io-client'
+import io from 'socket.io-client';
+import axios from "axios";
+
 
 class Chat extends Component {
   constructor(props){

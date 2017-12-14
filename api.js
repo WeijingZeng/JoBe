@@ -1,9 +1,13 @@
 const express = require("express");
 
+const app = express();
+
 const configAPIRoutes = require("./api");
 
-const app = express();
+
+console.log("congig routes api.js "+JSON.stringify(configAPIRoutes));
 app.use(express.json());
+
 configAPIRoutes(app);
 
 app.listen(4000, () => {  
