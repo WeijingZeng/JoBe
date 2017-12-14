@@ -2,21 +2,56 @@ const mongoCollections = require("../config/mongoCollections");
 const matches = mongoCollections.matches;
 const uuid = require('node-uuid');
 const usersData = require("./users");
+const uuid = require("node-uuid")
 
 let exportedMethods = {
     async imInterested(interestedUid, interestedInUid) {
-        let user1 = await usersData.getUserById(interestedUid)
-        console.log(user1)
-        let user2 = await usersData.getUserById(interestedInUid)
-        console.log(user2)
-        //here, we need to insert each id into the match mongo "table" and then notify they user someone is interested.
-        //then if that person is interested back.  set the mutual match field on the "row" in the match "table" to true.  This
-        //is how we will know they both are interested in each other and it will create the collaboration space.
-        // also we can show a list of people who are interested in the user here.. just query the matches where a userID
-        // is the interestedInUid
-
-
-    }
+        const matchCollection = await matches();
+        //first see if there is an existing match between the two users
+        let checkMatch = await getMatchByUIDS(interestedUid,interestedInUid)
+        if (!checkMatch) {
+            let addMatch = await addMatch(interestedUid, interestedInUid)
+        } else {
+            // this means that user2 has liked user1 before..
+            //need to get that record in matches where user2 ID is in the user1 field
+        }
+    },
+    async getMatchByUIDS(user1, user2) {
+        const matchCollection = await matches();
+        try {
+            let match = await userCollection.findOne({
+                $or: [
+                    {
+                        $and: [
+                            { user1: user1 },
+                            { user2: user2 }
+                        ]
+                    },
+                    {
+                        $and: [
+                            { user1: user2 },
+                            { user2: user1 }
+                        ]
+                    }
+                ]
+            });
+            return match;
+        } catch (e) {
+            console.log("there was an error");
+            console.log(e);
+        }
+    },
+    async addMatch(user1, user2) {
+        const matchCollection = await matches();
+        let newMatch = {
+            _id: uuid.v4(),
+            user1: user1,
+            user2: user2,
+            mutualMatch: 0
+        };
+        let addedMatch = await matchCollection.insertOne(newMatch);
+        return this.getMatchByUIDS(user1, user2);
+    },
 
 }
 module.exports = exportedMethods;
