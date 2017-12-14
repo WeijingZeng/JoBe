@@ -19,7 +19,7 @@ let exportedMethods = {
     async getMatchByUIDS(user1, user2) {
         const matchCollection = await matches();
         try {
-            let match = await userCollection.findOne({
+            let match = await matchCollection.findOne({
                 $or: [
                     {
                         $and: [
