@@ -8,7 +8,7 @@ let exportedMethods = {
     async imInterested(interestedUid, interestedInUid) {
         const matchCollection = await matches();
         //first see if there is an existing match between the two users
-        let checkMatch = await getMatchByUIDS(interestedUid,interestedInUid)
+        let checkMatch = await getMatchByUIDS(interestedUid, interestedInUid)
         if (!checkMatch) {
             let addMatch = await addMatch(interestedUid, interestedInUid)
         } else {
@@ -31,6 +31,26 @@ let exportedMethods = {
                         $and: [
                             { user1: user2 },
                             { user2: user1 }
+                        ]
+                    }
+                ]
+            });
+            return match;
+        } catch (e) {
+            console.log("there was an error");
+            console.log(e);
+        }
+    },
+    async getMutualMatches(uid) {
+        const matchCollection = await matches();
+        try {
+            let match = await matchCollection.findOne({
+                $and: [
+                    { mutualMatch: 1 },
+                    {
+                        $or: [
+                            { user1: uid },
+                            { user2: uid }
                         ]
                     }
                 ]
