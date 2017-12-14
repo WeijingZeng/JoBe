@@ -15,7 +15,7 @@ class Submit extends Component {
   };
   render() {
     return (
-        <div>
+        <div id="submitBox">
             <form onSubmit= { e => {e.preventDefault();this.props.sendMessage(this.state.messageText)}}>
                 <input type="text" placeholder="send a message!" 
                        value={this.state.messageText} 

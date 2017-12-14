@@ -8,64 +8,6 @@ let exportedMethods = {
         const allUsers = await userCollection.find({}).toArray();
         return allUsers;
     },
-    async getPotentialMatches(uid) {
-        let user = await this.getUserById(uid);
-        let long = user.location.coordinates[0];
-        let lat = user.location.coordinates[1];
-        let maxDistanceInMiles = user.distanceIfLocal;
-        let role = user.role;
-        let mainGenre = user.mainGenre;
-        let secondGenre = user.secondGenre;
-        let thirdGenre = user.thirdGenre;
-        let influences = user.influences;
-        let localRemoteOrAll = user.localRemoteOrAll;
-        let userList = null;
-        const userCollection = await users();
-        if (localRemoteOrAll === "Local" || localRemoteOrAll === "All") {
-            //convert the number of miles into meters
-            let maxDistance = maxDistanceInMiles * 1609.34
-            userList = await userCollection.find({
-                $and: [
-                    { seeking: role },
-                    { matchingActive: 1 },
-                    { influences: { $in: influences } },
-                    {
-                        $or: [
-                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
-                    },
-                    {
-                        location: {
-                            $near: {
-                                $geometry: { type: "Point", coordinates: [long, lat] }, $minDistance: 0,
-                                $maxDistance: maxDistance
-                            }
-                        }
-                    }
-                ]
-            })
-                .toArray();
-        } else {
-            //they do not care about location so run query without location filters
-            userList = await userCollection.find({
-                $and: [
-                    { seeking: role },
-                    { matchingActive: 1 },
-                    { influences: { $in: influences } },
-                    {
-                        $or: [
-                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
-                    }
-                ]
-            }).toArray()
-        }
-        console.log("USERLIST:");
-        console.log(userList);
-        return userList;
-    },
     async getUserById(id) {
         const userCollection = await users();
         try {

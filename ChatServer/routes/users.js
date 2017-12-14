@@ -3,12 +3,14 @@ const router = express.Router();
 const data = require("../data");
 const userData = data.users;
 
-router.get("/getAllUsers", (req, res) => {
-    userData.getAllUsers().then((userList) => {
-        res.status(200).json(userList);
-    }).catch((e) => {
+router.get("/getAllUsers", async (req, res) => { 
+    try{
+        let userList = await userData.getAllUsers();
+        res.json(userList);
+    } catch(e) {
+        console.log(e)
         res.status(500).json({ error: e });
-    });
+    };
 });
 
 router.get("/:id", (req, res) => {

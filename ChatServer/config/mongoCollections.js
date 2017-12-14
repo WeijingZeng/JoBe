@@ -23,4 +23,5 @@ let getCollectionFn = (collection) => {
 
 module.exports = {
     chats: getCollectionFn("chats"),
+    users: getCollectionFn("users"),
 };

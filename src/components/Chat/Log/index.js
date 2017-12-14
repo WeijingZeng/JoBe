@@ -5,13 +5,25 @@ class Log extends Component {
         super(props);
   };
   render() {
-       let chatList = this.props.messages.map(message => <li key={uuid.v4()}><p>{message.username}</p><p>{message.message}</p></li>);
+       let chatList = this.props.messages.map(message => 
+        {
+             if(message.username == this.props.username){
+                return(<div className="message own-message" key={uuid.v4()}>
+                    <p>{message.username}</p>
+                    <p>{message.message}</p>
+                </div>)
+            }else{
+                return(<div  className="message other-message" key={uuid.v4()}>
+                    <p>{message.username}</p>
+                    <p>{message.message}</p>
+                </div>)
+            }
+        });
+        console.log("\n\n\n\nTHE chat list\n" + chatList);
     return (
-        <div>
+        <div id="logBox">
         <h1>{this.props.roomTitle}</h1>
-       <ul>
         {chatList}
-       </ul>
         </div>
     );
   };

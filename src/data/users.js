@@ -4,6 +4,9 @@ const uuid = require("node-uuid");
 
 let exportedMethods = {
     async getAllUsers() {
+       
+        console.log(mongoCollections)
+        console.log(users);
         const userCollection = await users();
         const allUsers = await userCollection.find({}).toArray();
         return allUsers;

@@ -4,7 +4,9 @@ import Login from "./Login";
 import Log from "./Log";
 import Users from "./Users";
 import io from 'socket.io-client';
+import ApiHelper from "./apiHelper";
 import axios from "axios";
+
 
 
 class Chat extends Component {
@@ -12,7 +14,7 @@ class Chat extends Component {
         super(props);
         //messages should be loaded from the database, so this state will probably have to be lifted up
         this.state = {
-            socket: io.connect('http://localHost:8000'),
+            socket: io.connect('http://localhost:8000'),
             users: [],
             joinedChats: {}
         };
@@ -25,6 +27,13 @@ class Chat extends Component {
   }
   async componentDidMount(){
         console.log(this.props.uid);
+        try{
+            console.log(ApiHelper);
+            let axiosResponse = await ApiHelper.get("/users/getallusers");
+            console.log("\n\n\n\naxios response:\n" + axiosResponse + "\n\n\n\n\n\n\n");
+       }catch(e){
+            console.log(`\n\n\n\n=========\n${e}\n=======\n\n\n\n`);
+       } 
         //get all users
         
         this.state.socket.emit("login",this.props.uid);
@@ -84,13 +93,18 @@ class Chat extends Component {
         log=<Log messages={this.state.joinedChats[this.state.activeChat]} roomTitle="chat" username={this.props.uid}/>
         submit= <Submit messages={this.state.messages} sendMessage={this.sendMessage}/>;
     }
+
     console.log("logged in?" +this.state.loggedIn);
     console.log("submit" + submit);
     return (
-        <div className="chatBox">
-            <Users users={this.state.users} joinChat={this.joinChat} username={this.props.uid}/>;
+        <div className="chatBox row">
+            <div className="col-3">
+            <Users users={this.state.users} joinChat={this.joinChat} username={this.props.uid}/>
+            </div>
+            <div className="col-9">
             {log}
             {submit}
+            </div>
         </div>
     );
   }

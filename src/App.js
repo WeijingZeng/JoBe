@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { auth } from "./config/firebase-auth";
-
 import LoginSignUp from "./components/loginsignup";
 import Matches from "./components/matches";
 import Chat from "./components/Chat"; 
@@ -84,9 +82,21 @@ class App extends Component {
                 <Router>
                     <div >
                         <Switch>
-                            <Route path="/" component={Matches} />
+                            <Route path="/Chat" render={()=>{ 
+                                return (
+                                    <div>
+                                    <Chat uid={this.state.user.uid}/>
+                                    <Link to="/">Home</Link>
+                                    </div>
+                                )}} />
+                            <Route path="/" render={()=>{ 
+                                return (
+                                    <div>
+                                    <Matches/>
+                                    <Link to="/Chat">Chat</Link>
+                                    </div>
+                                )}} />
                         </Switch>
-                        <Chat uid={this.state.user.uid}/>
                         <br />
                         You are logged in as UserID: {this.state.user.uid}
                         <br />
@@ -97,8 +107,7 @@ class App extends Component {
                         <button
                             onClick={() => auth.signOut()}
                             id="login"
-                            className="btn btn-primary"
-                        >
+                            className="btn btn-primary">
                             Log Out
                         </button>
                     </div>
