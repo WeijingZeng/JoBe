@@ -7,6 +7,7 @@ import { auth } from "./config/firebase-auth";
 
 import LoginSignUp from "./components/loginsignup";
 import Matches from "./components/matches";
+import Chat from "./components/Chat"; 
 
 class App extends Component {
     constructor(props) {
@@ -85,6 +86,7 @@ class App extends Component {
                         <Switch>
                             <Route path="/" component={Matches} />
                         </Switch>
+                        <Chat uid={this.state.user.uid}/>
                         <br />
                         You are logged in as UserID: {this.state.user.uid}
                         <br />
