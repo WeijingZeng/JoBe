@@ -7,23 +7,34 @@ const uuid = require("node-uuid")
 let exportedMethods = {
     async imInterested(interestedUid, interestedInUid) {
         const matchCollection = await matches();
-        let user1 = await usersData.getUserById(interestedUid)
-        console.log(user1)
-        let user2 = await usersData.getUserById(interestedInUid)
-        console.log(user2)
-        //first see if user2 has liked user1 before
-        let checkMatch = await checkInterestedByID(user2)
+        //first see if there is an existing match between the two users
+        let checkMatch = await getMatchByUIDS(interestedUid,interestedInUid)
         if (!checkMatch) {
-            let addMatch = await addMatch(user1, user2)
+            let addMatch = await addMatch(interestedUid, interestedInUid)
         } else {
             // this means that user2 has liked user1 before..
             //need to get that record in matches where user2 ID is in the user1 field
         }
     },
-    async checkInterestedByID(id) {
+    async getMatchByUIDS(user1, user2) {
         const matchCollection = await matches();
         try {
-            let match = await userCollection.findOne({ user1: id });
+            let match = await userCollection.findOne({
+                $or: [
+                    {
+                        $and: [
+                            { user1: user1 },
+                            { user2: user2 }
+                        ]
+                    },
+                    {
+                        $and: [
+                            { user1: user2 },
+                            { user2: user1 }
+                        ]
+                    }
+                ]
+            });
             return match;
         } catch (e) {
             console.log("there was an error");
@@ -39,7 +50,7 @@ let exportedMethods = {
             mutualMatch: 0
         };
         let addedMatch = await matchCollection.insertOne(newMatch);
-        return this.checkInterestedByID(user1);
+        return this.getMatchByUIDS(user1, user2);
     },
 
 }
