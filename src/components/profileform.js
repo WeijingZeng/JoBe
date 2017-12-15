@@ -86,8 +86,10 @@ class ProfileForm extends Component {
             distanceIfLocal: this.state.distanceIfLocal
         };
 
+        let url = (this.state.userNotExist ? "/users" : "/users/edit/" + this.props.user.uid);
+
         $.post({
-            url: "/users",
+            url: url,
             data: post,
             success: (response) => {
                 this.setState({ success: true });
