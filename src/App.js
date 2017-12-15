@@ -83,7 +83,7 @@ class App extends Component {
                 <Router>
                     <div >
                         <Switch>
-                            <Route exact path="/matches" component={Matches} />
+                            <Route exact path="/matches" render={(props)=><Matches{...props} user={this.state.user}  />}/>
                             <Route exact path="/profile" component={() => (<Profile user={this.state.user} />)}/>
                         </Switch>
                         <br />
