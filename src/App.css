@@ -21,6 +21,11 @@
   font-size: large;
 }
 
+.footer{
+  font-size: 0.5em;
+  color: gray;
+}
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
