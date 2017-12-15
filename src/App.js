@@ -83,7 +83,8 @@ class App extends Component {
                 <Router>
                     <div >
                         <Switch>
-                            <Route path="/" component={Matches} />
+                            <Route path="/" render={(props)=><Matches{...props} user={this.state.user}  />}
+                            />
                         </Switch>
                         <br />
                         You are logged in as UserID: {this.state.user.uid}
