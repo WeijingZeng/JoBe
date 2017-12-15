@@ -3,14 +3,12 @@ const router = express.Router();
 const data = require("../data");
 const userData = data.users;
 
-router.get("/getAllUsers", async (req, res) => { 
-    try{
-        let userList = await userData.getAllUsers();
-        res.json(userList);
-    } catch(e) {
-        console.log(e)
+router.get("/", (req, res) => {
+    userData.getAllUsers().then((userList) => {
+        res.status(200).json(userList);
+    }).catch((e) => {
         res.status(500).json({ error: e });
-    };
+    });
 });
 
 router.get("/:id", (req, res) => {
@@ -21,13 +19,6 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.get("/getPotentialMatches/:id", (req, res) => {
-    userData.getPotentialMatches(req.params.id).then((userList) => {
-        res.status(200).json(userList);
-    }).catch((e) => {
-        res.status(500).json({ error: e });
-    });
-});
 
 router.get("/:userName", (req, res) => {
     userData.getPotentialMatches(req.params.name).then((user) => {
@@ -37,45 +28,24 @@ router.get("/:userName", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
     let userInfo = req.body;
-
+    console.log("tried to put a person in! with id of " + userInfo.firebaseId );
     if (!userInfo) {
         res.status(400).json({ error: "You must provide data to create a user" });
         return;
     }
 
-    userData.addUser(firebaseID,
-        username,
-        firstName,
-        lastName,
-        email,
-        gender,
-        city,
-        state,
-        age,
-        long,
-        lat,
-        seeking,
-        studioSWUsed,
-        mainGenre,
-        secondGenre,
-        thirdGenre,
-        hasSpace,
-        bio,
-        achivements,
-        role,
-        links,
-        influences,
-        lastLogin,
-        profilePhotoUrl,
-        localRemoteOrAll,
-        distanceIfLocal)
-        .then((newUser) => {
-            res.json(newUser);
-        }, () => {
-            res.sendStatus(500);
-        });
+    try{
+    let newUser =await userData.addUser(userInfo.firebaseId,
+        userInfo.email,
+        userInfo.lastLogin)
+    console.log("new user added! " + newUser);
+        res.json(newUser);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
 });
 
 router.delete("/:id", (req, res) => {

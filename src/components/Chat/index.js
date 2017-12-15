@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Submit from "./Submit";
 import Log from "./Log";
+
+//import JoinedChatsPanel from "./JoinedChatsPanel";
 import Users from "./Users";
 import io from 'socket.io-client';
 import ApiHelper from "./apiHelper";
@@ -48,11 +50,11 @@ class Chat extends Component {
         this.state.socket.on("login", (uid) => {
             this.updateUsers(uid);
         });
-        this.state.socket.on("subscribe", channelId => {
-            console.log(`I, ${this.props.uid} got the message to subscribe to ${channelId}`);
-            this.addChat(channelId);
-            this.setActiveChat(channelId);
-            this.state.socket.emit("subscribe",channelId);
+        this.state.socket.on("subscribe", chat => {
+            console.log(`I, ${this.props.uid} got the message to subscribe to ${JSON.stringify(chat)}`);
+            this.addChat(chat);
+            this.setActiveChat(chat.id);
+            this.state.socket.emit("subscribe",chat.id);
         });
   }
   sendMessage(message){
@@ -65,7 +67,7 @@ class Chat extends Component {
     let temp=this.state.joinedChats;
     console.log("added message to chat" + message.activeChat);
     console.log("chat log" + temp[message.activeChat]);
-    temp[message.activeChat] = temp[message.activeChat].concat([message]);
+    temp[message.activeChat].messages = temp[message.activeChat].messages.concat([message]);
     console.log("chat log after add" + temp[message.activeChat]);
     console.log(temp);
     this.setState({joinedChats:temp});
@@ -85,20 +87,22 @@ class Chat extends Component {
   setActiveChat(id){
             this.setState({activeChat:id});
   }
-  addChat(id){
+  addChat(chat){
+        //format
+        //{id,users,chatLog}
+        console.log("adding chat: " + JSON.stringify(chat));
         let temp = this.state.joinedChats;
-        temp[id] = [];
-        console.log(`added chat ${id} in the object ${JSON.stringify(temp)}`)
+        temp[chat.id] = chat;
+        console.log(`added chat ${chat.id} in the object ${JSON.stringify(temp)}`);
         this.setState({joinedChats:temp});
   }
   render() {
     let submit = null;
-    let users = null;
     let log= null;
     if(this.state.activeChat){
         console.log("joined chats"+this.state.joinedChats[this.state.activeChat]);
         console.log("active chat messages"+this.state.joinedChats[this.state.activeChat]);
-        log=<Log messages={this.state.joinedChats[this.state.activeChat]} roomTitle="chat" username={this.props.uid}/>
+        log=<Log messages={this.state.joinedChats[this.state.activeChat].messages} roomTitle="chat" username={this.props.uid}/>
         submit= <Submit messages={this.state.messages} sendMessage={this.sendMessage}/>;
     }
 

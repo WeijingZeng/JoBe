@@ -15,12 +15,11 @@
     padding-bottom: 15px; }
   #userBox button:hover {
     background: rgba(0, 0, 0, 0.1); }
-
-#userTitle {
-  font-size: 1.2rem;
-  width: 100%;
-  margin-bottom: 10px;
-  padding-top: 30px; }
+  #userBox h1 {
+    font-size: 1.2rem;
+    width: 100%;
+    margin-bottom: 10px;
+    padding-top: 30px; }
 
 #submitBox {
   position: absolute;

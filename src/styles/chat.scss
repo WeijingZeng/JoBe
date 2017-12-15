@@ -2,7 +2,8 @@
 .chatBox{
     min-height:80vh;
 }
-//sass for the user panel(on the left side of the screen
+
+//sass for the add user button this can be used in multiple places
  #userBox{
     background:#FDFDFD;
     min-height: 100%;
@@ -20,13 +21,13 @@
     button:hover{
          background:rgba(0,0,0,.1);
     }
+    h1{
+       font-size:1.2rem; 
+        width:100%;
+        margin-bottom: 10px;
+        padding-top: 30px;
+    }
 } 
-#userTitle{
-   font-size:1.2rem; 
-    width:100%;
-    margin-bottom: 10px;
-    padding-top: 30px;
-}
 //sass for the submit (the area you type a message in
 #submitBox{
     position:absolute;
