@@ -1,40 +1,88 @@
 import React, { Component } from "react";
+import {BrowserRouter as Router,Route,Link,Switch,Redirect} from "react-router-dom";
+import $ from 'jquery'
+import { Button, Thumbnail } from 'react-bootstrap';
 
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 class Matches extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            allUsers: [],
+            matcheUsers:[]
+          };
     }
+
+    componentDidMount () {
+        this.getAllusers();
+    }
+
+    getAllusers(){
+        $.ajax({
+            url: 'users/getAllUsers',
+            type: 'get',
+            dataType: 'json',
+            success: data => {
+                this.setState({allUsers:data})
+                //console.log(this.state.allUsers);
+            },
+            error: err => {
+                console.log(err);
+            }
+        })
+    }
+
+    getMatchUser(id){
+        $.ajax({
+            url: `users/getPotentialMatches/${id}`,
+            type: 'get',
+            dataType: 'json',
+            success: data => {
+                this.setState({matcheUsers:data})
+                console.log("match:"+this.state.matcheUsers);
+            },
+            error: err => {
+                console.log(err);
+            }
+        })
+    }
+            
+
     render() {
         //TODO: get matches from users and render
-        let matches = null;
+        let body = null;
+        const uid = this.props.user.uid;
+        console.log("uid:"+uid)
+        this.getMatchUser(uid);
+        const matcheList = this.state.matcheUsers;
+
+        if (matcheList.length === 0) {
+          return <small>No user match to your conditions yet!</small>;
+        }
+        
+        const listDisplays = matcheList.map(user => { 
+            const userImg = user.profilePhotoUrl ? (
+                <Thumbnail src={`${user.profilePhotoUrl}`} alt="242x200">
+                    <h4>{user.username}</h4>
+                <p>{user.role}</p>
+                <p>
+                  <Button bsStyle="primary">Button</Button>
+                </p>
+              </Thumbnail>
+              ) : null;
+
+            return (
+              <div className="col-sm-6 col-md-4">
+                {userImg}
+              </div>
+            );
+          });
+        
         return (
             <div className="container">
                 <div className="row">
                     <div className="col-md-8 offset-md-2">
-                        <div className="jumbotron">
-                            <h1 className="display-3">Matches!</h1>
-                            <p className="lead">
-                                This is where user's matches will be displayed
-                                based on various profile compatibility.
-                            </p>
-                            <hr className="my-4" />
-                            <p>
-                                Matching will be based on user's role matching
-                                other's 'seeking'. Geographical proximity is
-                                also taken into account if the user wants to
-                                look for nearby musicians.
-                            </p>
-                            <p className="lead">
-                                <a
-                                    className="btn btn-primary btn-lg"
-                                    href="/profile"
-                                    role="button"
-                                >
-                                    profile
-                                </a>
-                            </p>
-                        </div>
+                        <h2>Match List</h2>
+                            {<div>{listDisplays}</div>}
                     </div>
                 </div>
             </div>
