@@ -236,12 +236,10 @@ let exportedMethods = {
         let updateCommand = {
             $set: updatedUser
         };
-        
-        let editedUser= userCollection.updateOne({ _id: firebaseID }, updateCommand).then(() => {
-            return this.getUserById(firebaseID);
-        });
-            
-        return editedUser;
+
+
+        let editedUser = await userCollection.updateOne({ _id: firebaseID }, updateCommand)
+        return this.getUserById(firebaseID);
     },
     async removeUser(id) {
         return users().then(userCollection => {
