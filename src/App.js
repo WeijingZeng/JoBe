@@ -8,6 +8,7 @@ import LoginSignUp from "./components/loginsignup";
 import Profile from "./components/profile";
 import ProfileForm from "./components/profileform";
 import Matches from "./components/matches";
+import Connections from "./components/connections";
 
 class App extends Component {
     constructor(props) {
@@ -107,6 +108,11 @@ class App extends Component {
                                         Matches
                                     </Link>
                                 </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/connections">
+                                        Connections
+                                    </Link>
+                                </li>
                             </ul>
                         </div>
                     </nav>
@@ -125,6 +131,16 @@ class App extends Component {
                             path="/matches"
                             render={renderProps => (
                                 <Matches
+                                    {...renderProps}
+                                    user={this.state.user}
+                                />
+                            )}
+                        />
+                        <Route
+                            exact
+                            path="/connections"
+                            render={renderProps => (
+                                <Connections
                                     {...renderProps}
                                     user={this.state.user}
                                 />
