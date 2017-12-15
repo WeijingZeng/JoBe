@@ -96,27 +96,30 @@ class App extends Component {
 
         if (this.state && this.state.user && this.state.user.loggedin === 1) {
             body = (
-                <div>
-                    <Switch>
-                        <Route exact path="/profile" component={() => (<Profile user={this.state.user} />)} />
-                        <Route exact path="/matches" render={(props) => <Matches {...props} user={this.state.user} />} />
-                        />
-                    </Switch>
-                    <br />
-                    You are logged in as UserID: {this.state.user.uid}
-                    <br />
-                    You are logge with Email: {this.state.user.email}
-                    <br />
-                    Your Last Login Was: {this.state.user.lastSignInTime}
-                    <br />
-                    <button
-                        onClick={() => auth.signOut()}
-                        id="login"
-                        className="btn btn-primary"
-                    >
-                    Log Out
-                    </button>
-                </div>
+                <Router>
+                    <div >
+                        <Switch>
+                            <Route path="/profile/:id" component={Profile}/>
+
+                            <Route exact path="/matches" render={(props)=><Matches{...props} user={this.state.user}  />}
+                            />
+                        </Switch>
+                        <br />
+                        You are logged in as UserID: {this.state.user.uid}
+                        <br />
+                        You are logge with Email: {this.state.user.email}
+                        <br />
+                        Your Last Login Was: {this.state.user.lastSignInTime}
+                        <br />
+                        <button
+                            onClick={() => auth.signOut()}
+                            id="login"
+                            className="btn btn-primary"
+                        >
+                            Log Out
+                        </button>
+                    </div>
+                </Router>
             );
         } else {
             body = <LoginSignUp setUser={this.setUser} />;
