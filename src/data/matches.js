@@ -44,6 +44,22 @@ let exportedMethods = {
             console.log(e);
         }
     },
+    async setMutual(matchID){
+        const matchCollection = await matches();
+        let updateMutual ={
+            mutualMatch: 1
+        }
+        let updateCommand = {
+            $set: updateMutual
+        };
+        let mutualMatch= await matchCollection.updateOne({ _id: matchID }, updateCommand)
+        return await this.getMatchByMatchID(matchID)
+    },
+    async getMatchByMatchID(matchID){
+        const matchCollection = await matches();
+        let match = await matchCollection.findOne({_id: matchID})
+        return match
+    },
     //This function returns the mutual matches for a user
     async getMutualMatches(uid) {
         const matchCollection = await matches();
