@@ -1,19 +1,22 @@
 import React, { Component } from "react";
-import {BrowserRouter as Router,Route,Link,Switch,Redirect} from "react-router-dom";
+import {BrowserRouter as Route,Link,Switch} from "react-router-dom";
 import $ from 'jquery'
-import { Button, Thumbnail } from 'react-bootstrap';
 
 class Matches extends Component {
     constructor(props) {
         super(props);
         this.state = {
             allUsers: [],
-            matcheUsers:[]
+            matcheUsers:[],
+            working:false
           };
     }
 
     componentDidMount () {
+        this.setState({working:true});
         this.getAllusers();
+        this.getMatchUser(this.props.user.uid);
+        
     }
 
     getAllusers(){
@@ -38,9 +41,11 @@ class Matches extends Component {
             dataType: 'json',
             success: data => {
                 this.setState({matcheUsers:data})
+                this.setState({working:false});
                 console.log("match:"+this.state.matcheUsers);
             },
             error: err => {
+                this.setState({working:false});
                 console.log(err);
             }
         })
@@ -48,11 +53,14 @@ class Matches extends Component {
             
 
     render() {
-        //TODO: get matches from users and render
         let body = null;
         const uid = this.props.user.uid;
         console.log("uid:"+uid)
-        this.getMatchUser(uid);
+
+        if(this.state.working){
+            return <small>Finding Matches!</small>;
+        }
+        
         const matcheList = this.state.matcheUsers;
 
         if (matcheList.length === 0) {
@@ -61,13 +69,14 @@ class Matches extends Component {
         
         const listDisplays = matcheList.map(user => { 
             const userImg = user.profilePhotoUrl ? (
-                <Thumbnail src={`${user.profilePhotoUrl}`} alt="242x200">
-                    <h4>{user.username}</h4>
-                <p>{user.role}</p>
-                <p>
-                  <Button bsStyle="primary">Button</Button>
-                </p>
-              </Thumbnail>
+                <div class="thumbnail">
+                    <img src="`${user.profilePhotoUrl}`" alt="..."/>
+                        <div class="caption">
+                            <Link to={`/profile/${user._id}`}>{user.username}</Link>
+                            <p>I'm a {user.role}</p>
+                            <p><a href="#" class="btn btn-primary" role="button">Button</a> </p>
+                        </div>
+                </div>
               ) : null;
 
             return (

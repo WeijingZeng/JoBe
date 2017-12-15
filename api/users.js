@@ -31,7 +31,7 @@ router.get("/getPotentialMatches/:id", (req, res) => {
     });
 });
 
-router.get("/:userName", (req, res) => {
+router.get("/getPotentialMatches/:userName", (req, res) => {
     userData.getPotentialMatches(req.params.name).then((user) => {
         res.status(200).json(user);
     }).catch((e) => {

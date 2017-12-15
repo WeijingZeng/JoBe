@@ -12,6 +12,15 @@ import Matches from "./components/matches";
 class App extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            user: {
+                loggedin: 0,
+                email: undefined,
+                uid: undefined,
+                lastSignInTime: undefined,
+                loginError: undefined
+            }
+        };
         this.setUser = this.setUser.bind(this);
     }
     handleAuthStateChanged(firebaseuser, self) {
@@ -51,12 +60,12 @@ class App extends Component {
                     }
                 };
             },
-            function () {
+            function() {
                 console.log(
                     `APP STATE: ${this.state.user.email}, ${
-                    this.state.user.uid
+                        this.state.user.uid
                     } ${this.state.user.lastSignInTime}, ${
-                    this.state.user.loggedin
+                        this.state.user.loggedin
                     }`
                 );
             }
@@ -65,7 +74,7 @@ class App extends Component {
 
     render() {
         let body = null;
-
+        let profile = `/profile/${this.state.user.uid}`;
         //If the user is not logged in, render the login
         let header = (
             <div>
@@ -75,18 +84,28 @@ class App extends Component {
                         Welcome to JoBe - A Place where Musicians Connect
                     </h1>
                     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-
-                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                        <div
+                            className="collapse navbar-collapse"
+                            id="navbarSupportedContent"
+                        >
                             <ul className="navbar-nav mx-auto">
-                                <a className="navbar-brand" href="/">JoBe</a>
+                                <a className="navbar-brand" href="/">
+                                    JoBe
+                                </a>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/">Home</Link>
+                                    <Link className="nav-link" to="/">
+                                        Home
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/profile">Profile</Link>
+                                    <Link className="nav-link" to={profile}>
+                                        Profile
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/matches">Matches</Link>
+                                    <Link className="nav-link" to="/matches">
+                                        Matches
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
@@ -101,8 +120,17 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/profile" component={() => (<Profile user={this.state.user} />)} />
                         <Route exact path="/profileform" component={() => (<ProfileForm user={this.state.user} />)} />
-                        <Route exact path="/matches" render={(props) => <Matches {...props} user={this.state.user} />} />
+                        <Route
+                            exact
+                            path="/matches"
+                            render={renderProps => (
+                                <Matches
+                                    {...renderProps}
+                                    user={this.state.user}
+                                />
+                            )}
                         />
+                        <Route path="/profile/:id" component={Profile} />
                     </Switch>
                     <br />
                     You are logged in as UserID: {this.state.user.uid}
@@ -116,7 +144,7 @@ class App extends Component {
                         id="login"
                         className="btn btn-primary"
                     >
-                    Log Out
+                        Log Out
                     </button>
                 </div>
             );
