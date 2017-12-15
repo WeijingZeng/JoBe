@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import {BrowserRouter as Route,Link,Switch} from "react-router-dom";
 import $ from 'jquery'
+import axios from 'axios';
 
 class Matches extends Component {
     constructor(props) {
@@ -51,6 +52,10 @@ class Matches extends Component {
         })
     }
             
+    async sendRequest(uid){
+        let result = await axios.get(`matches/imInterested/${this.props.user.uid}/${uid}`);
+        console.log(uid);
+    }
 
     render() {
         let body = null;
@@ -69,18 +74,18 @@ class Matches extends Component {
         
         const listDisplays = matcheList.map(user => { 
             const userImg = user.profilePhotoUrl ? (
-                <div class="thumbnail">
+                <div className="thumbnail" >
                     <img src="`${user.profilePhotoUrl}`" alt="..."/>
-                        <div class="caption">
+                        <div className="caption">
                             <Link to={`/profile/${user._id}`}>{user.username}</Link>
                             <p>I'm a {user.role}</p>
-                            <p><a href="#" class="btn btn-primary" role="button">Button</a> </p>
+                            <p><button onClick={() => this.sendRequest(user._id)} className="btn btn-primary" role="button">Interested</button> </p>
                         </div>
                 </div>
               ) : null;
 
             return (
-              <div className="col-sm-6 col-md-4">
+              <div className="col-sm-6 col-md-4" key={user._id}>
                 {userImg}
               </div>
             );

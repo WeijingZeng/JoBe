@@ -68,6 +68,7 @@ let exportedMethods = {
         const userCollection = await users();
         try {
             let user = await userCollection.findOne({ _id: id });
+            if (!user) return { error: "User not found" };
             return user;
         } catch (e) {
             console.log("there was an error");
@@ -145,7 +146,7 @@ let exportedMethods = {
                 city: city,
                 state: state,
                 age: age,
-                location: { type: "Point", coordinates: [long, lat] },
+                location: { type: "Point", coordinates: [Number(long), Number(lat)] },
                 seeking: seeking,
                 studioSWUsed: studioSWUsed,
                 mainGenre: mainGenre,
