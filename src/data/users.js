@@ -62,8 +62,6 @@ let exportedMethods = {
                 ]
             }).toArray()
         }
-        console.log("USERLIST:");
-        console.log(userList);
         return userList;
     },
     async getUserById(id) {
