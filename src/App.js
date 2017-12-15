@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-
+import Profile from "./components/profile";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { auth } from "./config/firebase-auth";
 
@@ -83,7 +83,9 @@ class App extends Component {
                 <Router>
                     <div >
                         <Switch>
-                            <Route path="/" render={(props)=><Matches{...props} user={this.state.user}  />}
+                            <Route exact path="/profile" component={() => (<Profile user={this.state.user} />)}/>
+
+                            <Route exact path="/matches" render={(props)=><Matches{...props} user={this.state.user}  />}/>
                             />
                         </Switch>
                         <br />
