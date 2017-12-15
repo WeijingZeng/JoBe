@@ -104,6 +104,11 @@ class App extends Component {
                                     </Link>
                                 </li>
                                 <li className="nav-item">
+                                    <Link className="nav-link" to="/profileform">
+                                        Edit Profile
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
                                     <Link className="nav-link" to="/matches">
                                         Matches
                                     </Link>
