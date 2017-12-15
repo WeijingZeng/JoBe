@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Profile from "./components/profile";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { auth } from "./config/firebase-auth";
 
 import LoginSignUp from "./components/loginsignup";
@@ -50,12 +50,12 @@ class App extends Component {
                     }
                 };
             },
-            function() {
+            function () {
                 console.log(
                     `APP STATE: ${this.state.user.email}, ${
-                        this.state.user.uid
+                    this.state.user.uid
                     } ${this.state.user.lastSignInTime}, ${
-                        this.state.user.loggedin
+                    this.state.user.loggedin
                     }`
                 );
             }
@@ -64,7 +64,6 @@ class App extends Component {
 
     render() {
         let body = null;
-        console.log(this.state);
 
         //If the user is not logged in, render the login
         let header = (
@@ -74,6 +73,23 @@ class App extends Component {
                     <h1 className="App-title">
                         Welcome to JoBe - A Place where Musicians Connect
                     </h1>
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+
+                        <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul className="navbar-nav mx-auto">
+                                <a className="navbar-brand" href="/">JoBe</a>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/">Home</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/profile">Profile</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to="/matches">Matches</Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
                 </header>
             </div>
         );
@@ -83,7 +99,10 @@ class App extends Component {
                 <Router>
                     <div >
                         <Switch>
-                            <Route path="/" component={Matches} />
+                            <Route path="/profile/:id" component={Profile}/>
+
+                            <Route exact path="/matches" render={(props)=><Matches{...props} user={this.state.user}  />}
+                            />
                         </Switch>
                         <br />
                         You are logged in as UserID: {this.state.user.uid}
@@ -107,10 +126,12 @@ class App extends Component {
         }
 
         return (
-            <div className="App">
-                {header}
-                {body}
-            </div>
+            <Router>
+                <div className="App">
+                    {header}
+                    {body}
+                </div>
+            </Router>
         );
     }
 }

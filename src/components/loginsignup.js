@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import firebase from "firebase";
 
 import { auth } from "../config/firebase-auth";
+import { test } from "../tasks/s3_upload_or_get";
 
 class LoginSignUp extends Component {
     constructor(props) {
@@ -86,7 +87,18 @@ class LoginSignUp extends Component {
             provider = new firebase.auth.FacebookAuthProvider();
         }
         try {
-            await auth.signInWithPopup(provider);
+            var auth1=await auth.signInWithPopup(provider);
+            
+            // profile picture of facebook profile
+            if(auth1.additionalUserInfo.providerId==='facebook.com'){    
+                test('https://graph.facebook.com/'+auth1.user.providerData[0].uid+'/picture?width=800', auth1.user.email+'.jpg')    // test function is in s3_upload_or_get file
+            }
+
+            // profile picture of google profile
+            if(auth1.additionalUserInfo.providerId==='google.com'){
+               test(auth1.user.photoURL, auth1.user.email+'.jpg');
+            }
+            
         } catch (error) {
             // Handle Errors here.
             // var errorCode = error.code;
@@ -100,81 +112,56 @@ class LoginSignUp extends Component {
     }
 
     render() {
-        if (this.state.loggedin === 1) {
-            return (
-                <div>
-                    After Logging in, either the profile form for them to fill
-                    out their profile will be displayed if they are a new user,
-                    or if they are not a new user, then render their "homepage"
-                    <br />
-                    <br />
-                    You are logged in as UserID: {this.state.uid}
-                    <br />
-                    You are logged with Email: {this.state.email}
-                    <br />
-                    Your Last Login Was: {this.state.lastSignInTime}
-                    <br />
-                    <button
-                        onClick={this.signOut}
-                        id="login"
-                        className="btn btn-primary"
-                    >
-                        Log Out
-                    </button>
-                </div>
-            );
-        } else {
-            return (
-                <div>
-                    {this.state.loginError && (
-                        <div className="loginerror">
-                            {this.state.loginError}
-                        </div>
-                    )}
-                    <input
-                        type="email"
-                        id="email"
-                        placeholder="Email Address"
-                        required
-                    />
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Password"
-                        required
-                    />
-                    <br />
-                    <br />
-                    <button
-                        onClick={() => this.emailLogin("login")}
-                        id="login"
-                        className="btn btn-primary"
-                    >
-                        Login
-                    </button>
-                    <button
-                        onClick={() => this.emailLogin("signup")}
-                        id="signup"
-                        className="btn btn-primary"
-                    >
-                        Sign Up
-                    </button>
-                    <br />
-                    <br />
-                    <img
-                        onClick={() => this.socialSignOn("google")}
-                        alt="google signin"
-                        src="./imgs/btn_google_signin.png"
-                    />
-                    <br />
-                    <img
-                        onClick={() => this.socialSignOn("facebook")}
-                        alt="facebook signin"
-                        src="./imgs/facebook_signin.png"
-                    />
-                </div>
-            );
-        }
+        return (
+            <div>
+                {this.state.loginError && (
+                    <div className="loginerror">
+                        {this.state.loginError}
+                    </div>
+                )}
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email Address"
+                    required
+                />
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    required
+                />
+                <br />
+                <br />
+                <button
+                    onClick={() => this.emailLogin("login")}
+                    id="login"
+                    className="btn btn-primary"
+                >
+                    Login
+                </button>
+                <button
+                    onClick={() => this.emailLogin("signup")}
+                    id="signup"
+                    className="btn btn-primary"
+                >
+                    Sign Up
+                </button>
+                <br />
+                <br />
+                <img
+                    onClick={() => this.socialSignOn("google")}
+                    alt="google signin"
+                    src="./imgs/btn_google_signin.png"
+                />
+                <br />
+                <img
+                    onClick={() => this.socialSignOn("facebook")}
+                    alt="facebook signin"
+                    src="./imgs/facebook_signin.png"
+                />
+            </div>
+        );
     }
 }
 export default LoginSignUp;
