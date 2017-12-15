@@ -204,46 +204,46 @@ let exportedMethods = {
         //here we check if the username(handle) supplied is unique if it's not, then there
         // will be an error returned and if it is then it goes ahead and adds the user
         let updatedUser = {
-                _id:firebaseID,
-                username: username.toLowerCase(),
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                gender: gender,
-                city: city,
-                state: state,
-                age: age,
-                location: { type: "Point", coordinates: [long, lat] },
-                seeking: seeking,
-                studioSWUsed: studioSWUsed,
-                mainGenre: mainGenre,
-                secondGenre: secondGenre,
-                thirdGenre: thirdGenre,
-                hasSpace: hasSpace,
-                bio: bio,
-                achivements: achivements,
-                role: role,
-                links: links,
-                influences: influences,
-                matchingActive: 1,
-                lastLogin: lastLogin,
-                profilePhotoUrl: profilePhotoUrl,
-                profileViewCount: 0,
-                adminUser: 0,
-                localRemoteOrAll: localRemoteOrAll,
-                distanceIfLocal: distanceIfLocal
+            _id: firebaseID,
+            username: username.toLowerCase(),
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            gender: gender,
+            city: city,
+            state: state,
+            age: age,
+            location: { type: "Point", coordinates: [long, lat] },
+            seeking: seeking,
+            studioSWUsed: studioSWUsed,
+            mainGenre: mainGenre,
+            secondGenre: secondGenre,
+            thirdGenre: thirdGenre,
+            hasSpace: hasSpace,
+            bio: bio,
+            achivements: achivements,
+            role: role,
+            links: links,
+            influences: influences,
+            matchingActive: 1,
+            lastLogin: lastLogin,
+            profilePhotoUrl: profilePhotoUrl,
+            profileViewCount: 0,
+            adminUser: 0,
+            localRemoteOrAll: localRemoteOrAll,
+            distanceIfLocal: distanceIfLocal
         };
         let updateCommand = {
             $set: updatedUser
         };
-        
-        let editedUser= userCollection.updateOne({ _id: firebaseID }, updateCommand).then(() => {
-            return this.getUserById(firebaseID);
-        });
-            
-        
 
-        
+        let editedUser = await userCollection.updateOne({ _id: firebaseID }, updateCommand)
+        return this.getUserById(firebaseID);
+
+
+
+
+
     },
     async removeUser(id) {
         return users().then(userCollection => {
