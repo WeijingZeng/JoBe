@@ -23,101 +23,44 @@ let exportedMethods = {
         const userCollection = await users();
         if (localRemoteOrAll === "Local" || localRemoteOrAll === "All") {
             //convert the number of miles into meters
-            let maxDistance = maxDistanceInMiles * 1609.34;
-            userList = await userCollection
-                .find({
-                    $and: [
-                        { seeking: role },
-                        { matchingActive: 1 },
-                        { influences: { $in: influences } },
-                        {
-                            $or: [
-                                {
-                                    mainGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                },
-                                {
-                                    secondGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                },
-                                {
-                                    thirdGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            location: {
-                                $near: {
-                                    $geometry: {
-                                        type: "Point",
-                                        coordinates: [long, lat]
-                                    },
-                                    $minDistance: 0,
-                                    $maxDistance: maxDistance
-                                }
+            let maxDistance = maxDistanceInMiles * 1609.34
+            userList = await userCollection.find({
+                $and: [
+                    { seeking: role },
+                    { matchingActive: 1 },
+                    { influences: { $in: influences } },
+                    {
+                        $or: [
+                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                    },
+                    {
+                        location: {
+                            $near: {
+                                $geometry: { type: "Point", coordinates: [long, lat] }, $minDistance: 0,
+                                $maxDistance: maxDistance
                             }
                         }
-                    ]
-                })
+                    }
+                ]
+            })
                 .toArray();
         } else {
             //they do not care about location so run query without location filters
-            userList = await userCollection
-                .find({
-                    $and: [
-                        { seeking: role },
-                        { matchingActive: 1 },
-                        { influences: { $in: influences } },
-                        {
-                            $or: [
-                                {
-                                    mainGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                },
-                                {
-                                    secondGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                },
-                                {
-                                    thirdGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                })
-                .toArray();
+            userList = await userCollection.find({
+                $and: [
+                    { seeking: role },
+                    { matchingActive: 1 },
+                    { influences: { $in: influences } },
+                    {
+                        $or: [
+                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                    }
+                ]
+            }).toArray()
         }
         console.log("USERLIST:");
         console.log(userList);
