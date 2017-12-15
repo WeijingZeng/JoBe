@@ -6,6 +6,7 @@ class ProfileForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            username: "",
             firstName: "",
             lastName: "",
             email: this.props.user.email,
@@ -59,6 +60,7 @@ class ProfileForm extends Component {
 
         let post = {
             firebaseID: this.props.user.uid,
+            username: this.state.username,
             firstName: this.state.firstName,
             lastName: this.state.lastName,
             email: this.state.email,
@@ -84,7 +86,8 @@ class ProfileForm extends Component {
             distanceIfLocal: this.state.distanceIfLocal
         };
 
-        $.post("/users", {
+        $.post({
+            url: "/users",
             data: post,
             success: (response) => {
                 this.setState({ success: true });
@@ -97,12 +100,16 @@ class ProfileForm extends Component {
         if (this.state.userNotExist) message = <div className="alert alert-warning" role="alert">Your user profile was not found! Use this form to fill out your profile.</div>;
 
         var message2 = null;
-        if (this.state.submitted) message = <div className="alert alert-success" role="alert">Your profile has been updated.</div>;
+        if (this.state.success) message2 = <div className="alert alert-success" role="alert">Your profile has been updated.</div>;
 
         return (
             <div>
                 {message}
                 <form onSubmit={this.handleSubmit.bind(this)} style={{ width: "800px", margin: "auto" }}>
+                    <div className="form-group">
+                        <label htmlFor="username">Username</label>
+                        <input type="text" className="form-control" name="username" value={this.state.username} onChange={this.handleChange.bind(this)} />
+                    </div>
                     <div className="form-group">
                         <label htmlFor="firstName">First Name</label>
                         <input type="text" className="form-control" name="firstName" value={this.state.firstName} onChange={this.handleChange.bind(this)} />
@@ -259,34 +266,6 @@ class ProfileForm extends Component {
                 {message2}
             </div>
         );
-        /*
-firebaseID,
-username,
-firstName,
-lastName,
-email,
-gender,
-city,
-state,
-age,
-long,
-lat,
-seeking,
-studioSWUsed,
-mainGenre,
-secondGenre,
-thirdGenre,
-hasSpace,
-bio,
-achivements,
-role,
-links,
-influences,
-lastLogin,
-profilePhotoUrl,
-localRemoteOrAll,
-distanceIfLocal
-*/
     }
 }
 
