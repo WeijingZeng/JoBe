@@ -73,6 +73,7 @@ class App extends Component {
 
     render() {
         let body = null;
+        let footer = null;
         let profile = `/profile/${this.state.user.uid}`;
         //If the user is not logged in, render the login
         let header = (
@@ -129,6 +130,12 @@ class App extends Component {
                         />
                         <Route path="/profile/:id" component={Profile} />
                     </Switch>
+                </div>
+            );
+            footer = (
+                <footer class="footer navbar-fixed-bottom ">
+                <div class="container">
+                    <hr/>
                     <br />
                     You are logged in as UserID: {this.state.user.uid}
                     <br />
@@ -136,14 +143,9 @@ class App extends Component {
                     <br />
                     Your Last Login Was: {this.state.user.lastSignInTime}
                     <br />
-                    <button
-                        onClick={() => auth.signOut()}
-                        id="login"
-                        className="btn btn-primary"
-                    >
-                        Log Out
-                    </button>
+                    <button onClick={() => auth.signOut()} id="login" className="btn btn-danger btn-sm">Log Out</button>
                 </div>
+                </footer>
             );
         } else {
             body = <LoginSignUp setUser={this.setUser} />;
@@ -154,7 +156,9 @@ class App extends Component {
                 <div className="App">
                     {header}
                     {body}
+                    {footer}
                 </div>
+                
             </Router>
         );
     }
