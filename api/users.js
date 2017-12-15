@@ -13,7 +13,11 @@ router.get("/getAllUsers", (req, res) => {
 
 router.get("/:id", (req, res) => {
     userData.getUserById(req.params.id).then((user) => {
-        res.status(200).json(user);
+        if (user.error){
+            res.status(404).json(user);
+        } else {
+            res.status(200).json(user);
+        }
     }).catch((e) => {
         res.status(500).json({ error: e });
     });
@@ -43,36 +47,36 @@ router.post("/", (req, res) => {
         return;
     }
 
-    userData.addUser(firebaseID,
-        username,
-        firstName,
-        lastName,
-        email,
-        gender,
-        city,
-        state,
-        age,
-        long,
-        lat,
-        seeking,
-        studioSWUsed,
-        mainGenre,
-        secondGenre,
-        thirdGenre,
-        hasSpace,
-        bio,
-        achivements,
-        role,
-        links,
-        influences,
-        lastLogin,
-        profilePhotoUrl,
-        localRemoteOrAll,
-        distanceIfLocal)
+    userData.addUser(userInfo.firebaseID,
+        userInfo.username,
+        userInfo.firstName,
+        userInfo.lastName,
+        userInfo.email,
+        userInfo.gender,
+        userInfo.city,
+        userInfo.state,
+        userInfo.age,
+        userInfo.long,
+        userInfo.lat,
+        userInfo.seeking,
+        userInfo.studioSWUsed,
+        userInfo.mainGenre,
+        userInfo.secondGenre,
+        userInfo.thirdGenre,
+        userInfo.hasSpace,
+        userInfo.bio,
+        userInfo.achivements,
+        userInfo.role,
+        userInfo.links,
+        userInfo.influences,
+        userInfo.lastLogin,
+        userInfo.profilePhotoUrl,
+        userInfo.localRemoteOrAll,
+        userInfo.distanceIfLocal)
         .then((newUser) => {
             res.json(newUser);
-        }, () => {
-            res.sendStatus(500);
+        }, (err) => {
+            res.sendStatus(500).json(err);
         });
 });
 

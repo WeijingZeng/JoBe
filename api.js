@@ -4,6 +4,7 @@ const configAPIRoutes = require("./api/index");
 
 const app = express();
 app.use(express.json());
+app.use(express.urlencoded());
 configAPIRoutes(app);
 
 app.listen(4000, () => {  
