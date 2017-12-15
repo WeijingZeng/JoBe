@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import {BrowserRouter as Router,Route,Link,Switch,Redirect} from "react-router-dom";
+import {BrowserRouter as Route,Link,Switch} from "react-router-dom";
 import $ from 'jquery'
-import { Button, Thumbnail } from 'react-bootstrap';
 
 class Matches extends Component {
     constructor(props) {
@@ -61,13 +60,14 @@ class Matches extends Component {
         
         const listDisplays = matcheList.map(user => { 
             const userImg = user.profilePhotoUrl ? (
-                <Thumbnail src={`${user.profilePhotoUrl}`} alt="242x200">
-                    <h4>{user.username}</h4>
-                <p>{user.role}</p>
-                <p>
-                  <Button bsStyle="primary">Button</Button>
-                </p>
-              </Thumbnail>
+                <div class="thumbnail">
+                    <img src="`${user.profilePhotoUrl}`" alt="..."/>
+                        <div class="caption">
+                            <Link to={`/profile/${user._id}`}>{user.username}</Link>
+                            <p>I'm a {user.role}</p>
+                            <p><a href="#" class="btn btn-primary" role="button">Button</a> </p>
+                        </div>
+                </div>
               ) : null;
 
             return (
