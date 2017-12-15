@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import Profile from "./components/profile";
 import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { auth } from "./config/firebase-auth";
 
 import LoginSignUp from "./components/loginsignup";
+import Profile from "./components/profile";
+import ProfileForm from "./components/profileform";
 import Matches from "./components/matches";
 
 class App extends Component {
@@ -99,6 +100,7 @@ class App extends Component {
                 <div>
                     <Switch>
                         <Route exact path="/profile" component={() => (<Profile user={this.state.user} />)} />
+                        <Route exact path="/profileform" component={() => (<ProfileForm user={this.state.user} />)} />
                         <Route exact path="/matches" render={(props) => <Matches {...props} user={this.state.user} />} />
                         />
                     </Switch>
