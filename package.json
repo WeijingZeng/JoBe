@@ -5,6 +5,7 @@
   "dependencies": {
     "@firebase/app": "^0.1.4",
     "aws-sdk": "^2.169.0",
+    "axios": "^0.17.1",
     "bcryptjs": "^2.4.3",
     "bluebird": "^3.5.1",
     "express": "^4.16.2",
