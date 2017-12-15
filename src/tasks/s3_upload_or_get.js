@@ -93,12 +93,12 @@ function put_from_url(url, filename, callback) {
 /*
 * Get a file from s3
 */
-function getFile(fileName){
-	var urlParams = {Bucket: 'imagemagick-jobe', Key: 'images/'+fileName};
+async function getFile(fileName){
+	var urlParams = {Bucket: 'imagemagick-jobe', Key: 'images/'+fileName+'.jpg'};
 	//signed url as a temporary url pointing to that image
-	s3.getSignedUrl('getObject', urlParams, function(err, url){
-		console.log('the signed url of the image is', url);
-	});
+	 let url= await s3.getSignedUrl('getObject', urlParams)
+	return url.substring(0, url.indexOf(".jpg"))+".jpg";
+	
 }
 
 //uploadFileFromURL('images/google.jpg', 'https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg')
@@ -107,5 +107,8 @@ function getFile(fileName){
 
 export function test(url, filename) {
 	//uploadFileFromURL("google.jpg" ,url);
-	put_from_url(url, filename)
+	put_from_url(url, filename);
+}
+export async function get_profile_image(filename) {
+	return await getFile(filename);
 }

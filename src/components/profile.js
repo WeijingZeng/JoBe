@@ -1,37 +1,45 @@
 import React, { Component } from "react";
-
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-class Matches extends Component {
+import { get_profile_image } from "../tasks/s3_upload_or_get";
+
+class Profile extends Component {
     constructor(props) {
         super(props);
+        //console.log(props)
+        this.user=this.props.user;
+        this.state ={
+        	name: "name",					//todo
+        	email: this.user.email,
+        	id: this.user.id,
+        }
+        get_profile_image(this.props.user.email).then((result)=>{
+        	this.setState({profile_picture: result});
+        });
     }
     render() {
-        //TODO: get matches from users and render
-        let matches = null;
+        let profile = null;
         return (
             <div className="container">
                 <div className="row">
                     <div className="col-md-8 offset-md-2">
                         <div className="jumbotron">
-                            <h1 className="display-3">Matches!</h1>
+                            <h3>Profile!</h3>
+                            <img src={this.state.profile_picture} width="300" height="300" alt="this is me"/>
                             <p className="lead">
-                                This is where user's matches will be displayed
-                                based on various profile compatibility.
+                                Name: {this.state.name}
                             </p>
-                            <hr className="my-4" />
                             <p>
-                                Matching will be based on user's role matching
-                                other's 'seeking'. Geographical proximity is
-                                also taken into account if the user wants to
-                                look for nearby musicians.
+                                Email: {this.state.email}
                             </p>
+
+                            <hr className="my-4" />
                             <p className="lead">
                                 <a
                                     className="btn btn-primary btn-lg"
-                                    href="/profile"
+                                    href="/matches"
                                     role="button"
                                 >
-                                    profile
+                                    Matches
                                 </a>
                             </p>
                         </div>
@@ -39,7 +47,9 @@ class Matches extends Component {
                 </div>
             </div>
         );
+    
+        
     }
 }
 
-export default Matches;
+export default Profile;
