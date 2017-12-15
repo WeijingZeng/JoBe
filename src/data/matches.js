@@ -2,7 +2,6 @@ const mongoCollections = require("../config/mongoCollections");
 const matches = mongoCollections.matches;
 const uuid = require('node-uuid');
 const usersData = require("./users");
-const uuid = require("node-uuid")
 
 let exportedMethods = {
     async imInterested(interestedUid, interestedInUid) {
