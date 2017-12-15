@@ -7,12 +7,16 @@ class Matches extends Component {
         super(props);
         this.state = {
             allUsers: [],
-            matcheUsers:[]
+            matcheUsers:[],
+            working:false
           };
     }
 
     componentDidMount () {
+        this.setState({working:true});
         this.getAllusers();
+        this.getMatchUser(this.props.user.uid);
+        
     }
 
     getAllusers(){
@@ -37,9 +41,11 @@ class Matches extends Component {
             dataType: 'json',
             success: data => {
                 this.setState({matcheUsers:data})
+                this.setState({working:false});
                 console.log("match:"+this.state.matcheUsers);
             },
             error: err => {
+                this.setState({working:false});
                 console.log(err);
             }
         })
@@ -47,11 +53,14 @@ class Matches extends Component {
             
 
     render() {
-        //TODO: get matches from users and render
         let body = null;
         const uid = this.props.user.uid;
         console.log("uid:"+uid)
-        this.getMatchUser(uid);
+
+        if(this.state.working){
+            return <small>Finding Matches!</small>;
+        }
+        
         const matcheList = this.state.matcheUsers;
 
         if (matcheList.length === 0) {
