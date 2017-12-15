@@ -1,6 +1,6 @@
 const express = require("express");
 
-const configAPIRoutes = require("./api");
+const configAPIRoutes = require("./api/");
 
 const app = express();
 app.use(express.json());
