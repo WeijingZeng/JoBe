@@ -21,7 +21,7 @@ io.on('connection',(socket)=> {
         console.log(`successful join on ${channelId}`)
         socket.join(channelId);
     });
-    socket.on('joinChat', users => {
+    socket.on('startChat', users => {
        let chatId = uuid.v4()
        users.forEach( (user) => {
           console.log(`subscribing ${user} to ${chatId}`);

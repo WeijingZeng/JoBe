@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Submit from "./Submit";
 import Log from "./Log";
 
-//import JoinedChatsPanel from "./JoinedChatsPanel";
+import ChatsPanel from "./ChatsPanel";
 import Users from "./Users";
 import io from 'socket.io-client';
 import ApiHelper from "./apiHelper";
@@ -16,13 +16,15 @@ class Chat extends Component {
             //make sure to run the chatserver.js file! (node chatServer.js)
             socket: io.connect('http://localhost:8000'),
             users: [],
-            joinedChats: {}
+            joinedChats: []
         };
 
         this.updateMessages = this.updateMessages.bind(this);
         this.sendMessage = this.sendMessage.bind(this);
         this.updateUsers = this.updateUsers.bind(this);
-        this.joinChat = this.joinChat.bind(this);
+        this.startChat = this.startChat.bind(this);
+        this.setActiveChat = this.setActiveChat.bind(this);
+        //this.joinChat = this.joinChat.bind(this);
         
   }
   async componentDidMount(){
@@ -37,9 +39,7 @@ class Chat extends Component {
         }
         try{
             let allUsers = await ApiHelper.get("/users");
-            let userIds = allUsers.data.map( (user) => {return user._id});
-            console.log("these are all the users:"+userIds);
-            this.setState({users:userIds});
+            this.setState({users:allUsers.data});
         }catch(e){
             console.log(e)
         }
@@ -59,7 +59,7 @@ class Chat extends Component {
   }
   sendMessage(message){
     if(this.state.activeChat){ 
-        this.state.socket.emit('chatMessage',{username:this.props.uid,message:message,activeChat:this.state.activeChat});
+        this.state.socket.emit('chatMessage',{uid:this.props.uid,username:this.props.email,message:message,activeChat:this.state.activeChat});
         console.log('emitted message');
     }
   }
@@ -81,25 +81,35 @@ class Chat extends Component {
     this.setState({users:temp});
   }
 
-  joinChat(users){
-    this.state.socket.emit("joinChat",users);
+  startChat(users){ //this method creates a new chat for uers
+    this.state.socket.emit("startChat",users);
   } 
+  //joinChat(users,channelId){
+  //}
   setActiveChat(id){
-            this.setState({activeChat:id});
+            console.log("setting active chat!");
+            let index = 0;
+            for(let i=0;i<this.state.joinedChats.length;i++){
+                if(this.state.joinedChats[i].id == id){
+                    index = i;
+                }
+            }
+            console.log("set active chat to " + index);              
+            this.setState({activeChat:index});
   }
   addChat(chat){
         //format
         //{id,users,chatLog}
         console.log("adding chat: " + JSON.stringify(chat));
         let temp = this.state.joinedChats;
-        temp[chat.id] = chat;
+        temp = temp.concat([chat]);
         console.log(`added chat ${chat.id} in the object ${JSON.stringify(temp)}`);
         this.setState({joinedChats:temp});
   }
   render() {
     let submit = null;
     let log= null;
-    if(this.state.activeChat){
+    if(this.state.activeChat != undefined){
         console.log("joined chats"+this.state.joinedChats[this.state.activeChat]);
         console.log("active chat messages"+this.state.joinedChats[this.state.activeChat]);
         log=<Log messages={this.state.joinedChats[this.state.activeChat].messages} roomTitle="chat" username={this.props.uid}/>
@@ -111,9 +121,12 @@ class Chat extends Component {
     return (
         <div className="chatBox row">
             <div className="col-3">
-            <Users users={this.state.users} joinChat={this.joinChat} username={this.props.uid}/>
+            <Users users={this.state.users} joinChat={this.startChat} uid={this.props.uid}/>
             </div>
-            <div className="col-9">
+            <div className="col-3">
+            <ChatsPanel joinedChats={this.state.joinedChats} setActiveChat={this.setActiveChat} />
+            </div>
+            <div className="col-6">
             {log}
             {submit}
             </div>
