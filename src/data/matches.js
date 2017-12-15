@@ -7,10 +7,11 @@ let exportedMethods = {
     async imInterested(interestedUid, interestedInUid) {
         const matchCollection = await matches();
         //first see if there is an existing match between the two users
-        let checkMatch = await getMatchByUIDS(interestedUid, interestedInUid)
+        let checkMatch = await this.getMatchByUIDS(interestedUid, interestedInUid)
         //If there is no matching match document already then create one
         if (!checkMatch) {
-            let addMatch = await addMatch(interestedUid, interestedInUid)
+            let addMatch = await this.addMatch(interestedUid, interestedInUid)
+            return addMatch;
         } else {
             // this means that user2 has liked user1 before..and for whatever reason, maybe user1 didn't see 
             //that user2 liked them before so they clicked like when coming across user2's profile
