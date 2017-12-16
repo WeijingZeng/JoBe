@@ -151,7 +151,7 @@ class LoginSignUp extends Component {
         return (
             <div className="login_wrapper">
                 <div className="login">
-                    <p className="title">Welcome</p>
+                    <p className="login_title">Welcome</p>
                     {this.state.loginError && (
                         <div className="loginerror">
                             {this.state.loginError}
