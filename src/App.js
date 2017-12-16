@@ -126,7 +126,7 @@ class App extends Component {
                                 </Link>
                                 {navItems.map((item) => {
                                     return (this.state.user.loggedin || !item.mustBeLoggedIn)
-                                        ? (<li className="nav-item"><Link className="nav-link" to={item.to}>{item.title}</Link></li>)
+                                        ? (<li className="nav-item" key={item.to}><Link className="nav-link" to={item.to}>{item.title}</Link></li>)
                                         : null;
                                 })}
                             </ul>

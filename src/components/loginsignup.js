@@ -117,8 +117,10 @@ class LoginSignUp extends Component {
     async forgotPassword() {
         const email = document.getElementById("email").value;
         if (!email){
-            console.log ("No email")
-        }
+            this.setState({
+                loginError: "No Email Address Entered! Please Enter Your Email Address Below"
+            });
+        }else{
         try {
             await auth.sendPasswordResetEmail(email)
             this.setState({
@@ -144,21 +146,22 @@ class LoginSignUp extends Component {
                     break;
             }
         }
+    }
 
     }
 
     render() {
         return (
-            <div className="wrapper">
+            <div className="login_wrapper">
                 <div className="login">
-                    <p className="title">Welcome</p>
+                    <p className="login_title">Welcome</p>
                     {this.state.loginError && (
                         <div className="loginerror">
                             {this.state.loginError}
                         </div>
                     )}
-                    <input type="email" id="email" placeholder="Email Address" required />
-                    <input type="password" id="password" placeholder="Password" required />
+                    <input className= "login_input" type="email" id="email" placeholder="Email Address" required />
+                    <input className= "login_input" type="password" id="password" placeholder="Password" required />
 
                     <Link to="#" onClick={this.forgotPassword}>Forgot Password</Link>
                     <br /><br />
