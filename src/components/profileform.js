@@ -37,6 +37,7 @@ class ProfileForm extends Component {
         $.ajax("/users/" + this.props.user.uid, {
             dataType: 'json',
             success: (data) => {
+                if (data.influences && Array.isArray(data.influences)) data.influences = data.influences.join(",");
                 this.setState(data);
             },
             error: (err) => {
@@ -76,11 +77,12 @@ class ProfileForm extends Component {
             mainGenre: this.state.mainGenre,
             secondGenre: this.state.secondGenre,
             thirdGenre: this.state.thirdGenre,
+            hasSpace: this.state.hasSpace,
             bio: this.state.bio,
             achivements: this.state.achivements,
             role: this.state.role,
             links: this.state.links,
-            influences: this.state.influences,
+            influences: this.state.influences.split(","),
             lastLogin: new Date(),
             profilePhotoUrl: "",
             localRemoteOrAll: this.state.localRemoteOrAll,
@@ -248,7 +250,7 @@ class ProfileForm extends Component {
                         <input type="text" className="form-control" name="links" value={this.state.links} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="influences">Influences</label>
+                        <label htmlFor="influences">Influences (separated by commas)</label>
                         <input type="text" className="form-control" name="influences" value={this.state.influences} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="form-group">
