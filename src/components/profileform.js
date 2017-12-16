@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import Dropzone from 'react-dropzone'
+import axios from "axios";
 import $ from "jquery";
 import "../App.css";
 
@@ -7,6 +9,7 @@ class ProfileForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            uploading: false,
             username: "",
             firstName: "",
             lastName: "",
@@ -100,17 +103,60 @@ class ProfileForm extends Component {
         });
     }
 
+    async onDrop(files) {
+        if (files.length === 0) return;
+        this.setState({
+            uploading: true
+        });
+
+        //upload to AWS and get URL
+        var data = new FormData();
+        data.append("file", files[0]);
+        let response = await axios.post("/photo/upload", data, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        let url = response.data.url;
+
+        await axios.post("/users/editPic/" + this.props.user.uid, { url: url });
+
+        this.setState({
+            uploading: false,
+            profilePhotoUrl: url
+        });
+    }
+
     render() {
-        var message = null;
+        let message = null;
         if (this.state.userNotExist) message = <div className="alert alert-warning" role="alert">Your user profile was not found! Use this form to fill out your profile.</div>;
 
-        var message2 = null;
+        let message2 = null;
         if (this.state.success) message2 = <div className="alert alert-success" role="alert">Your profile has been updated.</div>;
+
+        let dropZoneText = <p>Drag a picture here, or click here to browse! Your picture will be cropped to a square.</p>;
+        if (this.state.uploading) dropZoneText = <p>Uploading...</p>
+
+        let dropZone = (
+            <div className="container">
+                <div className="row">
+                    <div className="col-sm-6">
+                        <p>Profile Picture</p>
+                        <div style={{ margin: "auto", width: 200 }}>
+                            <Dropzone multiple={false} onDrop={this.onDrop.bind(this)}>{dropZoneText}</Dropzone>
+                        </div>
+                    </div>
+                    <div className="col-sm-6">
+                        <p>Current Profile Picture:</p>
+                        {this.state.profilePhotoUrl ? <img src={this.state.profilePhotoUrl} style={{ width: 200, height: 200 }} /> : <p>None</p>}
+                    </div>
+                </div>
+            </div>
+        );
 
         return (
             <div>
                 {message}
-                <form onSubmit={this.handleSubmit.bind(this)} style={{ width: "500px", margin: "auto" }}>
+                {this.state.userNotExist ? null : dropZone}
+                <form onSubmit={this.handleSubmit.bind(this)} style={{ width: "800px", margin: "auto" }}>
                     <div className="profile_form input-group">
                         <span className="input-group-addon" id="basic-addon1">Username</span>
                         <input type="text" className="form-control" name="username" value={this.state.username} onChange={this.handleChange.bind(this)} />
