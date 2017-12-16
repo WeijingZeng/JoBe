@@ -1,9 +1,10 @@
 const mongoCollections = require("../config/mongoCollections");
 const chats = mongoCollections.chats;
 const uuid = require("node-uuid");
+const userData = require("./users");
 
 let exportedMethods = {
-    async getAllUsers() {
+    async getAllChats() {
         const chatCollection = await chats();
         const allChats = await chatCollection.find({}).toArray();
         return allChats;
@@ -19,9 +20,15 @@ let exportedMethods = {
         }
     },
     async addChat(chat){
+        //format is {_id,users,messages}
+        let newchat = chat; 
         try{
             const chatCollection = await chats();
-            let response = await chatCollection.insertOne(chat);
+            newchat.users.forEach(async  (user) => {
+               console.log("adding chat to user " + user);
+               await userData.addChat(user,newchat._id);
+            });
+            let response = await chatCollection.insertOne(newchat);
             return response; 
             
         } catch (e) {
@@ -33,6 +40,17 @@ let exportedMethods = {
         try{
             const chatCollection = await chats();
             let response = await chatCollection.updateOne({_id:id},chat);
+            return response; 
+            
+        } catch (e) {
+            console.log("there was an error");
+            console.log(e);
+        }
+    },
+    async addMessage(id,message){
+        try{
+            const chatCollection = await chats();
+            let response = await chatCollection.updateOne({_id:id},{$push: {chatLog:message}});
             return response; 
             
         } catch (e) {

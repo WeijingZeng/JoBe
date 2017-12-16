@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require("../data");
 const userData = data.users;
-
+const chatData = data.chats;
 router.get("/", (req, res) => {
     userData.getAllUsers().then((userList) => {
         res.status(200).json(userList);
@@ -18,15 +18,16 @@ router.get("/:id", (req, res) => {
         res.status(500).json({ error: e });
     });
 });
-
-
-router.get("/:userName", (req, res) => {
-    userData.getPotentialMatches(req.params.name).then((user) => {
-        res.status(200).json(user);
+router.get("/:id/chats", (req, res) => {
+    userData.getChats(req.params.id).then((chatList) => {
+        res.status(200).json(chatList);
     }).catch((e) => {
+        console.log(e);
         res.status(500).json({ error: e });
     });
 });
+
+
 
 router.post("/", async (req, res) => {
     let userInfo = req.body;
@@ -42,6 +43,42 @@ router.post("/", async (req, res) => {
         userInfo.lastLogin)
     console.log("new user added! " + newUser);
         res.json(newUser);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+//add a new chat
+router.post("/:id/chats", async (req, res) => {
+    let chat = req.body;
+    console.log("tried to put a chat in user " + req.params.id + "  with id of " + chat._id );
+    if (!chat) {
+        res.status(400).json({ error: "You must provide chat data to create a chat" });
+        return;
+    }
+
+    try{
+        let newChat =await chatData.addChat(chat);
+        console.log("new chat added! " + newChat);
+        res.json(newChat);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }
+});
+//add new message
+router.post("/chat/:chatId/message", async (req, res) => {
+    let message = req.body;
+    console.log("tried to put a message in chat " + req.params.chatId );
+    if (!message) {
+        res.status(400).json({ error: "You must provide chat data to create a chat" });
+        return;
+    }
+
+    try{
+        let newChat =await chatData.addMessage(req.params.chatId,message);
+        console.log("new message added! " + newChat);
+        res.json(newChat);
     }catch(e){
         console.log(e);
         res.sendStatus(500);

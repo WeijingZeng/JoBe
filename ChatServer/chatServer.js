@@ -25,7 +25,7 @@ io.on('connection',(socket)=> {
        let chatId = uuid.v4()
        users.forEach( (user) => {
           console.log(`subscribing ${user} to ${chatId}`);
-          io.to(user).emit('subscribe',{id:chatId,users:users,messages:[]});
+          io.to(user).emit('subscribe',{_id:chatId,users:users,chatLog:[]});
         });
     });
 });

@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 const uuid = require('uuid')
 class Users extends Component {
-  constructor(props){
-        super(props);
-  };
   render() {
     console.log("users in the user component " + this.props.users); 
     console.log("uid in user component " + this.props.uid);
@@ -14,7 +11,7 @@ class Users extends Component {
                     return(<button
                             key={uuid.v4()}
                             value={user._id}
-                            onClick={e => {this.props.joinChat([this.props.uid,e.target.value._id])}}>
+                            onClick={e => {this.props.joinChat([this.props.uid,e.target.value])}}>
                                 {user.email}
                             </button>);
                 }

@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 const uuid = require('uuid')
 class Log extends Component {
-  constructor(props){
-        super(props);
-  };
   render() {
-       let chatList = this.props.messages.map(message => 
+       let chatList = this.props.chatLog.map(message => 
         {
-             if(message.username == this.props.username){
+             if(message.username === this.props.username){
                 return(<div className="message own-message" key={uuid.v4()}>
                     <p>{message.username}</p>
                     <p>{message.message}</p>
