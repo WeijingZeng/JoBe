@@ -72,11 +72,36 @@ class App extends Component {
         );
     }
 
+
+
     render() {
         let body = null;
         let footer = null;
         let profile = `/profile/${this.state.user.uid}`;
-        //If the user is not logged in, render the login
+
+        var navItems = [
+            {
+                title: "Home",
+                to: "/",
+                mustBeLoggedIn: false
+            },
+            {
+                title: "Profile",
+                to: profile,
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Edit Profile",
+                to: "/profileform",
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Matches",
+                to: "/matches",
+                mustBeLoggedIn: true
+            }
+        ];
+
         let header = (
             <div>
                 <header className="App-header">
@@ -90,29 +115,14 @@ class App extends Component {
                             id="navbarSupportedContent"
                         >
                             <ul className="navbar-nav mx-auto">
-                                <a className="navbar-brand" href="/">
+                                <Link className="navbar-brand" to="/">
                                     JoBe
-                                </a>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/">
-                                        Home
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to={profile}>
-                                        Profile
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/profileform">
-                                        Edit Profile
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/matches">
-                                        Matches
-                                    </Link>
-                                </li>
+                                </Link>
+                                {navItems.map((item) => {
+                                    return (this.state.user.loggedin || !item.mustBeLoggedIn)
+                                        ? (<li className="nav-item"><Link className="nav-link" to={item.to}>{item.title}</Link></li>)
+                                        : null;
+                                })}
                             </ul>
                         </div>
                     </nav>
