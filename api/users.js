@@ -122,6 +122,23 @@ router.post("/edit/:id", (req, res) => {
         });
 });
 
+router.post("/editPic/:id", (req, res) => {
+    let userInfo = req.body;
+
+    if (!userInfo) {
+        res.status(400).json({ error: "You must provide data to edit a user" });
+        return;
+    }
+    
+    userData.editProfilePic(req.params.id, userInfo.url)
+        .then((user) => {
+            console.log(user);
+            res.json(user);
+        }, (err) => {
+            res.status(500).json(err.message);
+        });
+});
+
 router.delete("/:id", (req, res) => {
     let user = userData.getUserById(req.params.id).then(() => {
         return userData.removeUser(req.params.id)
