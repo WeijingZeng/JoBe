@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
 import { get_profile_image } from "../tasks/s3_upload_or_get";
 import $ from 'jquery'
 
@@ -91,13 +91,7 @@ class Profile extends Component {
 
                         <hr className="my-4" />
                         <p className="lead">
-                            <a
-                                className="btn btn-primary btn-lg"
-                                href="/matches"
-                                role="button"
-                            >
-                                Matches
-                            </a>
+                            <Link className="btn btn-primary btn-lg" to="/matches">Matches</Link>
                         </p>
                     </div>
                 </div>
