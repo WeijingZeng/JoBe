@@ -87,6 +87,16 @@ class App extends Component {
                 mustBeLoggedIn: false
             },
             {
+                title: "Matches",
+                to: "/matches",
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Connections",
+                to: "/connections",
+                mustBeLoggedIn: true
+            },
+            {
                 title: "Profile",
                 to: profile,
                 mustBeLoggedIn: true
@@ -94,11 +104,6 @@ class App extends Component {
             {
                 title: "Edit Profile",
                 to: "/profileform",
-                mustBeLoggedIn: true
-            },
-            {
-                title: "Matches",
-                to: "/matches",
                 mustBeLoggedIn: true
             }
         ];
