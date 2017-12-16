@@ -65,7 +65,7 @@ let exportedMethods = {
     async getMutualMatches(uid) {
         const matchCollection = await matches();
         try {
-            let match = await matchCollection.findOne({
+            let matches = await matchCollection.find({
                 $and: [
                     { mutualMatch: 1 },
                     {
@@ -75,7 +75,17 @@ let exportedMethods = {
                         ]
                     }
                 ]
-            });
+            }).toArray();
+        
+           let match= await Promise.all(matches.map(async m=>{
+                let otherId=null;
+                if(m.user1 === uid){
+                    otherId = m.user2;
+                }else{
+                    otherId = m.user1;
+                }
+                return await usersData.getUserById(otherId);
+            }));
             return match;
         } catch (e) {
             console.log("there was an error");

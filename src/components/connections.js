@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {Link} from "react-router-dom";
 import axios from "axios";
-import { auth } from "../config/firebase-auth";
 class Connections extends Component {
     constructor(props) {
         super(props);
@@ -43,14 +42,14 @@ class Connections extends Component {
         }
 
         let mutual=this.state.connections.map(con=>{
-            let user=con.user2;
+            let user=con;
             const userImg = user.profilePhotoUrl ? (
                 <div className="thumbnail" >
-                    <img src="`${user.profilePhotoUrl}`" alt="..."/>
+                    <img src={`${user.profilePhotoUrl}`} alt="..."/>
                         <div className="caption">
                             <Link to={`/profile/${user._id}`}>{user.username}</Link>
                             <p>I'm a {user.role}</p>
-                            <p><button onClick={() => this.sendRequest(user._id)} className="btn btn-primary" role="button">Interested</button> </p>
+                            
                         </div>
                 </div>
               ) : null;
@@ -61,6 +60,17 @@ class Connections extends Component {
               </div>
             );
         });
+
+        return (
+            <div className="container">
+                <div className="row">
+                    <div className="col-md-8 offset-md-2">
+                        <h2>Connections</h2>
+                            {<div>{mutual}</div>}
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 
