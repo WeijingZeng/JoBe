@@ -24,6 +24,13 @@ let exportedMethods = {
         let newchat = chat; 
         try{
             const chatCollection = await chats();
+            //check to see if chat already exists
+            let existingChat = await chatCollection.findOne({users:newchat.users});
+            let existingChatId = await chatCollection.findOne({_id:newchat._id}) ;
+            if(existingChat || existingChatId){
+                console.log("\n\nERROR CHAT EXISTS\n\n");
+                return({error:"chat aleady exists"});
+            }
             newchat.users.forEach(async  (user) => {
                console.log("adding chat to user " + user);
                await userData.addChat(user,newchat._id);

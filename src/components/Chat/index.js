@@ -142,13 +142,16 @@ class Chat extends Component {
   async addChat(chat){
         //format
         //{id,users,chatLog}
-        console.log("adding chat: " + JSON.stringify(chat));
-        let temp = this.state.joinedChats;
-        temp = temp.concat([chat]);
-        console.log(`added chat ${chat._id} in the object ${JSON.stringify(temp)}`);
-        this.setState({joinedChats:temp});
         try{    
-            await ApiHelper.post(`/users/${this.props.uid}/chats`,{_id:chat._id,users:chat.users,chatLog:chat.chatLog});
+            let response = await ApiHelper.post(`/users/${this.props.uid}/chats`,{_id:chat._id,users:chat.users,chatLog:chat.chatLog});
+            console.log(JSON.stringify(response)+"THIS IS MY RESPONSE HEAR IT LOUD AND CLEAR");
+            if(!response.data.error){
+                console.log("adding chat: " + JSON.stringify(chat));
+                let temp = this.state.joinedChats;
+                temp = temp.concat([chat]);
+                console.log(`added chat ${chat._id} in the object ${JSON.stringify(temp)}`);
+                this.setState({joinedChats:temp});
+            }
         }catch(e){
             console.log(e);
         }

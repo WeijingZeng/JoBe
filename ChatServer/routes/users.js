@@ -59,7 +59,7 @@ router.post("/:id/chats", async (req, res) => {
 
     try{
         let newChat =await chatData.addChat(chat);
-        console.log("new chat added! " + newChat);
+            console.log("new chat added! " + JSON.stringify(newChat));
         res.json(newChat);
     }catch(e){
         console.log(e);
