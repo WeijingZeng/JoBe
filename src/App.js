@@ -104,7 +104,7 @@ class App extends Component {
             },
             {
                 title: "Edit Profile",
-                to: "/profileform",
+                to: "/editprofile",
                 mustBeLoggedIn: true
             }
         ];
@@ -157,7 +157,7 @@ class App extends Component {
         body=(
             <div>
                 <Switch>
-                    <PrivateRoute path="/profileform" user={this.state.user} component={ProfileForm}/>
+                    <PrivateRoute path="/editprofile" user={this.state.user} component={ProfileForm}/>
                     <PrivateRoute path="/matches" user={this.state.user} component={Matches}/>
                     <PrivateRoute path="/connections" user={this.state.user} component={Connections}/>
                     <PrivateRoute path="/profile/:id" component={Profile}/>
