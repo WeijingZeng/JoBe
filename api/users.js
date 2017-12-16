@@ -76,7 +76,49 @@ router.post("/", (req, res) => {
         .then((newUser) => {
             res.json(newUser);
         }, (err) => {
-            res.sendStatus(500).json(err);
+            res.status(500).json(err);
+        });
+});
+
+router.post("/edit/:id", (req, res) => {
+    let userInfo = req.body;
+
+    if (!userInfo) {
+        res.status(400).json({ error: "You must provide data to edit a user" });
+        return;
+    }
+    
+    userData.editUser(req.params.id,
+        userInfo.username,
+        userInfo.firstName,
+        userInfo.lastName,
+        userInfo.email,
+        userInfo.gender,
+        userInfo.city,
+        userInfo.state,
+        userInfo.age,
+        userInfo.long,
+        userInfo.lat,
+        userInfo.seeking,
+        userInfo.studioSWUsed,
+        userInfo.mainGenre,
+        userInfo.secondGenre,
+        userInfo.thirdGenre,
+        userInfo.hasSpace,
+        userInfo.bio,
+        userInfo.achivements,
+        userInfo.role,
+        userInfo.links,
+        userInfo.influences,
+        userInfo.lastLogin,
+        userInfo.profilePhotoUrl,
+        userInfo.localRemoteOrAll,
+        userInfo.distanceIfLocal)
+        .then((user) => {
+            console.log(user);
+            res.json(user);
+        }, (err) => {
+            res.status(500).json(err);
         });
 });
 
