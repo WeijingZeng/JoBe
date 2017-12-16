@@ -33,42 +33,15 @@ let exportedMethods = {
                         { influences: { $in: influences } },
                         {
                             $or: [
-                                {
-                                    mainGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                },
-                                {
-                                    secondGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                },
-                                {
-                                    thirdGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                }
+                                { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                                { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                                { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }
                             ]
                         },
                         {
                             location: {
                                 $near: {
-                                    $geometry: {
-                                        type: "Point",
-                                        coordinates: [long, lat]
-                                    },
+                                    $geometry: { type: "Point", coordinates: [long, lat] },
                                     $minDistance: 0,
                                     $maxDistance: maxDistance
                                 }
@@ -87,33 +60,9 @@ let exportedMethods = {
                         { influences: { $in: influences } },
                         {
                             $or: [
-                                {
-                                    mainGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                },
-                                {
-                                    secondGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                },
-                                {
-                                    thirdGenre: {
-                                        $in: [
-                                            mainGenre,
-                                            secondGenre,
-                                            thirdGenre
-                                        ]
-                                    }
-                                }
+                                { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                                { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                                { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }
                             ]
                         }
                     ]

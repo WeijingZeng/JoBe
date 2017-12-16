@@ -116,7 +116,9 @@ class LoginSignUp extends Component {
     }
     async forgotPassword() {
         const email = document.getElementById("email").value;
-
+        if (!email){
+            console.log ("No email")
+        }
         try {
             await auth.sendPasswordResetEmail(email)
             this.setState({
