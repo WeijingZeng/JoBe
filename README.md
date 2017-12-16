@@ -20,16 +20,25 @@ JoBe is a cross between a social networking site and a dating site but for music
 
 Based on this profile, the system will match them to other musicians(user B) that fit that profile and whom are looking for someone like user A. User A is presented with a list of matches, when they see a profile they would be interested in collaborating with from the potential matches, they click an “I’m interested” button, it then alerts User B that someone is interested in working with them. User B then checks out the profile of User A and if they are also interested they click “I’m interested too”. If two users are both interested, then the system creates a private page/area only visible to them. in this private area they can chat, share uploads with each other(if they are working remotely they can send their digital studio tracks like pro tools, garageband etc..) Maybe post notes to each other etc, or a whiteboard or something similar. It’s just like a space where they can collaborate together. It would be great to incorporate some kind of video chat feature if time permitting as well.
 
-### To install and run:
+### Dependencies:
+* ImageMagick
+* Redis
 
-npm install  
-must have redis-server running  
+### To run (must have redis-server running):
+
+```
+npm install
 npm start
+```
 
 ### To run the data API server:
 
+```
 npm run api
+```
 
 ### To seed the database:
 
+```
 npm run seed
+```

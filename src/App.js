@@ -1,15 +1,29 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import { auth } from "./config/firebase-auth";
+import { BrowserRouter as Router, Route, Redirect, Switch, Link } from "react-router-dom";
+import { auth, isAuthenticated } from "./config/firebase-auth";
+
 import LoginSignUp from "./components/loginsignup";
+import Profile from "./components/profile";
+import ProfileForm from "./components/profileform";
 import Matches from "./components/matches";
 import Chat from "./components/Chat"; 
+import Connections from "./components/connections";
 
 class App extends Component {
+   
     constructor(props) {
         super(props);
+        this.state = {
+            user: {
+                loggedin: 0,
+                email: undefined,
+                uid: undefined,
+                lastSignInTime: undefined,
+                loginError: undefined
+            }
+        };
         this.setUser = this.setUser.bind(this);
     }
     handleAuthStateChanged(firebaseuser, self) {
@@ -61,11 +75,41 @@ class App extends Component {
         );
     }
 
+
+
     render() {
         let body = null;
-        console.log(this.state);
+        let footer = null;
+        let profile = `/profile/${this.state.user.uid}`;
 
-        //If the user is not logged in, render the login
+        var navItems = [
+            {
+                title: "Home",
+                to: "/",
+                mustBeLoggedIn: false
+            },
+            {
+                title: "Matches",
+                to: "/matches",
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Connections",
+                to: "/connections",
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Profile",
+                to: profile,
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Edit Profile",
+                to: "/editprofile",
+                mustBeLoggedIn: true
+            }
+        ];
+
         let header = (
             <div>
                 <header className="App-header">
@@ -73,57 +117,84 @@ class App extends Component {
                     <h1 className="App-title">
                         Welcome to JoBe - A Place where Musicians Connect
                     </h1>
+                    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+                        <div
+                            className="collapse navbar-collapse"
+                            id="navbarSupportedContent"
+                        >
+                            <ul className="navbar-nav mx-auto">
+                                <Link className="navbar-brand" to="/">
+                                    JoBe
+                                </Link>
+                                {navItems.map((item) => {
+                                    return (this.state.user.loggedin || !item.mustBeLoggedIn)
+                                        ? (<li className="nav-item" key={item.to}><Link className="nav-link" to={item.to}>{item.title}</Link></li>)
+                                        : null;
+                                })}
+                            </ul>
+                        </div>
+                    </nav>
                 </header>
             </div>
         );
 
-        if (this.state && this.state.user && this.state.user.loggedin === 1) {
-            body = (
-                <Router>
-                    <div >
-                        <Switch>
-                            <Route path="/Chat" render={()=>{ 
-                                return (
-                                    <div>
-                                    <Chat uid={this.state.user.uid} email={this.state.user.email} lastSignInTime={this.state.user.lastSignInTime}/>
-                                    <Link to="/">Home</Link>
-                                    </div>
-                                )}} />
-                            <Route path="/" render={()=>{ 
-                                return (
-                                    <div>
-                                    <Matches/>
-                                    <Link to="/Chat">Chat</Link>
-                                    </div>
-                                )}} />
-                        </Switch>
-                        <br />
-                        You are logged in as UserID: {this.state.user.uid}
-                        <br />
-                        You are logge with Email: {this.state.user.email}
-                        <br />
-                        Your Last Login Was: {this.state.user.lastSignInTime}
-                        <br />
-                        <button
-                            onClick={() => auth.signOut()}
-                            id="login"
-                            className="btn btn-primary">
-                            Log Out
-                        </button>
-                    </div>
-                </Router>
+        if (isAuthenticated()) {           
+            footer = (
+                <footer className="footer navbar-fixed-bottom ">
+                <div className="container">
+                    <hr/>
+                    <br />
+                    You are logged in as UserID: {this.state.user.uid}
+                    <br />
+                    You are logge with Email: {this.state.user.email}
+                    <br />
+                    Your Last Login Was: {this.state.user.lastSignInTime}
+                    <br />
+                    <button onClick={() => auth.signOut()} id="login" className="btn btn-danger btn-sm">Log Out</button>
+                </div>
+                </footer>
             );
-        } else {
-            body = <LoginSignUp setUser={this.setUser} />;
         }
-
-        return (
-            <div className="App">
-                {header}
-                {body}
+        body=(
+            <div>
+                <Switch>
+                    <PrivateRoute path="/editprofile" user={this.state.user} component={ProfileForm}/>
+                    <PrivateRoute path="/matches" user={this.state.user} component={Matches}/>
+                    <PrivateRoute path="/connections" user={this.state.user} component={Connections}/>
+                    <PrivateRoute path="/profile/:id" component={Profile}/>
+                    <PrivateRoute path="/profile" user={this.state.user} component={Profile}/>
+                    <Route path="/login" component={LoginSignUp}/>
+                    <Route path="/Chat" render={()=>{ 
+                        return (
+                            <Chat uid={this.state.user.uid} email={this.state.user.email} lastSignInTime={this.state.user.lastSignInTime}/>
+                        )}} />
+                    <Redirect from={'*'} to={'/matches'}/>
+                </Switch>
             </div>
+        );
+        return (
+            <Router>
+                <div className="App">
+                    {header}
+                    {body}
+                    {footer}
+                </div>
+                
+            </Router>
         );
     }
 }
 
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={(props) => (
+      isAuthenticated() === true
+        ? <Component {...props} {...rest}/>
+        : <Redirect to={{
+            pathname: '/login',
+            state: { from: props.location }
+          }} />
+    )} />
+  )
+
 export default App;
+
