@@ -19,8 +19,10 @@ let exportedMethods = {
             // this means that user2 has liked user1 before..and for whatever reason, maybe user1 didn't see
             //that user2 liked them before so they clicked like when coming across user2's profile
             //need to get that record in matches where user2 ID is in the user1 field
-            let setMutualMatch = await this.setMutual(checkMatch._id);
-            return setMutualMatch;
+            if (interestedUid !== checkMatch.user1) {
+                let setMutualMatch = await this.setMutual(checkMatch._id);
+                return setMutualMatch;
+            }
         }
     },
     //This function will get the match record if both users are in either the user1 or user2 fields, mutual does not have to be 1
