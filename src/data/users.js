@@ -241,6 +241,20 @@ let exportedMethods = {
         let editedUser = await userCollection.updateOne({ _id: firebaseID }, updateCommand)
         return this.getUserById(firebaseID);
     },
+
+    async editProfilePic(id, url){
+        let userCollection = await users();
+        let updatedUser = {
+                profilePhotoUrl: url
+        };
+        let updateCommand = {
+            $set: updatedUser
+        };
+
+        let editedUser = await userCollection.updateOne({ _id: id }, updateCommand)
+        return this.getUserById(id);
+    },
+
     async removeUser(id) {
         return users().then(userCollection => {
             return userCollection.removeOne({ _id: id }).then(deletionInfo => {
