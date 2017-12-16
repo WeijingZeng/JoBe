@@ -26,13 +26,19 @@ Based on this profile, the system will match them to other musicians(user B) tha
 
 ### To run (must have redis-server running):
 
-`npm install`
-`npm start`
+```
+npm install
+npm start
+```
 
 ### To run the data API server:
 
-`npm run api`
+```
+npm run api
+```
 
 ### To seed the database:
 
-`npm run seed`
+```
+npm run seed
+```
