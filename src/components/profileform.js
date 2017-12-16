@@ -32,7 +32,8 @@ class ProfileForm extends Component {
             links: "",
             influences: "",
             localRemoteOrAll: "",
-            distanceIfLocal: ""
+            distanceIfLocal: "",
+            profilePhotoUrl:""
         };
 
         navigator.geolocation.getCurrentPosition(this.positionHandler.bind(this));
@@ -87,7 +88,7 @@ class ProfileForm extends Component {
             links: this.state.links,
             influences: this.state.influences.split(","),
             lastLogin: new Date(),
-            profilePhotoUrl: "",
+            profilePhotoUrl: this.state.profilePhotoUrl,
             localRemoteOrAll: this.state.localRemoteOrAll,
             distanceIfLocal: this.state.distanceIfLocal
         };
@@ -243,7 +244,7 @@ class ProfileForm extends Component {
                         </select>
                     </div>
                     <div className="profile_form input-group">
-                        <span className="input-group-addon" id="basic-addon1">State</span>
+                        <span className="input-group-addon" id="basic-addon1">Age</span>
                         <input type="text" className="form-control" name="age" value={this.state.age} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
@@ -312,7 +313,7 @@ class ProfileForm extends Component {
                         <input type="text" className="form-control" name="distanceIfLocal" value={this.state.distanceIfLocal} onChange={this.handleChange.bind(this)} />
                     </div>
 
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary" onClick={()=>this.handleSubmit}>Submit</button>
                 </form>
                 {message2}
             </div>
