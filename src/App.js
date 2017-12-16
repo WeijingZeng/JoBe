@@ -89,6 +89,11 @@ class App extends Component {
                 mustBeLoggedIn: false
             },
             {
+                title: "Chat",
+                to: "/Chat",
+                mustBeLoggedIn: true
+            },
+            {
                 title: "Matches",
                 to: "/matches",
                 mustBeLoggedIn: true
@@ -163,11 +168,12 @@ class App extends Component {
                     <PrivateRoute path="/connections" user={this.state.user} component={Connections}/>
                     <PrivateRoute path="/profile/:id" component={Profile}/>
                     <PrivateRoute path="/profile" user={this.state.user} component={Profile}/>
-                    <Route path="/login" component={LoginSignUp}/>
-                    <Route path="/Chat" render={()=>{ 
+                    <PrivateRoute path="/Chat" uid={this.state.user.uid} email={this.state.user.email} lastSignInTime={this.state.user.lastSignInTime} component={Chat}/>
+                    /*<PrivateRoute path="/Chat" render={()=>{ 
                         return (
                             <Chat uid={this.state.user.uid} email={this.state.user.email} lastSignInTime={this.state.user.lastSignInTime}/>
-                        )}} />
+                        )}} />*/
+                    <Route path="/login" component={LoginSignUp}/>
                     <Redirect from={'*'} to={'/matches'}/>
                 </Switch>
             </div>
