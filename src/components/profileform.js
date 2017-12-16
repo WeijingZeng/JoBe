@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import $ from "jquery";
+import "../App.css";
 
 class ProfileForm extends Component {
     constructor(props) {
@@ -107,9 +108,10 @@ class ProfileForm extends Component {
         return (
             <div>
                 {message}
-                <form onSubmit={this.handleSubmit.bind(this)} style={{ width: "800px", margin: "auto" }}>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
+                <form onSubmit={this.handleSubmit.bind(this)} style={{ width: "500px", margin: "auto" }}>
+                    <div className="input-group">
+                        {/* <label htmlFor="username">Username</label> */}
+                        <span class="input-group-addon" id="basic-addon1">Username</span>
                         <input type="text" className="form-control" name="username" value={this.state.username} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="form-group">
