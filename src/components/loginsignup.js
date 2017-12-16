@@ -118,7 +118,7 @@ class LoginSignUp extends Component {
         const email = document.getElementById("email").value;
         if (!email){
             this.setState({
-                loginError: "No email address entered!"
+                loginError: "No Email Address Entered! Please Enter Your Email Address Below"
             });
         }else{
         try {
