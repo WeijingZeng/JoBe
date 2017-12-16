@@ -1,5 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
+const matches = mongoCollections.matches;
 const uuid = require("node-uuid");
 
 let exportedMethods = {
@@ -23,46 +24,71 @@ let exportedMethods = {
         const userCollection = await users();
         if (localRemoteOrAll === "Local" || localRemoteOrAll === "All") {
             //convert the number of miles into meters
-            let maxDistance = maxDistanceInMiles * 1609.34
-            userList = await userCollection.find({
-                $and: [
-                    { seeking: role },
-                    { matchingActive: 1 },
-                    { influences: { $in: influences } },
-                    {
-                        $or: [
-                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
-                    },
-                    {
-                        location: {
-                            $near: {
-                                $geometry: { type: "Point", coordinates: [long, lat] }, $minDistance: 0,
-                                $maxDistance: maxDistance
+            let maxDistance = maxDistanceInMiles * 1609.34;
+            userList = await userCollection
+                .find({
+                    $and: [
+                        { seeking: role },
+                        { matchingActive: 1 },
+                        { influences: { $in: influences } },
+                        {
+                            $or: [
+                                { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                                { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                                { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }
+                            ]
+                        },
+                        {
+                            location: {
+                                $near: {
+                                    $geometry: { type: "Point", coordinates: [long, lat] },
+                                    $minDistance: 0,
+                                    $maxDistance: maxDistance
+                                }
                             }
                         }
-                    }
-                ]
-            })
+                    ]
+                })
                 .toArray();
         } else {
             //they do not care about location so run query without location filters
-            userList = await userCollection.find({
+            userList = await userCollection
+                .find({
+                    $and: [
+                        { seeking: role },
+                        { matchingActive: 1 },
+                        { influences: { $in: influences } },
+                        {
+                            $or: [
+                                { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                                { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
+                                { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }
+                            ]
+                        }
+                    ]
+                })
+                .toArray();
+        }
+        const matchCollection = await matches();
+
+        let mutual = await matchCollection
+            .find({
                 $and: [
-                    { seeking: role },
-                    { matchingActive: 1 },
-                    { influences: { $in: influences } },
+                    { mutualMatch: 1 },
                     {
-                        $or: [
-                            { mainGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                            { secondGenre: { $in: [mainGenre, secondGenre, thirdGenre] } },
-                            { thirdGenre: { $in: [mainGenre, secondGenre, thirdGenre] } }]
+                        $or: [{ user1: uid }, { user2: uid }]
                     }
                 ]
-            }).toArray()
-        }
-        return userList;
+            })
+            .toArray();
+
+        let filtered = userList.filter(u => {
+            let r = mutual.findIndex(m => {
+                return m.user1 === u._id || m.user2 === u._id;
+            });
+            return r === -1;
+        });
+        return filtered;
     },
     async getUserById(id) {
         const userCollection = await users();
@@ -146,7 +172,10 @@ let exportedMethods = {
                 city: city,
                 state: state,
                 age: age,
-                location: { type: "Point", coordinates: [Number(long), Number(lat)] },
+                location: {
+                    type: "Point",
+                    coordinates: [Number(long), Number(lat)]
+                },
                 seeking: seeking,
                 studioSWUsed: studioSWUsed,
                 mainGenre: mainGenre,
@@ -204,41 +233,46 @@ let exportedMethods = {
         //here we check if the username(handle) supplied is unique if it's not, then there
         // will be an error returned and if it is then it goes ahead and adds the user
         let updatedUser = {
-                _id:firebaseID,
-                username: username.toLowerCase(),
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                gender: gender,
-                city: city,
-                state: state,
-                age: age,
-                location: { type: "Point", coordinates: [Number(long), Number(lat)] },
-                seeking: seeking,
-                studioSWUsed: studioSWUsed,
-                mainGenre: mainGenre,
-                secondGenre: secondGenre,
-                thirdGenre: thirdGenre,
-                hasSpace: hasSpace,
-                bio: bio,
-                achivements: achivements,
-                role: role,
-                links: links,
-                influences: influences,
-                matchingActive: 1,
-                lastLogin: lastLogin,
-                profilePhotoUrl: profilePhotoUrl,
-                profileViewCount: 0,
-                adminUser: 0,
-                localRemoteOrAll: localRemoteOrAll,
-                distanceIfLocal: distanceIfLocal
+            _id: firebaseID,
+            username: username.toLowerCase(),
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            gender: gender,
+            city: city,
+            state: state,
+            age: age,
+            location: {
+                type: "Point",
+                coordinates: [Number(long), Number(lat)]
+            },
+            seeking: seeking,
+            studioSWUsed: studioSWUsed,
+            mainGenre: mainGenre,
+            secondGenre: secondGenre,
+            thirdGenre: thirdGenre,
+            hasSpace: hasSpace,
+            bio: bio,
+            achivements: achivements,
+            role: role,
+            links: links,
+            influences: influences,
+            matchingActive: 1,
+            lastLogin: lastLogin,
+            profilePhotoUrl: profilePhotoUrl,
+            profileViewCount: 0,
+            adminUser: 0,
+            localRemoteOrAll: localRemoteOrAll,
+            distanceIfLocal: distanceIfLocal
         };
         let updateCommand = {
             $set: updatedUser
         };
 
-
-        let editedUser = await userCollection.updateOne({ _id: firebaseID }, updateCommand)
+        let editedUser = await userCollection.updateOne(
+            { _id: firebaseID },
+            updateCommand
+        );
         return this.getUserById(firebaseID);
     },
 
