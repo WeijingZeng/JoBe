@@ -167,8 +167,8 @@ class App extends Component {
                 </div>
             );
             footer = (
-                <footer class="footer navbar-fixed-bottom ">
-                <div class="container">
+                <footer className="footer navbar-fixed-bottom ">
+                <div className="container">
                     <hr/>
                     <br />
                     You are logged in as UserID: {this.state.user.uid}
