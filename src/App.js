@@ -8,6 +8,7 @@ import LoginSignUp from "./components/loginsignup";
 import Profile from "./components/profile";
 import ProfileForm from "./components/profileform";
 import Matches from "./components/matches";
+import Connections from "./components/connections";
 
 class App extends Component {
     constructor(props) {
@@ -86,6 +87,16 @@ class App extends Component {
                 mustBeLoggedIn: false
             },
             {
+                title: "Matches",
+                to: "/matches",
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Connections",
+                to: "/connections",
+                mustBeLoggedIn: true
+            },
+            {
                 title: "Profile",
                 to: profile,
                 mustBeLoggedIn: true
@@ -93,11 +104,6 @@ class App extends Component {
             {
                 title: "Edit Profile",
                 to: "/profileform",
-                mustBeLoggedIn: true
-            },
-            {
-                title: "Matches",
-                to: "/matches",
                 mustBeLoggedIn: true
             }
         ];
@@ -141,6 +147,16 @@ class App extends Component {
                             path="/matches"
                             render={renderProps => (
                                 <Matches
+                                    {...renderProps}
+                                    user={this.state.user}
+                                />
+                            )}
+                        />
+                        <Route
+                            exact
+                            path="/connections"
+                            render={renderProps => (
+                                <Connections
                                     {...renderProps}
                                     user={this.state.user}
                                 />
