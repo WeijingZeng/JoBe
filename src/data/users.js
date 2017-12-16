@@ -213,7 +213,7 @@ let exportedMethods = {
                 city: city,
                 state: state,
                 age: age,
-                location: { type: "Point", coordinates: [long, lat] },
+                location: { type: "Point", coordinates: [Number(long), Number(lat)] },
                 seeking: seeking,
                 studioSWUsed: studioSWUsed,
                 mainGenre: mainGenre,
@@ -236,14 +236,10 @@ let exportedMethods = {
         let updateCommand = {
             $set: updatedUser
         };
-        
-        let editedUser= userCollection.updateOne({ _id: firebaseID }, updateCommand).then(() => {
-            return this.getUserById(firebaseID);
-        });
-            
-        
 
-        
+
+        let editedUser = await userCollection.updateOne({ _id: firebaseID }, updateCommand)
+        return this.getUserById(firebaseID);
     },
     async removeUser(id) {
         return users().then(userCollection => {
