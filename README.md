@@ -24,10 +24,9 @@ Based on this profile, the system will match them to other musicians(user B) tha
 * ImageMagick
 * Redis
 
-### To run:
+### To run (must have redis-server running):
 
 `npm install`
-must have redis-server running  
 `npm start`
 
 ### To run the data API server:
