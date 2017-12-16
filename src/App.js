@@ -8,6 +8,7 @@ import LoginSignUp from "./components/loginsignup";
 import Profile from "./components/profile";
 import ProfileForm from "./components/profileform";
 import Matches from "./components/matches";
+import Connections from "./components/connections";
 
 class App extends Component {
     constructor(props) {
@@ -72,11 +73,41 @@ class App extends Component {
         );
     }
 
+
+
     render() {
         let body = null;
         let footer = null;
         let profile = `/profile/${this.state.user.uid}`;
-        //If the user is not logged in, render the login
+
+        var navItems = [
+            {
+                title: "Home",
+                to: "/",
+                mustBeLoggedIn: false
+            },
+            {
+                title: "Matches",
+                to: "/matches",
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Connections",
+                to: "/connections",
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Profile",
+                to: profile,
+                mustBeLoggedIn: true
+            },
+            {
+                title: "Edit Profile",
+                to: "/profileform",
+                mustBeLoggedIn: true
+            }
+        ];
+
         let header = (
             <div>
                 <header className="App-header">
@@ -90,29 +121,14 @@ class App extends Component {
                             id="navbarSupportedContent"
                         >
                             <ul className="navbar-nav mx-auto">
-                                <a className="navbar-brand" href="/">
+                                <Link className="navbar-brand" to="/">
                                     JoBe
-                                </a>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/">
-                                        Home
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to={profile}>
-                                        Profile
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/profileform">
-                                        Edit Profile
-                                    </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to="/matches">
-                                        Matches
-                                    </Link>
-                                </li>
+                                </Link>
+                                {navItems.map((item) => {
+                                    return (this.state.user.loggedin || !item.mustBeLoggedIn)
+                                        ? (<li className="nav-item"><Link className="nav-link" to={item.to}>{item.title}</Link></li>)
+                                        : null;
+                                })}
                             </ul>
                         </div>
                     </nav>
@@ -136,13 +152,23 @@ class App extends Component {
                                 />
                             )}
                         />
+                        <Route
+                            exact
+                            path="/connections"
+                            render={renderProps => (
+                                <Connections
+                                    {...renderProps}
+                                    user={this.state.user}
+                                />
+                            )}
+                        />
                         <Route path="/profile/:id" component={Profile} />
                     </Switch>
                 </div>
             );
             footer = (
-                <footer class="footer navbar-fixed-bottom ">
-                <div class="container">
+                <footer className="footer navbar-fixed-bottom ">
+                <div className="container">
                     <hr/>
                     <br />
                     You are logged in as UserID: {this.state.user.uid}

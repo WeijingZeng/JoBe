@@ -41,8 +41,8 @@ class Matches extends Component {
             type: 'get',
             dataType: 'json',
             success: data => {
-                this.setState({matcheUsers:data})
-                this.setState({working:false});
+                this.setState({matcheUsers:data,working:false})
+              
                 console.log("match:"+this.state.matcheUsers);
             },
             error: err => {
@@ -54,7 +54,6 @@ class Matches extends Component {
             
     async sendRequest(uid){
         let result = await axios.get(`matches/imInterested/${this.props.user.uid}/${uid}`);
-        console.log(uid);
     }
 
     render() {

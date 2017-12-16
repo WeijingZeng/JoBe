@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import firebase from "firebase";
-
+import "../App.css";
 import { auth } from "../config/firebase-auth";
 import { test } from "../tasks/s3_upload_or_get";
 
@@ -26,7 +26,9 @@ class LoginSignUp extends Component {
 
     async emailLogin(loginOrSignUp) {
         const email = document.getElementById("email").value;
+        console.log("email:"+email);
         const password = document.getElementById("password").value;
+        console.log("psw:"+password);
         if (loginOrSignUp === "login") {
             await auth.signInWithEmailAndPassword(email, password).catch(e => {
                 console.log(e.code);
@@ -112,39 +114,22 @@ class LoginSignUp extends Component {
 
     render() {
         return (
-            <div>
-                {this.state.loginError && (
-                    <div className="loginerror">
-                        {this.state.loginError}
-                    </div>
-                )}
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="Email Address"
-                    required
-                />
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Password"
-                    required
-                />
+            <div className="wrapper">
+                <div className="login">
+                    <p className="title">Welcome</p>
+                        {this.state.loginError && (
+                            <div className="loginerror">
+                                {this.state.loginError}
+                            </div>
+                        )}
+                <input type="email" id="email" placeholder="Email Address" required/>
+                <input type="password" id="password" placeholder="Password" required/>
                 <br />
-                <br />
-                <button
-                    onClick={() => this.emailLogin("login")}
-                    id="login"
-                    className="btn btn-primary"
-                >
-                    Login
+                <button onClick={() => this.emailLogin("login")} id="login" className="btn btn-primary">
+                       Login
                 </button>
-                <button
-                    onClick={() => this.emailLogin("signup")}
-                    id="signup"
-                    className="btn btn-primary"
-                >
-                    Sign Up
+                <button onClick={() => this.emailLogin("signup")} id="signup" className="btn btn-primary">
+                      Sign Up
                 </button>
                 <br />
                 <br />
@@ -153,13 +138,13 @@ class LoginSignUp extends Component {
                     alt="google signin"
                     src="./imgs/btn_google_signin.png"
                 />
-                <br />
                 <img
                     onClick={() => this.socialSignOn("facebook")}
                     alt="facebook signin"
                     src="./imgs/facebook_signin.png"
                 />
             </div>
+          </div>
         );
     }
 }
