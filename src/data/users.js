@@ -226,7 +226,8 @@ let exportedMethods = {
         lastLogin,
         profilePhotoUrl,
         localRemoteOrAll,
-        distanceIfLocal
+        distanceIfLocal,
+        matchingActive
     ) {
         //need error checking here to make sure all fields are supplied and also need to check that their handle is unique
         let userCollection = await users();
@@ -257,7 +258,7 @@ let exportedMethods = {
             role: role,
             links: links,
             influences: influences,
-            matchingActive: 1,
+            matchingActive: matchingActive,
             lastLogin: lastLogin,
             profilePhotoUrl: profilePhotoUrl,
             profileViewCount: 0,
