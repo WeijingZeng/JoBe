@@ -117,8 +117,10 @@ class LoginSignUp extends Component {
     async forgotPassword() {
         const email = document.getElementById("email").value;
         if (!email){
-            console.log ("No email")
-        }
+            this.setState({
+                loginError: "No Email Address Entered! Please Enter Your Email Address Below"
+            });
+        }else{
         try {
             await auth.sendPasswordResetEmail(email)
             this.setState({
@@ -144,6 +146,7 @@ class LoginSignUp extends Component {
                     break;
             }
         }
+    }
 
     }
 
