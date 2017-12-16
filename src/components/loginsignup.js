@@ -160,8 +160,8 @@ class LoginSignUp extends Component {
                             {this.state.loginError}
                         </div>
                     )}
-                    <input type="email" id="email" placeholder="Email Address" required />
-                    <input type="password" id="password" placeholder="Password" required />
+                    <input className= "login_input" type="email" id="email" placeholder="Email Address" required />
+                    <input className= "login_input" type="password" id="password" placeholder="Password" required />
 
                     <Link to="#" onClick={this.forgotPassword}>Forgot Password</Link>
                     <br /><br />
