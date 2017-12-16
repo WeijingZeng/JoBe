@@ -3,7 +3,7 @@ import firebase from "firebase";
 import "../App.css";
 import { auth } from "../config/firebase-auth";
 import { test } from "../tasks/s3_upload_or_get";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 class LoginSignUp extends Component {
     constructor(props) {
@@ -13,15 +13,27 @@ class LoginSignUp extends Component {
         this.socialSignOn = this.socialSignOn.bind(this);
         this.signOut = this.signOut.bind(this);
         this.forgotPassword = this.forgotPassword.bind(this);
+        this.handleAuthStateChanged = this.handleAuthStateChanged.bind(this);
         this.state = {
             uid: undefined,
             email: undefined,
             lastSignInTime: undefined,
             loginError: undefined,
-            loggedin: 0
+            loggedin: 0,
+            redirectToReferrer: false
         };
     }
-
+    handleAuthStateChanged(user){
+        this.setState(() => ({
+            redirectToReferrer: user != null
+          }))
+    }
+    componentDidMount() {
+        auth.onAuthStateChanged(user =>
+            this.handleAuthStateChanged(user)
+        );
+    }
+    
     async signOut() {
         await auth.signOut();
     }
@@ -151,6 +163,12 @@ class LoginSignUp extends Component {
     }
 
     render() {
+        const { from } = this.props.location.state || { from: { pathname: '/' } }
+        const { redirectToReferrer } = this.state
+    
+        if (redirectToReferrer === true) {
+          return (<Redirect to={from} />);
+        }
         return (
             <div className="login_wrapper">
                 <div className="login">
