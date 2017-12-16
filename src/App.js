@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
-import { auth } from "./config/firebase-auth";
+import { BrowserRouter as Router, Route, Redirect, Switch, Link } from "react-router-dom";
+import { auth, isAuthenticated } from "./config/firebase-auth";
 
 import LoginSignUp from "./components/loginsignup";
 import Profile from "./components/profile";
@@ -11,6 +11,7 @@ import Matches from "./components/matches";
 import Connections from "./components/connections";
 
 class App extends Component {
+   
     constructor(props) {
         super(props);
         this.state = {
@@ -136,36 +137,7 @@ class App extends Component {
             </div>
         );
 
-        if (this.state && this.state.user && this.state.user.loggedin === 1) {
-            body = (
-                <div>
-                    <Switch>
-                        <Route exact path="/profile" component={() => (<Profile user={this.state.user} />)} />
-                        <Route exact path="/profileform" component={() => (<ProfileForm user={this.state.user} />)} />
-                        <Route
-                            exact
-                            path="/matches"
-                            render={renderProps => (
-                                <Matches
-                                    {...renderProps}
-                                    user={this.state.user}
-                                />
-                            )}
-                        />
-                        <Route
-                            exact
-                            path="/connections"
-                            render={renderProps => (
-                                <Connections
-                                    {...renderProps}
-                                    user={this.state.user}
-                                />
-                            )}
-                        />
-                        <Route path="/profile/:id" component={Profile} />
-                    </Switch>
-                </div>
-            );
+        if (isAuthenticated()) {           
             footer = (
                 <footer className="footer navbar-fixed-bottom ">
                 <div className="container">
@@ -181,10 +153,20 @@ class App extends Component {
                 </div>
                 </footer>
             );
-        } else {
-            body = <LoginSignUp setUser={this.setUser} />;
         }
-
+        body=(
+            <div>
+                <Switch>
+                    <PrivateRoute path="/profileform" user={this.state.user} component={ProfileForm}/>
+                    <PrivateRoute path="/matches" user={this.state.user} component={Matches}/>
+                    <PrivateRoute path="/connections" user={this.state.user} component={Connections}/>
+                    <PrivateRoute path="/profile/:id" component={Profile}/>
+                    <PrivateRoute path="/profile" user={this.state.user} component={Profile}/>
+                    <Route path="/login" component={LoginSignUp}/>
+                    <Redirect from={'*'} to={'/matches'}/>
+                </Switch>
+            </div>
+        );
         return (
             <Router>
                 <div className="App">
@@ -198,4 +180,16 @@ class App extends Component {
     }
 }
 
+const PrivateRoute = ({ component: Component, ...rest }) => (
+    <Route {...rest} render={(props) => (
+      isAuthenticated() === true
+        ? <Component {...props} {...rest}/>
+        : <Redirect to={{
+            pathname: '/login',
+            state: { from: props.location }
+          }} />
+    )} />
+  )
+
 export default App;
+

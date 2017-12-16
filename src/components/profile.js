@@ -57,7 +57,7 @@ class Profile extends Component {
             console.log("profileUSER:"+this.state.user.username);
             user = this.state.user;
        
-            let img = get_profile_image(this.state.user.email);
+            let img = this.state.user.profilePhotoUrl;
              const picture = img ? (
                 <img
                     src={`${img}`}
