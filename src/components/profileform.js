@@ -112,23 +112,23 @@ class ProfileForm extends Component {
                 {message}
                 <form onSubmit={this.handleSubmit.bind(this)} style={{ width: "500px", margin: "auto" }}>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Username</span>
+                        <span className="input-group-addon" id="basic-addon1">Username</span>
                         <input type="text" className="form-control" name="username" value={this.state.username} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">First Name</span>
+                        <span className="input-group-addon" id="basic-addon1">First Name</span>
                         <input type="text" className="form-control" name="firstName" value={this.state.firstName} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Last Name</span>
+                        <span className="input-group-addon" id="basic-addon1">Last Name</span>
                         <input type="text" className="form-control" name="lastName" value={this.state.lastName} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Email</span>
+                        <span className="input-group-addon" id="basic-addon1">Email</span>
                         <input type="email" className="form-control" name="email" value={this.state.email} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Gender</span>
+                        <span className="input-group-addon" id="basic-addon1">Gender</span>
                         <select className="form-control" name="gender" value={this.state.gender} onChange={this.handleChange.bind(this)}>
                             <option value=""></option>
                             <option value="Male">Male</option>
@@ -136,11 +136,11 @@ class ProfileForm extends Component {
                         </select>
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">City</span>
+                        <span className="input-group-addon" id="basic-addon1">City</span>
                         <input type="text" className="form-control" name="city" value={this.state.city} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">State</span>
+                        <span className="input-group-addon" id="basic-addon1">State</span>
                         <select className="form-control" name="state" value={this.state.state} onChange={this.handleChange.bind(this)}>
                             <option value=""></option>
                             <option value="AL">Alabama</option>
@@ -197,63 +197,63 @@ class ProfileForm extends Component {
                         </select>
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">State</span>
+                        <span className="input-group-addon" id="basic-addon1">State</span>
                         <input type="text" className="form-control" name="age" value={this.state.age} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Latitude</span>
+                        <span className="input-group-addon" id="basic-addon1">Latitude</span>
                         <input type="text" className="form-control" name="lat" value={this.state.lat} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Longitude</span>
+                        <span className="input-group-addon" id="basic-addon1">Longitude</span>
                         <input type="text" className="form-control" name="long" value={this.state.long} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Seeking</span>
+                        <span className="input-group-addon" id="basic-addon1">Seeking</span>
                         <input type="text" className="form-control" name="seeking" value={this.state.seeking} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Studio Software Used</span>
+                        <span className="input-group-addon" id="basic-addon1">Studio Software Used</span>
                         <input type="text" className="form-control" name="studioSWUsed" value={this.state.studioSWUsed} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Main Genre</span>
+                        <span className="input-group-addon" id="basic-addon1">Main Genre</span>
                         <input type="text" className="form-control" name="mainGenre" value={this.state.mainGenre} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Second Genre</span>
+                        <span className="input-group-addon" id="basic-addon1">Second Genre</span>
                         <input type="text" className="form-control" name="secondGenre" value={this.state.secondGenre} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Third Genre</span>
+                        <span className="input-group-addon" id="basic-addon1">Third Genre</span>
                         <input type="text" className="form-control" name="thirdGenre" value={this.state.thirdGenre} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Has Space</span>
+                        <span className="input-group-addon" id="basic-addon1">Has Space</span>
                         <input type="text" className="form-control" name="hasSpace" value={this.state.hasSpace} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Bio</span>
+                        <span className="input-group-addon" id="basic-addon1">Bio</span>
                         <input type="text" className="form-control" name="bio" value={this.state.bio} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Achievements</span>
+                        <span className="input-group-addon" id="basic-addon1">Achievements</span>
                         <input type="text" className="form-control" name="achivements" value={this.state.achivements} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Role</span>
+                        <span className="input-group-addon" id="basic-addon1">Role</span>
                         <input type="text" className="form-control" name="role" value={this.state.role} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Links</span>
+                        <span className="input-group-addon" id="basic-addon1">Links</span>
                         <input type="text" className="form-control" name="links" value={this.state.links} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Influences (separated by commas)</span>
+                        <span className="input-group-addon" id="basic-addon1">Influences (separated by commas)</span>
                         <input type="text" className="form-control" name="influences" value={this.state.influences} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Local, Remote, or All</span>
+                        <span className="input-group-addon" id="basic-addon1">Local, Remote, or All</span>
                         <select className="form-control" name="localRemoteOrAll" value={this.state.localRemoteOrAll} onChange={this.handleChange.bind(this)}>
                             <option value=""></option>
                             <option value="Local">Local</option>
@@ -262,7 +262,7 @@ class ProfileForm extends Component {
                         </select>
                     </div>
                     <div className="profile_form input-group">
-                        <span class="input-group-addon" id="basic-addon1">Distance in miles (if local)</span>
+                        <span className="input-group-addon" id="basic-addon1">Distance in miles (if local)</span>
                         <input type="text" className="form-control" name="distanceIfLocal" value={this.state.distanceIfLocal} onChange={this.handleChange.bind(this)} />
                     </div>
 
