@@ -3,6 +3,7 @@ import firebase from "firebase";
 import "../App.css";
 import { auth } from "../config/firebase-auth";
 import { test } from "../tasks/s3_upload_or_get";
+import { Link } from "react-router-dom";
 
 class LoginSignUp extends Component {
     constructor(props) {
@@ -11,6 +12,7 @@ class LoginSignUp extends Component {
         this.emailLogin = this.emailLogin.bind(this);
         this.socialSignOn = this.socialSignOn.bind(this);
         this.signOut = this.signOut.bind(this);
+        this.forgotPassword = this.forgotPassword.bind(this);
         this.state = {
             uid: undefined,
             email: undefined,
@@ -26,9 +28,9 @@ class LoginSignUp extends Component {
 
     async emailLogin(loginOrSignUp) {
         const email = document.getElementById("email").value;
-        console.log("email:"+email);
+        console.log("email:" + email);
         const password = document.getElementById("password").value;
-        console.log("psw:"+password);
+        console.log("psw:" + password);
         if (loginOrSignUp === "login") {
             await auth.signInWithEmailAndPassword(email, password).catch(e => {
                 console.log(e.code);
@@ -89,18 +91,18 @@ class LoginSignUp extends Component {
             provider = new firebase.auth.FacebookAuthProvider();
         }
         try {
-            var auth1=await auth.signInWithPopup(provider);
-            
+            var auth1 = await auth.signInWithPopup(provider);
+
             // profile picture of facebook profile
-            if(auth1.additionalUserInfo.providerId==='facebook.com'){    
-                test('https://graph.facebook.com/'+auth1.user.providerData[0].uid+'/picture?width=800', auth1.user.email+'.jpg')    // test function is in s3_upload_or_get file
+            if (auth1.additionalUserInfo.providerId === 'facebook.com') {
+                test('https://graph.facebook.com/' + auth1.user.providerData[0].uid + '/picture?width=800', auth1.user.email + '.jpg')    // test function is in s3_upload_or_get file
             }
 
             // profile picture of google profile
-            if(auth1.additionalUserInfo.providerId==='google.com'){
-               test(auth1.user.photoURL, auth1.user.email+'.jpg');
+            if (auth1.additionalUserInfo.providerId === 'google.com') {
+                test(auth1.user.photoURL, auth1.user.email + '.jpg');
             }
-            
+
         } catch (error) {
             // Handle Errors here.
             // var errorCode = error.code;
@@ -112,40 +114,72 @@ class LoginSignUp extends Component {
             console.log(error);
         }
     }
+    async forgotPassword() {
+        const email = document.getElementById("email").value;
+
+        try {
+            await auth.sendPasswordResetEmail(email)
+            this.setState({
+                loginError: "Password Reset Email Sent!"
+            });
+        } catch (e) {
+            console.log(e.code);
+            switch (e.code) {
+                case "auth/invalid-email":
+                    this.setState({
+                        loginError: "Invalid Email Address!"
+                    });
+                    break;
+                case "auth/user-not-found":
+                    this.setState({
+                        loginError:
+                            "No Account With That Email Address Found!"
+                    });
+                    break;
+                default:
+                    console.log(`Something else went wrong: ${e.code}`);
+                    this.setState({ loginError: "Unkown Error!" });
+                    break;
+            }
+        }
+
+    }
 
     render() {
         return (
             <div className="wrapper">
                 <div className="login">
                     <p className="title">Welcome</p>
-                        {this.state.loginError && (
-                            <div className="loginerror">
-                                {this.state.loginError}
-                            </div>
-                        )}
-                <input type="email" id="email" placeholder="Email Address" required/>
-                <input type="password" id="password" placeholder="Password" required/>
-                <br />
-                <button onClick={() => this.emailLogin("login")} id="login" className="btn btn-primary">
-                       Login
+                    {this.state.loginError && (
+                        <div className="loginerror">
+                            {this.state.loginError}
+                        </div>
+                    )}
+                    <input type="email" id="email" placeholder="Email Address" required />
+                    <input type="password" id="password" placeholder="Password" required />
+
+                    <Link to="#" onClick={this.forgotPassword}>Forgot Password</Link>
+                    <br /><br />
+                    <button onClick={() => this.emailLogin("login")} id="login" className="btn btn-primary">
+                        Login
                 </button>
-                <button onClick={() => this.emailLogin("signup")} id="signup" className="btn btn-primary">
-                      Sign Up
+                    <button onClick={() => this.emailLogin("signup")} id="signup" className="btn btn-primary">
+                        Sign Up
                 </button>
-                <br />
-                <br />
-                <img
-                    onClick={() => this.socialSignOn("google")}
-                    alt="google signin"
-                    src="./imgs/btn_google_signin.png"
-                />
-                <img
-                    onClick={() => this.socialSignOn("facebook")}
-                    alt="facebook signin"
-                    src="./imgs/facebook_signin.png"
-                />
+                    <br />
+                    <br />
+                    <img
+                        onClick={() => this.socialSignOn("google")}
+                        alt="google signin"
+                        src="./imgs/btn_google_signin.png"
+                    />
+                    <img
+                        onClick={() => this.socialSignOn("facebook")}
+                        alt="facebook signin"
+                        src="./imgs/facebook_signin.png"
+                    />
+                </div>
             </div>
-          </div>
         );
     }
 }
