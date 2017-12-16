@@ -26,13 +26,7 @@
   color: gray;
 }
 
-.input-group{
-  flex: 1 1 50%;
-  margin: 0 15em;
-  position: relative;
-}
-
-.wrapper {
+.login_wrapper {
   display: flex;
   align-items: center;
   flex-direction: column; 
@@ -53,7 +47,7 @@
   box-shadow: 0px 1px 5px rgba(0,0,0,0.3);
 }
 
-input {
+.login_input {
   display: block;
   padding: 15px 10px;
   margin-bottom: 10px;
@@ -64,13 +58,17 @@ input {
   color: #ccc;
 }
 
-.title {
+.login_title {
   color: #444;
   font-size: 1.2em;
   font-weight: bold;
   margin: 10px 0 30px 0;
   border-bottom: 1px solid #eee;
   padding-bottom: 20px;
+}
+
+.profile_form{
+  margin: 20px;
 }
 
 
