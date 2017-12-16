@@ -258,7 +258,7 @@ let exportedMethods = {
             role: role,
             links: links,
             influences: influences,
-            matchingActive: matchingActive,
+            matchingActive: Number(matchingActive),
             lastLogin: lastLogin,
             profilePhotoUrl: profilePhotoUrl,
             profileViewCount: 0,
