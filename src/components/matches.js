@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {BrowserRouter as Route,Link,Switch} from "react-router-dom";
+import {Link} from "react-router-dom";
 import $ from 'jquery'
 import axios from 'axios';
 
@@ -57,10 +57,7 @@ class Matches extends Component {
     }
 
     render() {
-        let body = null;
-        const uid = this.props.user.uid;
-        console.log("uid:"+uid)
-
+      
         if(this.state.working){
             return <small>Finding Matches!</small>;
         }
@@ -74,11 +71,11 @@ class Matches extends Component {
         const listDisplays = matcheList.map(user => { 
             const userImg = user.profilePhotoUrl ? (
                 <div className="thumbnail" >
-                    <img src="`${user.profilePhotoUrl}`" alt="..."/>
+                    <img src={`${user.profilePhotoUrl}`} alt="..."/>
                         <div className="caption">
                             <Link to={`/profile/${user._id}`}>{user.username}</Link>
                             <p>I'm a {user.role}</p>
-                            <p><button onClick={() => this.sendRequest(user._id)} className="btn btn-primary" role="button">Interested</button> </p>
+                            <p><button onClick={() => this.sendRequest(user._id)} className="btn btn-primary">Interested</button> </p>
                         </div>
                 </div>
               ) : null;
