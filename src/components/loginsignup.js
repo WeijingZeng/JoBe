@@ -116,28 +116,33 @@ class LoginSignUp extends Component {
     }
     async forgotPassword() {
         const email = document.getElementById("email").value;
-        await auth
-            .sendPasswordResetEmail(email)
-            .catch(e => {
-                console.log(e.code);
-                switch (e.code) {
-                    case "auth/invalid-email":
-                        this.setState({
-                            loginError: "Invalid Email Address!"
-                        });
-                        break;
-                    case "auth/user-not-found":
-                        this.setState({
-                            loginError:
-                                "No Account With That Email Address Found!"
-                        });
-                        break;
-                    default:
-                        console.log(`Something else went wrong: ${e.code}`);
-                        this.setState({ loginError: "Unkown Error!" });
-                        break;
-                }
+
+        try {
+            await auth.sendPasswordResetEmail(email)
+            this.setState({
+                loginError: "Password Reset Email Sent!"
             });
+        } catch (e) {
+            console.log(e.code);
+            switch (e.code) {
+                case "auth/invalid-email":
+                    this.setState({
+                        loginError: "Invalid Email Address!"
+                    });
+                    break;
+                case "auth/user-not-found":
+                    this.setState({
+                        loginError:
+                            "No Account With That Email Address Found!"
+                    });
+                    break;
+                default:
+                    console.log(`Something else went wrong: ${e.code}`);
+                    this.setState({ loginError: "Unkown Error!" });
+                    break;
+            }
+        }
+
     }
 
     render() {
