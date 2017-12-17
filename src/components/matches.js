@@ -67,12 +67,10 @@ class Matches extends Component {
         if (matcheList.length === 0) {
           return <small>No user match to your conditions yet!</small>;
         }
-        
-        var profPic = user.profilePhotoUrl ? <img src={`${user.profilePhotoUrl}`} alt={user.username + "'s profile photo"} /> : <p>No profile photo</p>;
 
         const listDisplays = matcheList.map(user => { 
             const userImg = (<div className="thumbnail" >
-                    {profPic}
+                    {user.profilePhotoUrl ? <img src={`${user.profilePhotoUrl}`} alt={user.username + "'s profile photo"} /> : <p>No profile photo</p>}
                     <div className="caption">
                         <Link to={`/profile/${user._id}`}>{user.username}</Link>
                         <p>I'm a {user.role}</p>
