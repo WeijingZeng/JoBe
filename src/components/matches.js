@@ -68,17 +68,18 @@ class Matches extends Component {
           return <small>No user match to your conditions yet!</small>;
         }
         
+        var profPic = user.profilePhotoUrl ? <img src={`${user.profilePhotoUrl}`} alt={user.username + "'s profile photo"} /> : <p>No profile photo</p>;
+
         const listDisplays = matcheList.map(user => { 
-            const userImg = user.profilePhotoUrl ? (
-                <div className="thumbnail" >
-                    <img src={`${user.profilePhotoUrl}`} alt="..."/>
-                        <div className="caption">
-                            <Link to={`/profile/${user._id}`}>{user.username}</Link>
-                            <p>I'm a {user.role}</p>
-                            <p><button onClick={() => this.sendRequest(user._id)} className="btn btn-primary">Interested</button> </p>
-                        </div>
+            const userImg = (<div className="thumbnail" >
+                    {profPic}
+                    <div className="caption">
+                        <Link to={`/profile/${user._id}`}>{user.username}</Link>
+                        <p>I'm a {user.role}</p>
+                        <p><button onClick={() => this.sendRequest(user._id)} className="btn btn-primary">Interested</button> </p>
+                    </div>
                 </div>
-              ) : null;
+              );
 
             return (
               <div className="col-sm-6 col-md-4" key={user._id}>
