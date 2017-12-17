@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require("../src/data");
 const userData = data.users;
+const chatData = data.chats;
 
 router.get("/getAllUsers", (req, res) => {
     userData.getAllUsers().then((userList) => {
@@ -153,5 +154,35 @@ router.delete("/:id", (req, res) => {
     });
 });
 
+//chat specific routes
+router.get("/:id/chats", (req, res) => {
+    userData.getChats(req.params.id).then((chatList) => {
+        res.status(200).json(chatList);
+    }).catch((e) => {
+        console.log(e);
+        res.status(500).json({ error: e });
+    });
+});
+//add a new chat
+router.post("/:id/chats", async (req, res) => {
+    let chat = req.body;
+        
+    console.log(req.body);
+    console.log("tried to put a chat in user " + req.params.id + "  that is " + JSON.stringify(chat ));
+    /*
+    if (!chat) {
+        res.status(400).json({ error: "You must provide chat data to create a chat" });
+        return;
+    }
+
+    try{
+        let newChat =await chatData.addChat(chat);
+        console.log("new chat added! " + JSON.stringify(newChat));
+        res.json(newChat);
+    }catch(e){
+        console.log(e);
+        res.sendStatus(500);
+    }*/
+});
 
 module.exports = router;

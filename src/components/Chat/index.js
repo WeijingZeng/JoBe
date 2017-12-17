@@ -26,18 +26,10 @@ class Chat extends Component {
         
   }
   async componentDidMount(){
-      //checks if the user is in the database and adds them if not, this is only for testing purposes
-      try{
-            let addedUser = await ApiHelper.post("/users",{firebaseId:this.props.uid , email:this.props.email,lastLogin:this.props.lastSignInTime})
-            console.log(`my uid (should be the same as added users) ${this.props.uid}`);
-            console.log(`added a user: ${JSON.stringify(addedUser.data)}\n\n\n\n\n\n\n\n\n\n`);
-        }catch(e){
-            console.log("\n\n\n\n\n\n coudln't add user");
-            console.log(e);
-        }
         //loads the other users in the website
         try{
-            let allUsers = await ApiHelper.get("/users");
+            let allUsers = await ApiHelper.get("/users/getAllUsers");
+            console.log("got all users " + allUsers.data)
             this.setState({users:allUsers.data});
         }catch(e){
             console.log(e)
@@ -70,9 +62,9 @@ class Chat extends Component {
         //join a specific chat 
         this.state.socket.on("subscribe", chat => {
             console.log(`I, ${this.props.uid} got the message to subscribe to ${JSON.stringify(chat)}`);
-            console.log(`the chat i got from the chatserver is ${chat}`);    
+            console.log(`the chat i got from the chatserver is ${JSON.stringify(chat)}`);    
             this.addChat(chat);
-            this.setActiveChat(chat._id);
+            //this.setActiveChat(chat._id);
             this.state.socket.emit("subscribe",chat._id);
         });
   }
@@ -82,7 +74,7 @@ class Chat extends Component {
         let data= {uid:this.props.uid,username:this.props.email,message:message,activeChat:this.state.joinedChats[this.state.activeChat]._id};
         this.state.socket.emit('chatMessage',data);
         try{    
-           await ApiHelper.post(`/users/chat/${data.activeChat}/message`,data);
+           await ApiHelper.post(`/chat/${data.activeChat}/message`,data);
            console.log("posted message to db");
         }catch(e){
             console.log("error posting message to db" + e);
@@ -143,14 +135,17 @@ class Chat extends Component {
         //format
         //{id,users,chatLog}
         try{    
-            let response = await ApiHelper.post(`/users/${this.props.uid}/chats`,{_id:chat._id,users:chat.users,chatLog:chat.chatLog});
-            console.log(JSON.stringify(response)+"THIS IS MY RESPONSE HEAR IT LOUD AND CLEAR");
+        
+            let response = await ApiHelper.post(`/users/${this.props.uid}/chats`,chat);
+            console.log(JSON.stringify(response)+"THIS IS MY RESPONSE HEAR IT LOUD AND CLEAR to adding chat " + JSON.stringify(chat));
             if(!response.data.error){
                 console.log("adding chat: " + JSON.stringify(chat));
                 let temp = this.state.joinedChats;
                 temp = temp.concat([chat]);
                 console.log(`added chat ${chat._id} in the object ${JSON.stringify(temp)}`);
                 this.setState({joinedChats:temp});
+            }else{
+                console.log("there was an error, chat already exists");
             }
         }catch(e){
             console.log(e);
@@ -162,7 +157,7 @@ class Chat extends Component {
     let submit = null;
     let log= null;
     console.log("\n\n\n\nthis is my joined chats "+this.state.joinedChats+"\n\n\n");
-    if(this.state.activeChat != undefined){
+    if(this.state.activeChat != undefined && this.state.joinedChats[this.state.activeChat] != undefined){
         console.log("joined chats"+this.state.joinedChats[this.state.activeChat]);
         console.log("active chat messages"+this.state.joinedChats[this.state.activeChat]);
         log=<Log chatLog={this.state.joinedChats[this.state.activeChat].chatLog} roomTitle="chat" username={this.props.uid}/>

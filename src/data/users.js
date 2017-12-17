@@ -1,5 +1,6 @@
 const mongoCollections = require("../config/mongoCollections");
 const users = mongoCollections.users;
+const chats = mongoCollections.chats;
 const matches = mongoCollections.matches;
 const uuid = require("node-uuid");
 
