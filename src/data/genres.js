@@ -1,3 +1,9 @@
+const bluebird = require("bluebird");
+const redis = require("redis");
+const client = redis.createClient();
+
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
 
 const genreData = [{
     "id": 1,
@@ -450,7 +456,16 @@ let exportedMethods = {
     },
 
     async getGenreByID(id) {
-        return await genreData.find(genre => genre.id === id)
+        if (typeof id === "string") id = Number(id);
+        let cacheExists = await client.getAsync("genre" + id);
+        if (cacheExists) {
+            return JSON.parse(cacheExists);
+        } else {
+            //not found in cache - must get data manually
+            let genre = genreData.find(genre => genre.id === id);
+            await client.setAsync("genre" + id, JSON.stringify(genre));
+            return genre;
+        }
     }
 }
 module.exports = exportedMethods;
