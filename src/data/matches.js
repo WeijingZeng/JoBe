@@ -3,6 +3,13 @@ const matches = mongoCollections.matches;
 const uuid = require("node-uuid");
 const usersData = require("./users");
 
+const bluebird = require("bluebird");
+const redis = require("redis");
+const client = redis.createClient();
+
+bluebird.promisifyAll(redis.RedisClient.prototype);
+bluebird.promisifyAll(redis.Multi.prototype);
+
 let exportedMethods = {
     async imInterested(interestedUid, interestedInUid) {
         const matchCollection = await matches();
@@ -57,7 +64,16 @@ let exportedMethods = {
             { _id: matchID },
             updateCommand
         );
-        return await this.getMatchByMatchID(matchID);
+
+        let match = await this.getMatchByMatchID(matchID);
+
+        //update cache in Redis because matches have changed
+        let mutual1 = await getMutualMatches(match.user1);
+        let mutual2 = await getMutualMatches(match.user2);
+        await client.setAsync("mutualmatches" + match.user1, JSON.stringify(mutual1));
+        await client.setAsync("mutualmatches" + match.user2, JSON.stringify(mutual2));
+
+        return match;
     },
     async getMatchByMatchID(matchID) {
         const matchCollection = await matches();
@@ -66,6 +82,10 @@ let exportedMethods = {
     },
     //This function returns the mutual matches for a user
     async getMutualMatches(uid) {
+        //check if result is in Redis cache
+        let cacheExists = await client.getAsync("mutualmatches" + uid);
+        if (cacheExists) return JSON.parse(cacheExists);
+
         const matchCollection = await matches();
         try {
             let matches = await matchCollection
@@ -90,6 +110,10 @@ let exportedMethods = {
                     return await usersData.getUserById(otherId);
                 })
             );
+
+            //Add result to Redis cache
+            await client.setAsync("mutualmatches" + uid, JSON.stringify(match));
+
             return match;
         } catch (e) {
             console.log("there was an error");

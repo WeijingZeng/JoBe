@@ -25,7 +25,7 @@ let exportedMethods = {
         let localRemoteOrAll = user.localRemoteOrAll;
         let userList = null;
         const userCollection = await users();
-        if (localRemoteOrAll === "Local" || localRemoteOrAll === "All") {
+        if (localRemoteOrAll === "Local") {
             //convert the number of miles into meters
             let maxDistance = maxDistanceInMiles * 1609.34;
             userList = await userCollection
