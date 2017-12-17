@@ -136,7 +136,7 @@ class Chat extends Component {
         //{id,users,chatLog}
         try{    
         
-            let response = await ApiHelper.post(`/users/${this.props.uid}/chats`,chat);
+            let response = ApiHelper.post('/chat',chat);
             console.log(JSON.stringify(response)+"THIS IS MY RESPONSE HEAR IT LOUD AND CLEAR to adding chat " + JSON.stringify(chat));
             if(!response.data.error){
                 console.log("adding chat: " + JSON.stringify(chat));

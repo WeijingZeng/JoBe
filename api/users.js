@@ -163,26 +163,5 @@ router.get("/:id/chats", (req, res) => {
         res.status(500).json({ error: e });
     });
 });
-//add a new chat
-router.post("/:id/chats", async (req, res) => {
-    let chat = req.body;
-        
-    console.log(req.body);
-    console.log("tried to put a chat in user " + req.params.id + "  that is " + JSON.stringify(chat ));
-    /*
-    if (!chat) {
-        res.status(400).json({ error: "You must provide chat data to create a chat" });
-        return;
-    }
-
-    try{
-        let newChat =await chatData.addChat(chat);
-        console.log("new chat added! " + JSON.stringify(newChat));
-        res.json(newChat);
-    }catch(e){
-        console.log(e);
-        res.sendStatus(500);
-    }*/
-});
 
 module.exports = router;

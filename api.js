@@ -5,6 +5,7 @@ const configAPIRoutes = require("./api/index");
 
 console.log("config routes api.js "+JSON.stringify(configAPIRoutes));
 app.use(express.urlencoded());
+app.use(express.json());
 configAPIRoutes(app);
 
 app.listen(4000, () => {  
