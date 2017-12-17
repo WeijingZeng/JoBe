@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require("../src/data");
 const userData = data.users;
+const chatData = data.chats;
 
 router.get("/getAllUsers", (req, res) => {
     userData.getAllUsers().then((userList) => {
@@ -154,5 +155,14 @@ router.delete("/:id", (req, res) => {
     });
 });
 
+//chat specific routes
+router.get("/:id/chats", (req, res) => {
+    userData.getChats(req.params.id).then((chatList) => {
+        res.status(200).json(chatList);
+    }).catch((e) => {
+        console.log(e);
+        res.status(500).json({ error: e });
+    });
+});
 
 module.exports = router;
