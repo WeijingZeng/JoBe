@@ -40,6 +40,12 @@ npm start
 npm run api
 ```
 
+### To run the Chat server:
+
+```
+npm run chat
+```
+
 ### To seed the database:
 
 ```
