@@ -31,6 +31,7 @@ let exportedMethods = {
             //check to see if chat already exists
             let existingChat = await chatCollection.findOne({users:newchat.users});
             let existingChatId = await chatCollection.findOne({_id:newchat._id}) ;
+            console.log("existing chat: " + JSON.stringify(existingChat) + "existingChatId " + JSON.stringify(existingChatId));
             if(existingChat || existingChatId){
                 console.log("\n\nERROR CHAT EXISTS\n\n");
                 return({error:"chat aleady exists"});
