@@ -40,7 +40,7 @@ npm start
 npm run api
 ```
 
-### To run the data Chat server:
+### To run the Chat server:
 
 ```
 npm run chat
