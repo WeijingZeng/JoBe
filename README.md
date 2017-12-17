@@ -23,8 +23,11 @@ Based on this profile, the system will match them to other musicians(user B) tha
 ### Dependencies:
 * ImageMagick
 * Redis
+* MongoDB
 
-### To run (must have redis-server running):
+### To run:
+
+First, ensure all dependencies are installed. Redis and MongoDB must be running in the background. Then, run the following commands:
 
 ```
 npm install

@@ -75,14 +75,33 @@ class Matches extends Component {
                         <div className="caption">
                             <Link to={`/profile/${user._id}`}>{user.username}</Link>
                             <p>I'm a {user.role}</p>
-                            <p><button onClick={() => this.sendRequest(user._id)} className="btn btn-primary">Interested</button> </p>
+                            <p><button 
+                                onClick={() => this.sendRequest(user._id)} 
+                                className="btn btn-primary"
+                                data-toggle="modal" data-target="#confirm">Interested</button> </p>
                         </div>
                 </div>
+                
               ) : null;
 
             return (
               <div className="col-sm-6 col-md-4" key={user._id}>
                 {userImg}
+                <div class="modal" id="confirm" tabindex="-1" role="dialog" aria-labelledby="confirm-toggle" >
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="confirm-Label">Confirmation</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>After {user.username} confirmed, he will be showed in your Connections.  </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
               </div>
             );
           });
