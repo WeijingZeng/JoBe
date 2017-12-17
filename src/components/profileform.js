@@ -32,7 +32,9 @@ class ProfileForm extends Component {
             links: "",
             influences: "",
             localRemoteOrAll: "",
-            distanceIfLocal: ""
+            distanceIfLocal: "",
+            profilePhotoUrl: "",
+            matchingActive: "1"
         };
 
         navigator.geolocation.getCurrentPosition(this.positionHandler.bind(this));
@@ -45,6 +47,13 @@ class ProfileForm extends Component {
             },
             error: (err) => {
                 this.setState({ userNotExist: true });
+            }
+        });
+
+        $.ajax("/genres/", {
+            dataType: 'json',
+            success: (data) => {
+                this.setState({ genres: data });
             }
         });
     }
@@ -87,9 +96,10 @@ class ProfileForm extends Component {
             links: this.state.links,
             influences: this.state.influences.split(","),
             lastLogin: new Date(),
-            profilePhotoUrl: "",
+            profilePhotoUrl: this.state.profilePhotoUrl,
             localRemoteOrAll: this.state.localRemoteOrAll,
-            distanceIfLocal: this.state.distanceIfLocal
+            distanceIfLocal: Number(this.state.distanceIfLocal),
+            matchingActive: Number(this.state.matchingActive)
         };
 
         let url = (this.state.userNotExist ? "/users" : "/users/edit/" + this.props.user.uid);
@@ -134,6 +144,9 @@ class ProfileForm extends Component {
 
         let dropZoneText = <p>Drag a picture here, or click here to browse! Your picture will be cropped to a square.</p>;
         if (this.state.uploading) dropZoneText = <p>Uploading...</p>
+
+        let genreOptions = this.state.genres ? this.state.genres.map(genre => <option key={genre.id} value={genre.id}>{genre.genre}</option>) : null;
+        if (genreOptions) genreOptions.unshift(<option key={0} value=""></option>);
 
         let dropZone = (
             <div className="container">
@@ -243,16 +256,8 @@ class ProfileForm extends Component {
                         </select>
                     </div>
                     <div className="profile_form input-group">
-                        <span className="input-group-addon" id="basic-addon1">State</span>
+                        <span className="input-group-addon" id="basic-addon1">Age</span>
                         <input type="text" className="form-control" name="age" value={this.state.age} onChange={this.handleChange.bind(this)} />
-                    </div>
-                    <div className="profile_form input-group">
-                        <span className="input-group-addon" id="basic-addon1">Latitude</span>
-                        <input type="text" className="form-control" name="lat" value={this.state.lat} onChange={this.handleChange.bind(this)} />
-                    </div>
-                    <div className="profile_form input-group">
-                        <span className="input-group-addon" id="basic-addon1">Longitude</span>
-                        <input type="text" className="form-control" name="long" value={this.state.long} onChange={this.handleChange.bind(this)} />
                     </div>
                     <div className="profile_form input-group">
                         <span className="input-group-addon" id="basic-addon1">Seeking</span>
@@ -264,15 +269,15 @@ class ProfileForm extends Component {
                     </div>
                     <div className="profile_form input-group">
                         <span className="input-group-addon" id="basic-addon1">Main Genre</span>
-                        <input type="text" className="form-control" name="mainGenre" value={this.state.mainGenre} onChange={this.handleChange.bind(this)} />
+                        <select className="form-control" name="mainGenre" value={this.state.mainGenre} onChange={this.handleChange.bind(this)}>{genreOptions}</select>
                     </div>
                     <div className="profile_form input-group">
                         <span className="input-group-addon" id="basic-addon1">Second Genre</span>
-                        <input type="text" className="form-control" name="secondGenre" value={this.state.secondGenre} onChange={this.handleChange.bind(this)} />
+                        <select className="form-control" name="secondGenre" value={this.state.secondGenre} onChange={this.handleChange.bind(this)}>{genreOptions}</select>
                     </div>
                     <div className="profile_form input-group">
                         <span className="input-group-addon" id="basic-addon1">Third Genre</span>
-                        <input type="text" className="form-control" name="thirdGenre" value={this.state.thirdGenre} onChange={this.handleChange.bind(this)} />
+                        <select className="form-control" name="thirdGenre" value={this.state.thirdGenre} onChange={this.handleChange.bind(this)}>{genreOptions}</select>
                     </div>
                     <div className="profile_form input-group">
                         <span className="input-group-addon" id="basic-addon1">Has Space</span>
@@ -308,11 +313,18 @@ class ProfileForm extends Component {
                         </select>
                     </div>
                     <div className="profile_form input-group">
+                        <span className="input-group-addon" id="basic-addon1">Matching Active?</span>
+                        <select className="form-control" name="matchingActive" value={this.state.matchingActive} onChange={this.handleChange.bind(this)}>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div className="profile_form input-group">
                         <span className="input-group-addon" id="basic-addon1">Distance in miles (if local)</span>
                         <input type="text" className="form-control" name="distanceIfLocal" value={this.state.distanceIfLocal} onChange={this.handleChange.bind(this)} />
                     </div>
 
-                    <button type="submit" className="btn btn-primary">Submit</button>
+                    <button type="submit" className="btn btn-primary" onClick={() => this.handleSubmit}>Submit</button>
                 </form>
                 {message2}
             </div>

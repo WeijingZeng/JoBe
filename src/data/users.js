@@ -5,6 +5,9 @@ const uuid = require("node-uuid");
 
 let exportedMethods = {
     async getAllUsers() {
+       
+        console.log(mongoCollections)
+        console.log(users);
         const userCollection = await users();
         const allUsers = await userCollection.find({}).toArray();
         return allUsers;
@@ -178,9 +181,9 @@ let exportedMethods = {
                 },
                 seeking: seeking,
                 studioSWUsed: studioSWUsed,
-                mainGenre: mainGenre,
-                secondGenre: secondGenre,
-                thirdGenre: thirdGenre,
+                mainGenre: Number(mainGenre),
+                secondGenre: Number(secondGenre),
+                thirdGenre: Number(thirdGenre),
                 hasSpace: hasSpace,
                 bio: bio,
                 achivements: achivements,
@@ -226,7 +229,8 @@ let exportedMethods = {
         lastLogin,
         profilePhotoUrl,
         localRemoteOrAll,
-        distanceIfLocal
+        distanceIfLocal,
+        matchingActive
     ) {
         //need error checking here to make sure all fields are supplied and also need to check that their handle is unique
         let userCollection = await users();
@@ -248,16 +252,16 @@ let exportedMethods = {
             },
             seeking: seeking,
             studioSWUsed: studioSWUsed,
-            mainGenre: mainGenre,
-            secondGenre: secondGenre,
-            thirdGenre: thirdGenre,
+            mainGenre: Number(mainGenre),
+            secondGenre: Number(secondGenre),
+            thirdGenre: Number(thirdGenre),
             hasSpace: hasSpace,
             bio: bio,
             achivements: achivements,
             role: role,
             links: links,
             influences: influences,
-            matchingActive: 1,
+            matchingActive: Number(matchingActive),
             lastLogin: lastLogin,
             profilePhotoUrl: profilePhotoUrl,
             profileViewCount: 0,

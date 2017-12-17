@@ -1,0 +1,82 @@
+const mongoCollections = require("../config/mongoCollections");
+const chats = mongoCollections.chats;
+const uuid = require("node-uuid");
+
+let exportedMethods = {
+    async getAllChats() {
+        const chatCollection = await chats();
+        const allChats = await chatCollection.find({}).toArray();
+        return allChats;
+    },
+    async getChatById(id) {
+        const chatCollection = await chats();
+        try {
+            let chat = await chatCollection.findOne({ _id: id });
+            return chat;
+        } catch (e) {
+            console.log("there was an error");
+            console.log(e);
+        }
+    },
+    async getChatsByUserId(id){
+        const chatCollection = await chats();
+        try{
+        const allChats = await chatCollection.find({uid:id}).toArray();
+        console.log("got chats by user " + allChats);
+        return allChats;
+        }catch(e){
+            console.log(e);
+            return {error: e};
+        }
+    },
+    async addChat(chat){
+        //format is {_id,uid,messages}
+        let newchat = chat; 
+        try{
+            const chatCollection = await chats();
+            let response = await chatCollection.insertOne(newchat);
+            return response; 
+            
+        } catch (e) {
+            console.log("there was an error");
+            console.log(e);
+        }
+    },
+    async replaceChat(id,chat){
+        try{
+            const chatCollection = await chats();
+            let response = await chatCollection.updateOne({_id:id},chat);
+            return response; 
+            
+        } catch (e) {
+            console.log("there was an error");
+            console.log(e);
+        }
+    },
+    async addMessage(id,message){
+        try{
+            const chatCollection = await chats();
+            let response = await chatCollection.updateOne({_id:id},{$push: {messages:message}});
+            return response; 
+            
+        } catch (e) {
+            console.log("there was an error");
+            console.log(e);
+        }
+    },
+    async removeChat(id) {
+        const chatCollection = await chats();
+        let response = chatCollection.removeOne({_id:id})
+        try{
+            if(response.deletedCount ==0){
+                throw `could not find user with id of ${id}`;
+            }
+            return response;
+        }catch (e){
+            console.log("there was an error");
+            console.log(e);
+        }
+    }
+};
+
+module.exports = exportedMethods;

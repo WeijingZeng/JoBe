@@ -1,9 +1,9 @@
 const express = require("express");
-
+const app = express();
 const configAPIRoutes = require("./api/index");
 
-const app = express();
-app.use(express.json());
+
+console.log("config routes api.js "+JSON.stringify(configAPIRoutes));
 app.use(express.urlencoded());
 configAPIRoutes(app);
 
