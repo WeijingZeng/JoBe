@@ -113,7 +113,8 @@ router.post("/edit/:id", (req, res) => {
         userInfo.lastLogin,
         userInfo.profilePhotoUrl,
         userInfo.localRemoteOrAll,
-        userInfo.distanceIfLocal)
+        userInfo.distanceIfLocal,
+        userInfo.matchingActive)
         .then((user) => {
             console.log(user);
             res.json(user);
