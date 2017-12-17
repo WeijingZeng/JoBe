@@ -1,10 +1,4 @@
 import firebase from "firebase";
-var admin = require("firebase-admin");
-var serviceAccount = require("./serviceAccountKey.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://jobe-b84fc.firebaseio.com"
-});
 const config = {
     apiKey: "AIzaSyCbb4SNcbrKwQsSxegT7A9TjsjG7jkYGBs",
     authDomain: "jobe-b84fc.firebaseapp.com",
@@ -19,8 +13,3 @@ export const auth = firebaseApp.auth();
 export const isAuthenticated = () => {
     return !!auth.currentUser;
 };
-
-async function fetch(email) {
-	let user=await admin.auth().getUserByEmail(email)
-	return user;
-}
