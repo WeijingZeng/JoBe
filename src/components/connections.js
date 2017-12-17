@@ -43,16 +43,16 @@ class Connections extends Component {
 
         let mutual=this.state.connections.map(con=>{
             let user=con;
-            const userImg = user.profilePhotoUrl ? (
+            const userImg = (
                 <div className="thumbnail" >
-                    <img src={`${user.profilePhotoUrl}`} alt="..."/>
+                    {user.profilePhotoUrl ? <img src={`${user.profilePhotoUrl}`} alt="..."/> : <p>No profile photo</p>}
                         <div className="caption">
                             <Link to={`/profile/${user._id}`}>{user.username}</Link>
                             <p>I'm a {user.role}</p>
                             
                         </div>
                 </div>
-              ) : null;
+              );
 
             return (
               <div className="col-sm-6 col-md-4" key={user._id}>
